@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="2">
+<meta http-equiv="refresh" content="5">
 <title>Feedback</title>
 
 <style>

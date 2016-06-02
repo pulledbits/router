@@ -42,7 +42,7 @@ Route::get('/contactmoment/{contactmoment}', 'Contactmoment@read');
 Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmoment) {
     return view('feedback', [
         'contactmoment' => $contactmoment,
-        'url' => 'http://' . $_SERVER['SERVER_ADDR'] . '/feedback/' . $contactmoment->id . '/supply'
+        'url' => 'http://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
     ]);
 });
 Route::get('/feedback/{contactmoment}/supply', function (\Illuminate\Http\Request $request, App\Contactmoment $contactmoment) {
