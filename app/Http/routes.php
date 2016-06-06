@@ -55,9 +55,15 @@ Route::post('/contactmoment/import', 'Contactmoment@importFromURL');
 Route::get('/contactmoment/{contactmoment}', 'Contactmoment@read');
 
 Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmoment) {
+    if (array_key_exists('HTTPS', $_SERVER) === false) {
+        $scheme = 'http';
+    } else {
+        $scheme = 'https';
+    }
+
     return view('feedback', [
         'contactmoment' => $contactmoment,
-        'url' => 'http://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
+        'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
     ]);
 });
 Route::get('/feedback/{contactmoment}/supply', function (\Illuminate\Http\Request $request, App\Contactmoment $contactmoment) {
