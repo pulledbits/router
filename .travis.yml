@@ -1,5 +1,6 @@
 language: php
 php:
   - '7.0'
-before_script: echo "extension = php_openssl.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-install: composer install
+install:
+  - composer install
+  - php artisan key:generate
