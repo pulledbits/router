@@ -3,4 +3,5 @@ php:
   - '7.0'
 install:
   - composer install
+  - touch .env
   - php artisan key:generate
