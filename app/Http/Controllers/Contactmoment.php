@@ -136,6 +136,10 @@ class Contactmoment extends Controller
                 'jaar' => $contactmoment->starttijd->format('Y'),
                 'kalenderweek' => (int) $contactmoment->starttijd->format('W')
             ]);
+            if ($lesplan->naam === null) {
+                $lesplan->naam = "";
+            }
+            
             $lesplan->doelgroep()->associate(\App\Doelgroep::find(1));
             $lesplan->save();
             
