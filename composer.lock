@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aecd5badbcfd397b3a84bb6e7276f5f4",
-    "content-hash": "baf0ad9bc75ee0a86c3a3b67585b8082",
+    "hash": "124a81aa82efba198a8b79710b7a68ea",
+    "content-hash": "c16acc61a8162faa8c04f2bb4c49c996",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2043,6 +2043,45 @@
                 "environment"
             ],
             "time": "2016-09-01 10:05:43"
+        },
+        {
+            "name": "way/generators",
+            "version": "dev-feature/laravel-five-stable",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jamisonvalenta/Laravel-4-Generators.git",
+                "reference": "a358bb44f517e2b3c1fd4f848f2646857c75b3a4"
+            },
+            "require": {
+                "illuminate/support": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "behat/behat": "~2.5.1",
+                "behat/mink": "~1.5.0",
+                "behat/mink-extension": "~1.2.0",
+                "behat/mink-goutte-driver": "~1.0.9",
+                "behat/mink-selenium2-driver": "~1.1.1",
+                "phpspec/phpspec": "~2.0",
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Way\\Generators": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeffrey Way",
+                    "email": "jeffrey@jeffrey-way.com"
+                }
+            ],
+            "description": "Rapidly generate resources, migrations, models, and much more.",
+            "time": "2015-02-17 06:26:25"
         }
     ],
     "packages-dev": [
@@ -4066,45 +4105,6 @@
             "time": "2016-10-24 18:41:13"
         },
         {
-            "name": "way/generators",
-            "version": "dev-feature/laravel-five-stable",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jamisonvalenta/Laravel-4-Generators.git",
-                "reference": "a358bb44f517e2b3c1fd4f848f2646857c75b3a4"
-            },
-            "require": {
-                "illuminate/support": "~5.0",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "behat/behat": "~2.5.1",
-                "behat/mink": "~1.5.0",
-                "behat/mink-extension": "~1.2.0",
-                "behat/mink-goutte-driver": "~1.0.9",
-                "behat/mink-selenium2-driver": "~1.1.1",
-                "phpspec/phpspec": "~2.0",
-                "phpunit/phpunit": "~3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Way\\Generators": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeffrey Way",
-                    "email": "jeffrey@jeffrey-way.com"
-                }
-            ],
-            "description": "Rapidly generate resources, migrations, models, and much more.",
-            "time": "2015-02-17 06:26:25"
-        },
-        {
             "name": "webmozart/assert",
             "version": "1.1.0",
             "source": {
@@ -4211,8 +4211,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "oriceon/oauth-5-laravel": 20,
-        "xethron/migrations-generator": 20,
-        "way/generators": 20
+        "way/generators": 20,
+        "xethron/migrations-generator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
