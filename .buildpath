@@ -1,84 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
-	<buildpathentry kind="src" path="vendor/mtdowling/cron-expression/src"/>
+	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Queue"/>
+	<buildpathentry kind="src" path="vendor/nesbot/carbon/src/Carbon"/>
+	<buildpathentry kind="src" path="vendor/sebastian/version/src"/>
+	<buildpathentry kind="src" path="vendor/sebastian/environment/src"/>
+	<buildpathentry kind="src" path="database"/>
+	<buildpathentry kind="src" path="vendor/phpunit/php-token-stream/src"/>
+	<buildpathentry kind="src" path="vendor/swiftmailer/swiftmailer/lib"/>
+	<buildpathentry kind="src" path="vendor/johngrogg/ics-parser"/>
+	<buildpathentry kind="src" path="vendor/phpunit/php-file-iterator/src"/>
+	<buildpathentry kind="src" path="vendor/phpunit/phpunit/src"/>
+	<buildpathentry kind="src" path="vendor/dnoegel/php-xdg-base-dir/src"/>
+	<buildpathentry kind="src" path="vendor/paragonie/random_compat/lib"/>
+	<buildpathentry kind="src" path="vendor/jakub-onderka/php-console-color/src"/>
+	<buildpathentry kind="src" path="vendor/psy/psysh/src/Psy"/>
+	<buildpathentry kind="src" path="vendor/symfony/http-foundation"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+	<buildpathentry kind="src" path="vendor/sebastian/object-enumerator/src"/>
+	<buildpathentry kind="src" path="vendor/sebastian/resource-operations/src"/>
+	<buildpathentry kind="src" path="vendor/laracasts/generators/src"/>
+	<buildpathentry kind="src" path="vendor/league/flysystem/src"/>
 	<buildpathentry kind="src" path="vendor/phpunit/phpunit-skeleton-generator/src"/>
-	<buildpathentry kind="src" path="vendor/monolog/monolog/src/Monolog"/>
-	<buildpathentry kind="src" path="vendor/phpunit/dbunit/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/console"/>
 	<buildpathentry kind="src" path="vendor/lusitanian/oauth/tests"/>
 	<buildpathentry kind="src" path="vendor/mockery/mockery/library"/>
-	<buildpathentry excluding="Resources/functions/" kind="src" path="vendor/symfony/var-dumper"/>
-	<buildpathentry kind="src" path="vendor/doctrine/dbal/lib"/>
-	<buildpathentry kind="src" path="vendor/phpspec/prophecy/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/polyfill-util"/>
-	<buildpathentry kind="src" path="vendor/doctrine/inflector/lib"/>
-	<buildpathentry kind="src" path="vendor/sebastian/comparator/src"/>
-	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Queue"/>
-	<buildpathentry kind="src" path="vendor/phpunit/phpunit-mock-objects/src"/>
-	<buildpathentry kind="src" path="vendor/doctrine/collections/lib"/>
-	<buildpathentry kind="src" path="vendor/sebastian/resource-operations/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/translation"/>
-	<buildpathentry kind="src" path="vendor/phpunit/php-timer/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/polyfill-php56"/>
-	<buildpathentry kind="src" path="vendor/symfony/event-dispatcher"/>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-	<buildpathentry kind="src" path="vendor/symfony/css-selector"/>
-	<buildpathentry kind="src" path="vendor/symfony/http-kernel"/>
-	<buildpathentry kind="src" path="vendor/jakub-onderka/php-console-highlighter/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/yaml"/>
-	<buildpathentry excluding="Foundation/|Queue/|Support/" kind="src" path="vendor/laravel/framework/src/Illuminate"/>
-	<buildpathentry kind="src" path="vendor/swiftmailer/swiftmailer/lib"/>
-	<buildpathentry kind="src" path="vendor/doctrine/cache/lib/Doctrine/Common/Cache"/>
-	<buildpathentry kind="src" path="vendor/phpunit/php-file-iterator/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/var-dumper/Resources/functions"/>
-	<buildpathentry kind="src" path="vendor/dnoegel/php-xdg-base-dir/src"/>
-	<buildpathentry kind="src" path="vendor/doctrine/common/lib/Doctrine/Common"/>
-	<buildpathentry kind="src" path="vendor/symfony/process"/>
-	<buildpathentry kind="src" path="vendor/vlucas/phpdotenv/src"/>
-	<buildpathentry kind="src" path="vendor/nesbot/carbon/src/Carbon"/>
-	<buildpathentry kind="src" path="vendor/sebastian/global-state/src"/>
-	<buildpathentry kind="src" path="vendor/bacon/bacon-qr-code/src"/>
-	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-docblock/src"/>
-	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib"/>
-	<buildpathentry kind="src" path="vendor/symfony/http-foundation"/>
-	<buildpathentry kind="src" path="vendor/symfony/routing"/>
-	<buildpathentry kind="src" path="vendor/sebastian/recursion-context/src"/>
-	<buildpathentry kind="src" path="vendor/sebastian/environment/src"/>
-	<buildpathentry kind="src" path="vendor/oriceon/oauth-5-laravel/src"/>
-	<buildpathentry kind="src" path="vendor/nikic/php-parser/lib/PhpParser"/>
 	<buildpathentry kind="src" path="vendor/sebastian/diff/src"/>
-	<buildpathentry kind="src" path="vendor/johngrogg/ics-parser"/>
-	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Foundation"/>
-	<buildpathentry kind="src" path="vendor/way/generators/src"/>
-	<buildpathentry kind="src" path="vendor/lusitanian/oauth/src"/>
-	<buildpathentry kind="src" path="vendor/jakub-onderka/php-console-color/src"/>
-	<buildpathentry kind="src" path="vendor/myclabs/deep-copy/src/DeepCopy"/>
-	<buildpathentry kind="src" path="vendor/sebastian/exporter/src"/>
-	<buildpathentry kind="src" path="vendor/fzaninotto/faker/src/Faker"/>
-	<buildpathentry kind="src" path="vendor/sebastian/object-enumerator/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/dom-crawler"/>
-	<buildpathentry kind="src" path="vendor/laracasts/generators/src"/>
-	<buildpathentry kind="src" path="vendor/phpunit/php-text-template/src"/>
-	<buildpathentry kind="src" path="vendor/psr/log"/>
-	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib"/>
-	<buildpathentry kind="src" path="vendor/sebastian/version/src"/>
-	<buildpathentry kind="src" path="app"/>
-	<buildpathentry kind="src" path="vendor/symfony/finder"/>
-	<buildpathentry kind="src" path="vendor/league/flysystem/src"/>
-	<buildpathentry kind="src" path="vendor/phpunit/php-code-coverage/src"/>
-	<buildpathentry kind="src" path="vendor/symfony/debug"/>
-	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Support"/>
-	<buildpathentry kind="src" path="vendor/phpunit/php-token-stream/src"/>
-	<buildpathentry kind="src" path="vendor/psy/psysh/src/Psy"/>
-	<buildpathentry kind="src" path="vendor/phpunit/phpunit/src"/>
-	<buildpathentry kind="src" path="vendor/paragonie/random_compat/lib"/>
-	<buildpathentry kind="src" path="vendor/composer"/>
 	<buildpathentry kind="src" path="vendor/jeremeamia/SuperClosure/src"/>
-	<buildpathentry kind="src" path="vendor/doctrine/instantiator/src/Doctrine/Instantiator"/>
-	<buildpathentry kind="src" path="database"/>
+	<buildpathentry kind="src" path="vendor/symfony/dom-crawler"/>
+	<buildpathentry kind="src" path="vendor/symfony/var-dumper/Resources/functions"/>
+	<buildpathentry kind="src" path="vendor/symfony/polyfill-php56"/>
+	<buildpathentry kind="src" path="vendor/symfony/finder"/>
+	<buildpathentry kind="src" path="vendor/symfony/yaml"/>
 	<buildpathentry kind="src" path="vendor/sebastian/code-unit-reverse-lookup/src"/>
 	<buildpathentry kind="src" path="vendor/hamcrest/hamcrest-php/hamcrest"/>
 	<buildpathentry kind="src" path="vendor/classpreloader/classpreloader/src"/>
 	<buildpathentry kind="src" path="vendor/xethron/migrations-generator/src"/>
+	<buildpathentry kind="src" path="vendor/jakub-onderka/php-console-highlighter/src"/>
+	<buildpathentry kind="src" path="vendor/myclabs/deep-copy/src/DeepCopy"/>
+	<buildpathentry kind="src" path="vendor/symfony/console"/>
+	<buildpathentry excluding="Resources/functions/" kind="src" path="vendor/symfony/var-dumper"/>
+	<buildpathentry kind="src" path="vendor/fzaninotto/faker/src/Faker"/>
+	<buildpathentry kind="src" path="vendor/doctrine/cache/lib/Doctrine/Common/Cache"/>
+	<buildpathentry kind="src" path="vendor/symfony/polyfill-util"/>
+	<buildpathentry kind="src" path="vendor/laravelcollective/html/src"/>
+	<buildpathentry kind="src" path="vendor/doctrine/dbal/lib"/>
+	<buildpathentry kind="src" path="vendor/sebastian/comparator/src"/>
+	<buildpathentry kind="src" path="vendor/phpunit/phpunit-mock-objects/src"/>
+	<buildpathentry kind="src" path="vendor/doctrine/common/lib/Doctrine/Common"/>
+	<buildpathentry kind="src" path="vendor/nikic/php-parser/lib/PhpParser"/>
+	<buildpathentry kind="src" path="vendor/doctrine/collections/lib"/>
+	<buildpathentry kind="src" path="vendor/sebastian/exporter/src"/>
+	<buildpathentry kind="src" path="vendor/phpunit/php-text-template/src"/>
+	<buildpathentry kind="src" path="vendor/composer"/>
+	<buildpathentry kind="src" path="vendor/symfony/routing"/>
+	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Foundation"/>
+	<buildpathentry kind="src" path="vendor/phpunit/php-timer/src"/>
+	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib"/>
 	<buildpathentry kind="src" path="vendor/symfony/polyfill-mbstring"/>
+	<buildpathentry kind="src" path="vendor/doctrine/instantiator/src/Doctrine/Instantiator"/>
+	<buildpathentry kind="src" path="vendor/oriceon/oauth-5-laravel/src"/>
+	<buildpathentry kind="src" path="vendor/sebastian/recursion-context/src"/>
+	<buildpathentry kind="src" path="vendor/phpunit/php-code-coverage/src"/>
+	<buildpathentry kind="src" path="vendor/mtdowling/cron-expression/src"/>
+	<buildpathentry kind="src" path="vendor/symfony/process"/>
+	<buildpathentry kind="src" path="vendor/phpunit/dbunit/src"/>
+	<buildpathentry kind="src" path="app"/>
+	<buildpathentry kind="src" path="vendor/phpspec/prophecy/src"/>
+	<buildpathentry excluding="Foundation/|Queue/|Support/" kind="src" path="vendor/laravel/framework/src/Illuminate"/>
+	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Support"/>
+	<buildpathentry kind="src" path="vendor/symfony/translation"/>
+	<buildpathentry kind="src" path="vendor/doctrine/inflector/lib"/>
+	<buildpathentry kind="src" path="vendor/lusitanian/oauth/src"/>
+	<buildpathentry kind="src" path="vendor/monolog/monolog/src/Monolog"/>
+	<buildpathentry kind="src" path="vendor/way/generators/src"/>
+	<buildpathentry kind="src" path="vendor/vlucas/phpdotenv/src"/>
+	<buildpathentry kind="src" path="vendor/psr/log"/>
+	<buildpathentry kind="src" path="vendor/sebastian/global-state/src"/>
+	<buildpathentry kind="src" path="vendor/bacon/bacon-qr-code/src"/>
+	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-docblock/src"/>
+	<buildpathentry kind="src" path="vendor/symfony/event-dispatcher"/>
+	<buildpathentry kind="src" path="vendor/symfony/debug"/>
+	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib"/>
+	<buildpathentry kind="src" path="vendor/symfony/css-selector"/>
+	<buildpathentry kind="src" path="vendor/symfony/http-kernel"/>
 </buildpath>
