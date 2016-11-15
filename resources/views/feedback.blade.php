@@ -13,7 +13,7 @@ body {
 </head>
 <body>
 	<center>
-		<h1>Feedback-o-meter (eduroam only)</h1>
+		<h1>Feedback-o-meter</h1>
 		<img src="/rating/{{ $contactmoment->id }}" width="500" height="100"
 			style="margin: 25px 0;" /></br> <img
 			src="/qr?data=<?php print htmlentities(rawurlencode($url));?>"
