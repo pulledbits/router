@@ -13,7 +13,8 @@
 		"laravel/framework" : "5.2.*",
 		"oriceon/oauth-5-laravel" : "dev-master",
 		"johngrogg/ics-parser" : "^1.0",
-		"laravelcollective/html": "5.2.*"
+		"laravelcollective/html" : "5.2.*",
+		"way/generators" : "dev-feature/laravel-five-stable"
 	},
 	"require-dev" : {
 		"fzaninotto/faker" : "~1.4",
@@ -23,8 +24,7 @@
 		"symfony/css-selector" : "2.8.*|3.0.*",
 		"symfony/dom-crawler" : "2.8.*|3.0.*",
 		"laracasts/generators" : "^1.1",
-		"xethron/migrations-generator" : "dev-l5",
-		"way/generators" : "dev-feature/laravel-five-stable"
+		"xethron/migrations-generator" : "dev-l5"
 	},
 	"autoload" : {
 		"classmap" : [

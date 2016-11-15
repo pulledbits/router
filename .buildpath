@@ -20,7 +20,6 @@
 	<buildpathentry kind="src" path="vendor/sebastian/resource-operations/src"/>
 	<buildpathentry kind="src" path="vendor/laracasts/generators/src"/>
 	<buildpathentry kind="src" path="vendor/league/flysystem/src"/>
-	<buildpathentry kind="src" path="vendor/phpunit/phpunit-skeleton-generator/src"/>
 	<buildpathentry kind="src" path="vendor/lusitanian/oauth/tests"/>
 	<buildpathentry kind="src" path="vendor/mockery/mockery/library"/>
 	<buildpathentry kind="src" path="vendor/sebastian/diff/src"/>
@@ -32,6 +31,7 @@
 	<buildpathentry kind="src" path="vendor/symfony/yaml"/>
 	<buildpathentry kind="src" path="vendor/sebastian/code-unit-reverse-lookup/src"/>
 	<buildpathentry kind="src" path="vendor/hamcrest/hamcrest-php/hamcrest"/>
+	<buildpathentry kind="src" path="vendor/webmozart/assert/src"/>
 	<buildpathentry kind="src" path="vendor/classpreloader/classpreloader/src"/>
 	<buildpathentry kind="src" path="vendor/xethron/migrations-generator/src"/>
 	<buildpathentry kind="src" path="vendor/jakub-onderka/php-console-highlighter/src"/>
@@ -39,6 +39,7 @@
 	<buildpathentry kind="src" path="vendor/symfony/console"/>
 	<buildpathentry excluding="Resources/functions/" kind="src" path="vendor/symfony/var-dumper"/>
 	<buildpathentry kind="src" path="vendor/fzaninotto/faker/src/Faker"/>
+	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-common/src"/>
 	<buildpathentry kind="src" path="vendor/doctrine/cache/lib/Doctrine/Common/Cache"/>
 	<buildpathentry kind="src" path="vendor/symfony/polyfill-util"/>
 	<buildpathentry kind="src" path="vendor/laravelcollective/html/src"/>
@@ -54,7 +55,6 @@
 	<buildpathentry kind="src" path="vendor/symfony/routing"/>
 	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Foundation"/>
 	<buildpathentry kind="src" path="vendor/phpunit/php-timer/src"/>
-	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib"/>
 	<buildpathentry kind="src" path="vendor/symfony/polyfill-mbstring"/>
 	<buildpathentry kind="src" path="vendor/doctrine/instantiator/src/Doctrine/Instantiator"/>
 	<buildpathentry kind="src" path="vendor/oriceon/oauth-5-laravel/src"/>
@@ -64,16 +64,17 @@
 	<buildpathentry kind="src" path="vendor/symfony/process"/>
 	<buildpathentry kind="src" path="vendor/phpunit/dbunit/src"/>
 	<buildpathentry kind="src" path="app"/>
+	<buildpathentry kind="src" path="vendor/psr/log/Psr/Log"/>
 	<buildpathentry kind="src" path="vendor/phpspec/prophecy/src"/>
 	<buildpathentry excluding="Foundation/|Queue/|Support/" kind="src" path="vendor/laravel/framework/src/Illuminate"/>
 	<buildpathentry kind="src" path="vendor/laravel/framework/src/Illuminate/Support"/>
+	<buildpathentry kind="src" path="vendor/phpdocumentor/type-resolver/src"/>
 	<buildpathentry kind="src" path="vendor/symfony/translation"/>
 	<buildpathentry kind="src" path="vendor/doctrine/inflector/lib"/>
 	<buildpathentry kind="src" path="vendor/lusitanian/oauth/src"/>
 	<buildpathentry kind="src" path="vendor/monolog/monolog/src/Monolog"/>
 	<buildpathentry kind="src" path="vendor/way/generators/src"/>
 	<buildpathentry kind="src" path="vendor/vlucas/phpdotenv/src"/>
-	<buildpathentry kind="src" path="vendor/psr/log"/>
 	<buildpathentry kind="src" path="vendor/sebastian/global-state/src"/>
 	<buildpathentry kind="src" path="vendor/bacon/bacon-qr-code/src"/>
 	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-docblock/src"/>
@@ -82,4 +83,5 @@
 	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib"/>
 	<buildpathentry kind="src" path="vendor/symfony/css-selector"/>
 	<buildpathentry kind="src" path="vendor/symfony/http-kernel"/>
+	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib/Doctrine/Common/Annotations"/>
 </buildpath>
