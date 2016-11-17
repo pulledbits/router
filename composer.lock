@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2ec9d126f8e494d586adea49992646cd",
-    "content-hash": "f0e0b7a5142e42a87248b6e64220e734",
+    "hash": "e2c8510f1b59e61d07a517487c3af187",
+    "content-hash": "588bff8860bd578074da342df337a57b",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -604,6 +604,59 @@
                 "parser"
             ],
             "time": "2014-09-09 13:34:57"
+        },
+        {
+            "name": "duncan3dc/blade",
+            "version": "3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/duncan3dc/blade.git",
+                "reference": "10bef332b0daa43baf60c55fb623b129f41e1295"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/duncan3dc/blade/zipball/10bef332b0daa43baf60c55fb623b129f41e1295",
+                "reference": "10bef332b0daa43baf60c55fb623b129f41e1295",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": ">=5.1,<5.4",
+                "illuminate/events": ">=5.1,<5.4",
+                "illuminate/view": ">=5.1,<5.4",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.5",
+                "phpunit/phpunit": "^5.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "duncan3dc\\Laravel\\": "src/",
+                    "duncan3dc\\LaravelTests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Craig Duncan",
+                    "email": "git@duncanc.co.uk",
+                    "homepage": "https://github.com/duncan3dc",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Use Laravel Blade templates without the full Laravel framework",
+            "homepage": "https://github.com/duncan3dc/blade",
+            "keywords": [
+                "laravel",
+                "template",
+                "templating",
+                "views"
+            ],
+            "time": "2016-08-24 12:55:43"
         },
         {
             "name": "jakub-onderka/php-console-color",

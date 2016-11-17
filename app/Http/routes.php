@@ -1,5 +1,10 @@
 <?php
 
+function makeBlade() {
+    return new \duncan3dc\Laravel\BladeInstance(dirname(dirname(__DIR__)) . "/resources/views", dirname(dirname(__DIR__)) . "/storage/views");
+}
+
+
 /*
  * |--------------------------------------------------------------------------
  * | Application Routes
@@ -36,7 +41,8 @@ Route::get('/', function () {
             
         }
     }
-    return view('welcome', [
+    
+    return makeBlade()->render('welcome', [
         'modules' => App\Module::all(),
         'contactmomenten' => App\Contactmoment::where('starttijd', '>', date('Y-m-d 00:00:00'))->where('starttijd', '<', date('Y-m-d 23:59:00'))->get(),
         'ipv4Adresses' => $ipv4Adresses
@@ -48,7 +54,7 @@ Route::post('/activiteit/create', 'Activiteit@create')->name('activiteit.create'
 Route::post('/activiteit/edit/{activiteit}', 'Activiteit@edit')->name('activiteit.edit');
     
 Route::get('/contactmoment/import', function () {
-    return view('contactmoment.import', []);
+    return makeBlade()->render('contactmoment.import', []);
 });
 Route::post('/contactmoment/import', 'Contactmoment@importFromURL');
 
@@ -61,7 +67,7 @@ Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmome
         $scheme = 'https';
     }
 
-    return view('feedback', [
+    return makeBlade()->render('feedback', [
         'contactmoment' => $contactmoment,
         'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
     ]);
@@ -100,7 +106,7 @@ Route::get('/feedback/{contactmoment}/supply', function (\Illuminate\Http\Reques
         $rating = $request->input('rating');
     }
     
-    return view('feedback/supply', [
+    return makeBlade()->render('feedback/supply', [
         'rating' => $rating,
         'explanation' => $explanation,
         'uris' => [
@@ -124,7 +130,7 @@ Route::get('/rating/{contactmoment}', function (App\Contactmoment $contactmoment
     $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
     $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
 
-    return view('rating', [
+    return makeBlade()->render('rating', [
         'rating' => $contactmoment->rating,
         'starData' => file_get_contents($imageStar),
         'unstarData' => file_get_contents($imageUnstar)
@@ -135,7 +141,7 @@ Route::get('/qr', function () {
     if ($data === null) {
         return abort(400);
     }
-    return view('qr', [
+    return makeBlade()->render('qr', [
         'data' => $data
     ]);
 });

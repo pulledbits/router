@@ -16,7 +16,8 @@
 		"laravelcollective/html" : "5.2.*",
 		"way/generators" : "dev-feature/laravel-five-stable",
 		"laracasts/generators" : "^1.1",
-		"xethron/migrations-generator" : "dev-l5"
+		"xethron/migrations-generator" : "dev-l5",
+		"duncan3dc/blade": "^3.3"
 	},
 	"require-dev" : {
 		"fzaninotto/faker" : "~1.4",
