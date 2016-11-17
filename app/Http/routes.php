@@ -1,9 +1,65 @@
 <?php
 
-function makeBlade() {
+function makeBlade()
+{
     return new \duncan3dc\Laravel\BladeInstance(dirname(dirname(__DIR__)) . "/resources/views", dirname(dirname(__DIR__)) . "/storage/views");
 }
 
+function extractModule(string $summary)
+{
+    if (preg_match('/(?<module>[A-Z]+\d{1,2})/', $summary, $matches) !== 1) {
+        return null;
+    }
+    return \App\Module::where('naam', $matches['module'])->first();
+}
+
+function importEvent(\App\Module $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte, array $groepcodes)
+{
+    $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
+    $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
+    
+    $contactmoment = \App\Contactmoment::where('ical_uid', $uid)->first();
+    if ($contactmoment === null) {
+        $contactmoment = \App\Contactmoment::firstOrNew([
+            'starttijd' => $starttijd
+        ]);
+    }
+    
+    $contactmoment->ical_uid = $uid;
+    $contactmoment->starttijd = $starttijd;
+    $contactmoment->eindtijd = $eindtijd;
+    $contactmoment->ruimte = $ruimte;
+    
+    if ($contactmoment->les === null) {
+        // try to find lesplan
+        $lesplan = $module->lessen()->firstOrNew([
+            'jaar' => $contactmoment->starttijd->format('Y'),
+            'kalenderweek' => (int) $contactmoment->starttijd->format('W')
+        ]);
+        if ($lesplan->naam === null) {
+            $lesplan->naam = "";
+        }
+        
+        $lesplan->doelgroep()->associate(\App\Doelgroep::find(1));
+        $lesplan->save();
+        
+        $contactmoment->les()->associate($lesplan);
+    }
+    
+    foreach ($groepcodes as $groepcode) {
+        $blokgroep = \App\Blokgroep::firstOrNew([
+            'code' => $groepcode
+        ]);
+        $blokgroep->collegejaar = '1516';
+        if (preg_match('/42IN(?<bloknummer>\d+)SO\w/', $groepcode, $matches) !== 1) {
+            continue;
+        }
+        $blokgroep->nummer = (int) $matches['bloknummer'];
+        $blokgroep->save();
+    }
+    
+    $contactmoment->save();
+}
 
 /*
  * |--------------------------------------------------------------------------
@@ -16,7 +72,7 @@ function makeBlade() {
  * |
  */
 Route::get('/', function () {
-	 $ipv4Adresses = [
+    $ipv4Adresses = [
         $_SERVER['HTTP_HOST']
     ];
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -38,27 +94,165 @@ Route::get('/', function () {
             if (preg_match('/inet addr:(?<ipv4>\d+\.\d+\.\d+\.\d+)/', $line, $matches) === 1) {
                 $ipv4Adresses[] = $matches['ipv4'];
             }
-            
         }
     }
     
     return makeBlade()->render('welcome', [
         'modules' => App\Module::all(),
-        'contactmomenten' => App\Contactmoment::where('starttijd', '>', date('Y-m-d 00:00:00'))->where('starttijd', '<', date('Y-m-d 23:59:00'))->get(),
+        'contactmomenten' => App\Contactmoment::where('starttijd', '>', date('Y-m-d 00:00:00'))->where('starttijd', '<', date('Y-m-d 23:59:00'))
+            ->get(),
         'ipv4Adresses' => $ipv4Adresses
     ]);
 });
 
-Route::post('/thema/create', 'Thema@create')->name('thema.create');
-Route::post('/activiteit/create', 'Activiteit@create')->name('activiteit.create');
-Route::post('/activiteit/edit/{activiteit}', 'Activiteit@edit')->name('activiteit.edit');
+Route::post('/thema/create', function () {
+    $thema = \App\Thema::create([
+        'les_id' => \Request::get('lesplan_id'),
+        'leerdoel' => \Request::get('leerdoel')
+    ]);
     
+    $thema->save();
+    
+    return redirect()->back()->withInput([
+        'thema.created',
+        []
+    ]);
+});
+
+Route::post('/activiteit/create', function () {
+    $activiteit = \App\Activiteit::create([
+        'werkvorm' => \Request::get('werkvorm'),
+        'organisatievorm' => \Request::get('organisatievorm'),
+        'tijd' => \Request::get('tijd'),
+        'werkvormsoort' => \Request::get('werkvormsoort'),
+        'intelligenties' => \Request::get('intelligenties', []),
+        'inhoud' => \Request::get('inhoud')
+    ]);
+    
+    $activiteit->save();
+    
+    return redirect()->back()->withInput([
+        'activiteit.created',
+        [
+            'referencing_property' => \Request::get('referencing_property'),
+            'value' => $activiteit->id
+        ]
+    ]);
+});
+Route::post('/activiteit/edit/{activiteit}', function (App\Activiteit $activiteit) {
+    $activiteit->werkvorm = \Request::get('werkvorm');
+    $activiteit->organisatievorm = \Request::get('organisatievorm');
+    $activiteit->tijd = \Request::get('tijd');
+    $activiteit->werkvormsoort = \Request::get('werkvormsoort');
+    $activiteit->intelligenties = \Request::get('intelligenties', []);
+    $activiteit->inhoud = \Request::get('inhoud');
+    
+    $activiteit->save();
+    
+    return redirect()->back()->withInput([
+        'activiteit.updated',
+        []
+    ]);
+});
+
 Route::get('/contactmoment/import', function () {
     return makeBlade()->render('contactmoment.import', []);
 });
-Route::post('/contactmoment/import', 'Contactmoment@importFromURL');
+Route::post('/contactmoment/import', function () {
+    switch (\Request::get("type")) {
+        case "ics":
+            $url = \Request::get("url");
+            $icalReader = new \ICal($url);
+            
+            foreach ($icalReader->events() as $event) {
+                if (array_key_exists('SUMMARY', $event) === false) {
+                    continue;
+                }
+                
+                $module = extractModule($event['SUMMARY']);
+                if ($module === null) {
+                    continue;
+                }
+                
+                if (preg_match('/Groepen:\s+(?<groepen>[^\\n]+)\\\\n\\\\n/', $event['DESCRIPTION'], $groepMatches) === 1) {
+                    $groepen = explode('\, ', $groepMatches['groepen']);
+                }
+                
+                importEvent($module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION'], $groepen);
+            }
+            
+            // remove future, imported contactmomenten which where not touched in this batch (today)
+            \App\Contactmoment::where(function ($query) {
+                $query->where('updated_at', '<', date('Y-m-d'))->orWhereNull('updated_at');
+            })->where('starttijd', '>', date('Y-m-d'))
+                ->whereNotNull('ical_uid')
+                ->delete();
+            break;
+        
+        case 'avansroosterjson':
+            foreach (json_decode(\Request::get("json"), true) as $event) {
+                $module = extractModule($event['vak']);
+                if ($module === null) {
+                    continue;
+                } elseif (preg_match('/in\s+\<a[^\>]+\><span[^\>]+\>(?<ruimte>\w+)/', $event['title'], $matches) !== 1) {
+                    continue;
+                }
+                
+                $ruimte = $matches['ruimte'];
+                $uid = 'Ical' . $event['start'] . $event['end'] . $ruimte . $event['vak'] . $event['param'] . '@rooster.avans.nl';
+                $uid = str_replace('-', '', $uid);
+                $uid = str_replace(' ', '', $uid);
+                importEvent($module, new \DateTime($event['start']), new \DateTime($event['end']), $uid, $ruimte, []);
+            }
+            break;
+        
+        default:
+            return abort(500, 'Unsupported import type');
+    }
+    return view("contactmoment.imported");
+});
 
-Route::get('/contactmoment/{contactmoment}', 'Contactmoment@read');
+Route::get('/contactmoment/{contactmoment}', function (\App\Contactmoment $contactmoment) {
+    // $code = request('code');
+    // $googleService = \OAuth::consumer('Google');
+    // if ($code === null) {
+    // return redirect((string) $googleService->getAuthorizationUri() . "&hd=avans.nl");
+    // }
+    // $token = $googleService->requestAccessToken($code);
+    // $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
+    $result = \Request::old('result');
+    if ($result !== null) {
+        switch ($result[0]) {
+            case 'activiteit.created':
+                $path = explode('.', $result[1]['referencing_property']);
+                if (substr_compare($path[0], 'thema', 0) === 0) {
+                    list ($themaQualifier, $referencedIndex) = explode('#', $path[0]);
+                    foreach ($contactmoment->les->themas as $index => $thema) {
+                        if ($index === (int) $referencedIndex) {
+                            $thema->{$path[1]} = $result[1]['value'];
+                            $thema->save();
+                        }
+                    }
+                } elseif ($path[0] === 'les') { // expect les
+                    $contactmoment->les->{$path[1]} = $result[1]['value'];
+                    $contactmoment->les->save();
+                } else {
+                    return abort(400);
+                }
+                break;
+            
+            case 'activiteit.updated':
+                break;
+            
+            default:
+                return abort(500, 'Unknown result ' . $result[0]);
+        }
+    }
+    
+    return view('lesplan', [
+        'contactmoment' => $contactmoment
+    ]);
+});
 
 Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmoment) {
     if (array_key_exists('HTTPS', $_SERVER) === false) {
@@ -66,7 +260,7 @@ Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmome
     } else {
         $scheme = 'https';
     }
-
+    
     return makeBlade()->render('feedback', [
         'contactmoment' => $contactmoment,
         'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
@@ -74,7 +268,7 @@ Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmome
 });
 Route::get('/feedback/{contactmoment}/supply', function (\Illuminate\Http\Request $request, App\Contactmoment $contactmoment) {
     $assetsDirectory = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
-
+    
     $ipRating = $contactmoment->ratings()->firstOrNew([
         'ipv4' => $_SERVER['REMOTE_ADDR']
     ]);
@@ -101,7 +295,7 @@ Route::get('/feedback/{contactmoment}/supply', function (\Illuminate\Http\Reques
         $rating = null;
         $explanation = null;
     }
-
+    
     if ($request->has('rating')) {
         $rating = $request->input('rating');
     }
@@ -129,7 +323,7 @@ Route::get('/rating/{contactmoment}', function (App\Contactmoment $contactmoment
     $assetsDirectory = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
     $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
     $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
-
+    
     return makeBlade()->render('rating', [
         'rating' => $contactmoment->rating,
         'starData' => file_get_contents($imageStar),
