@@ -40,7 +40,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://teach.laravel'),
+    'url' => env('APP_URL', 'http://teach.pulledbits.org'),
 
     /*
     |--------------------------------------------------------------------------
