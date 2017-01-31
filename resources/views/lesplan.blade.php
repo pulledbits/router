@@ -81,26 +81,6 @@
 		@foreach ($contactmoment->les->themas as $index => $thema)
 		<section>
 			<h3>Thema {{ $index+1 }}: {{ $thema->leerdoel }}</h3>
-        		@include('activiteit', [
-        			'title'=> 'Ervaren',
-        			'activiteit' => $thema->ervaren,
-					'referencing_property' => 'thema#' . $index . '.ervaren_id'
-        		])
-        		@include('activiteit', [
-        			'title'=> 'Reflecteren',
-        			'activiteit' => $thema->reflecteren,
-					'referencing_property' => 'thema#' . $index . '.reflecteren_id'
-        		])
-        		@include('activiteit', [
-        			'title'=> 'Conceptualiseren',
-        			'activiteit' => $thema->conceptualiseren,
-					'referencing_property' => 'thema#' . $index . '.conceptualiseren_id'
-        		])
-        		@include('activiteit', [
-        			'title'=> 'Toepassen',
-        			'activiteit' => $thema->toepassen,
-					'referencing_property' => 'thema#' . $index . '.toepassen_id'
-        		])
 		</section>
 		@endforeach 
          {{ Form::open(['route' => 'thema.create']) }}
