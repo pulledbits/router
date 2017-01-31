@@ -117,7 +117,7 @@ Route::post('/thema/create', function () {
         'thema.created',
         []
     ]);
-});
+})->name('thema.create');
 
 Route::post('/activiteit/create', function () {
     $activiteit = \App\Activiteit::create([
@@ -138,7 +138,8 @@ Route::post('/activiteit/create', function () {
             'value' => $activiteit->id
         ]
     ]);
-});
+})->name('activiteit.create');
+
 Route::post('/activiteit/edit/{activiteit}', function (App\Activiteit $activiteit) {
     $activiteit->werkvorm = \Request::get('werkvorm');
     $activiteit->organisatievorm = \Request::get('organisatievorm');
@@ -153,7 +154,7 @@ Route::post('/activiteit/edit/{activiteit}', function (App\Activiteit $activitei
         'activiteit.updated',
         []
     ]);
-});
+})->name('activiteit.edit');
 
 Route::get('/contactmoment/import', function () {
     return makeBlade()->render('contactmoment.import', []);
