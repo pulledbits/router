@@ -20,7 +20,9 @@
 		"laracasts/generators" : "^1.1",
 		"xethron/migrations-generator" : "dev-l5",
 		"duncan3dc/blade": "^3.3",
-		"rikmeijer/activerecord.php": "dev-master"
+		"rikmeijer/activerecord.php": "dev-master",
+		"aura/router": "^3.0",
+		"guzzlehttp/psr7": "^1.3"
 	},
 	"require-dev" : {
 		"fzaninotto/faker" : "~1.4",
