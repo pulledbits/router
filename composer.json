@@ -7,6 +7,8 @@
 	],
 	"license" : "MIT",
 	"type" : "project",
+	"minimum-stability" : "dev",
+	"prefer-stable" : true,
 	"require" : {
 		"php" : ">=7.0",
 		"bacon/bacon-qr-code" : "^1.0",
@@ -17,7 +19,8 @@
 		"way/generators" : "dev-feature/laravel-five-stable",
 		"laracasts/generators" : "^1.1",
 		"xethron/migrations-generator" : "dev-l5",
-		"duncan3dc/blade": "^3.3"
+		"duncan3dc/blade": "^3.3",
+		"rikmeijer/activerecord.php": "dev-master"
 	},
 	"require-dev" : {
 		"fzaninotto/faker" : "~1.4",

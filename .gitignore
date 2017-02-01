@@ -57,6 +57,7 @@ modules.xml
 
 vendor
 tests/gen
+src/gen
 .idea/inspectionProfiles/
 
 /storage/views
