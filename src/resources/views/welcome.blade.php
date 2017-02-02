@@ -36,9 +36,8 @@
 	</ul>
 	@include('contactmomenten', [
 		'caption'=> 'Contactmomenten',
-		'contactmomenten' => $module->contactmomenten
+		'contactmomenten' => $module->read("modulecontactmoment", ["module_id" => "id"])
 	])
-
 </section>
 @endforeach
 @endsection

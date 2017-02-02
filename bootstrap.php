@@ -1,6 +1,5 @@
 <?php
 return function(string $factoryPath) : \ActiveRecord\SQL\Schema {
-
     require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
     $dotenv = new Dotenv\Dotenv(__DIR__);
