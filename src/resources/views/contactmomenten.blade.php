@@ -23,6 +23,7 @@
 		@else
 			<tr>
 		@endif
+				{{var_Dump($contactmoment->starttijd)}}
 			<td>{{ $contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->kalenderweek }}</td>
 			<td>{{ $contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->blokweek }}</td>
 			<td>{{ strftime('%A', strtotime($contactmoment->starttijd)) }}</td>
