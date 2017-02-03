@@ -16,19 +16,19 @@
 	</thead>
 	<tbody>
 		@foreach ($contactmomenten as $contactmoment)
-		@if ($contactmoment->active)
+		@if (date('U', $contactmoment->starttijd) <= time() && date('U', $contactmoment->eindtijd) >= time())
 			<tr class="active">
-		@elseif ($contactmoment->past)
+		@elseif (date('U', $contactmoment->eindtijd) <= time())
 			<tr class="past">
 		@else
 			<tr>
 		@endif
 
-			<td>{{ $contactmoment->les->lesweek->kalenderweek }}</td>
-			<td>{{ $contactmoment->les->lesweek->blokweek }}</td>
-			<td>{{ $contactmoment->starttijd->formatLocalized('%A') }}</td>
-			<td>{{ $contactmoment->starttijd->format('H:i') }}</td>
-			<td>{{ $contactmoment->eindtijd->format('H:i') }}</td>
+			<td>{{ $contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->kalenderweek }}</td>
+			<td>{{ $contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->blokweek }}</td>
+			<td>{{ strftime('%A', strtotime($contactmoment->starttijd)) }}</td>
+			<td>{{ date('H:i', $contactmoment->starttijd) }}</td>
+			<td>{{ date('H:i', $contactmoment->eindtijd) }}</td>
 			<td><a href="/contactmoment/{{ $contactmoment->id }}" target="_blank">Lesplan</a></td>
 			<td>@foreach ($ipv4Adresses as $ipv4Adress) <a
 				href="http://{{ $ipv4Adress }}/feedback/{{ $contactmoment->id }}"
