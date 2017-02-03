@@ -108,7 +108,7 @@ return function() : \Aura\Router\Matcher {
 
         return makeBlade()->render('welcome', [
             'modules' => $schema->read('module', [], []),
-            'contactmomenten' => $schema->read('contactmomenten_vandaag', [], []),
+            'contactmomenten' => $schema->read('contactmoment_vandaag', [], []),
             'ipv4Adresses' => $ipv4Adresses
         ]);
     });

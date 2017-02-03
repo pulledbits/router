@@ -1831,12 +1831,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rikmeijer/activerecord.php.git",
-                "reference": "92df88e7bd6496af50959f3f2903a96fcab835b4"
+                "reference": "2553d17e38f7f8f086d94efa1ed135049146d171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rikmeijer/activerecord.php/zipball/92df88e7bd6496af50959f3f2903a96fcab835b4",
-                "reference": "92df88e7bd6496af50959f3f2903a96fcab835b4",
+                "url": "https://api.github.com/repos/rikmeijer/activerecord.php/zipball/2553d17e38f7f8f086d94efa1ed135049146d171",
+                "reference": "2553d17e38f7f8f086d94efa1ed135049146d171",
                 "shasum": ""
             },
             "require": {
@@ -1860,7 +1860,7 @@
                 "MIT"
             ],
             "description": "proper activerecord in PHP",
-            "time": "2017-02-03 07:49:49"
+            "time": "2017-02-03 08:17:23"
         },
         {
             "name": "swiftmailer/swiftmailer",
