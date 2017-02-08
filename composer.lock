@@ -464,16 +464,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.11",
+            "version": "v2.5.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "1b1effbddbdc0f40d1c8f849f44bcddac4f52a48"
+                "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/1b1effbddbdc0f40d1c8f849f44bcddac4f52a48",
-                "reference": "1b1effbddbdc0f40d1c8f849f44bcddac4f52a48",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7b9e911f9d8b30d43b96853dab26898c710d8f44",
+                "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44",
                 "shasum": ""
             },
             "require": {
@@ -531,7 +531,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-02-04 21:20:13"
+            "time": "2017-02-08 12:53:47"
         },
         {
             "name": "doctrine/inflector",
@@ -1831,12 +1831,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rikmeijer/activerecord.php.git",
-                "reference": "9cacb71ce51296b97b61e9cf060e1757f424cc05"
+                "reference": "2e710a870a53b23e1c7a702dc6c49e9e2f335792"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rikmeijer/activerecord.php/zipball/9cacb71ce51296b97b61e9cf060e1757f424cc05",
-                "reference": "9cacb71ce51296b97b61e9cf060e1757f424cc05",
+                "url": "https://api.github.com/repos/rikmeijer/activerecord.php/zipball/2e710a870a53b23e1c7a702dc6c49e9e2f335792",
+                "reference": "2e710a870a53b23e1c7a702dc6c49e9e2f335792",
                 "shasum": ""
             },
             "require": {
@@ -1860,7 +1860,7 @@
                 "MIT"
             ],
             "description": "proper activerecord in PHP",
-            "time": "2017-02-08 12:11:56"
+            "time": "2017-02-08 14:10:42"
         },
         {
             "name": "swiftmailer/swiftmailer",
