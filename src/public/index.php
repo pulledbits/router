@@ -12,5 +12,5 @@ if ($route === false) {
     http_response_code(404);
 } else {
     http_response_code(201);
-    print call_user_func($route->handler);
+    print call_user_func_array($route->handler, $route->attributes);
 }

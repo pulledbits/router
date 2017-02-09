@@ -221,7 +221,9 @@ return function() : \Aura\Router\Matcher {
         return view("contactmoment.imported");
     });
 
-    $map->get('contactmoment.view', '/contactmoment/{contactmoment}', function (\App\Contactmoment $contactmoment) use ($schema) {
+    $map->get('contactmoment.view', '/contactmoment/{contactmomentIdentifier}', function (String $contactmomentIdentifier) use ($schema) {
+        $contactmoment = $schema->read('contactmoment', [], ['id' => $contactmomentIdentifier]);
+
         // $code = request('code');
         // $googleService = \OAuth::consumer('Google');
         // if ($code === null) {
