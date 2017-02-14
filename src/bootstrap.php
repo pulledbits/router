@@ -222,7 +222,7 @@ return function() : \Aura\Router\Matcher {
     });
 
     $map->get('contactmoment.view', '/contactmoment/{contactmomentIdentifier}', function (String $contactmomentIdentifier) use ($schema) {
-        $contactmoment = $schema->read('contactmoment', [], ['id' => $contactmomentIdentifier]);
+        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $contactmomentIdentifier]);
 
         // $code = request('code');
         // $googleService = \OAuth::consumer('Google');
@@ -231,7 +231,8 @@ return function() : \Aura\Router\Matcher {
         // }
         // $token = $googleService->requestAccessToken($code);
         // $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-        $result = \Request::old('result');
+        $result = null;
+        // TODO: $result = \Request::old('result');
         if ($result !== null) {
             switch ($result[0]) {
                 case 'activiteit.created':
@@ -260,8 +261,16 @@ return function() : \Aura\Router\Matcher {
             }
         }
 
-        return view('lesplan', [
-            'contactmoment' => $contactmoment
+        $les = $contactmoment->fetchFirstByFkContactmomentLes();
+        $module = $les->fetchFirstByFkLesmodule();
+
+        return makeBlade()->render('lesplan', [
+            'contactmoment' => $contactmoment,
+            'les' => $les,
+            'module' => $module,
+            'doelgroep' => $les->fetchFirstByFkLesDoelgroep(),
+            'lesmedia' => $schema->read('mediaView', [], ['les_id' => $les->id]),
+            'lesleerdoelen' => $schema->read('leerdoelenView', [], ['les_id' => $les->id])
         ]);
     });
 
