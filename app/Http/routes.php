@@ -121,11 +121,7 @@ Route::post('/thema/create', function () {
 
 Route::post('/activiteit/create', function () {
     $activiteit = \App\Activiteit::create([
-        'werkvorm' => \Request::get('werkvorm'),
-        'organisatievorm' => \Request::get('organisatievorm'),
         'tijd' => \Request::get('tijd'),
-        'werkvormsoort' => \Request::get('werkvormsoort'),
-        'intelligenties' => \Request::get('intelligenties', []),
         'inhoud' => \Request::get('inhoud')
     ]);
     
@@ -141,11 +137,7 @@ Route::post('/activiteit/create', function () {
 })->name('activiteit.create');
 
 Route::post('/activiteit/edit/{activiteit}', function (App\Activiteit $activiteit) {
-    $activiteit->werkvorm = \Request::get('werkvorm');
-    $activiteit->organisatievorm = \Request::get('organisatievorm');
     $activiteit->tijd = \Request::get('tijd');
-    $activiteit->werkvormsoort = \Request::get('werkvormsoort');
-    $activiteit->intelligenties = \Request::get('intelligenties', []);
     $activiteit->inhoud = \Request::get('inhoud');
     
     $activiteit->save();

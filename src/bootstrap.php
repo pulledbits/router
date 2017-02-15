@@ -1,7 +1,11 @@
 <?php
-function makeBlade()
+function makeBlade() : \duncan3dc\Laravel\BladeInstance
 {
-    return new \duncan3dc\Laravel\BladeInstance(__DIR__ . "/resources/views", dirname(__DIR__) . "/storage/views.reboot");
+    static $blade;
+    if ($blade === null) {
+        $blade = new \duncan3dc\Laravel\BladeInstance(__DIR__ . "/resources/views", dirname(__DIR__) . "/storage/views.reboot");
+    }
+    return $blade;
 }
 
 function extractModule(string $summary)
@@ -69,6 +73,9 @@ return function() : \Aura\Router\Matcher {
     $routerContainer = new \Aura\Router\RouterContainer();
     $map = $routerContainer->getMap();
 
+    makeBlade()->directive('formbuilder', function($expression) {
+        return '<?php $formbuilder = new \AdamWathan\Form\FormBuilder' . $expression . '; ?>';
+    });
 
     /*
      * |--------------------------------------------------------------------------
@@ -129,11 +136,7 @@ return function() : \Aura\Router\Matcher {
 
     $map->post('activiteit.create', '/activiteit/create', function () use ($schema) {
         $activiteit = \App\Activiteit::create([
-            'werkvorm' => \Request::get('werkvorm'),
-            'organisatievorm' => \Request::get('organisatievorm'),
             'tijd' => \Request::get('tijd'),
-            'werkvormsoort' => \Request::get('werkvormsoort'),
-            'intelligenties' => \Request::get('intelligenties', []),
             'inhoud' => \Request::get('inhoud')
         ]);
 
@@ -149,11 +152,7 @@ return function() : \Aura\Router\Matcher {
     });
 
     $map->post('activiteit.edit', '/activiteit/edit/{activiteit}', function (App\Activiteit $activiteit) use ($schema) {
-        $activiteit->werkvorm = \Request::get('werkvorm');
-        $activiteit->organisatievorm = \Request::get('organisatievorm');
         $activiteit->tijd = \Request::get('tijd');
-        $activiteit->werkvormsoort = \Request::get('werkvormsoort');
-        $activiteit->intelligenties = \Request::get('intelligenties', []);
         $activiteit->inhoud = \Request::get('inhoud');
 
         $activiteit->save();
@@ -269,8 +268,8 @@ return function() : \Aura\Router\Matcher {
             'les' => $les,
             'module' => $module,
             'doelgroep' => $les->fetchFirstByFkLesDoelgroep(),
-            'lesmedia' => $schema->read('mediaView', [], ['les_id' => $les->id]),
-            'lesleerdoelen' => $schema->read('leerdoelenView', [], ['les_id' => $les->id])
+            'lesmedia' => $schema->read('mediaview', [], ['les_id' => $les->id]),
+            'lesleerdoelen' => $schema->read('leerdoelenview', [], ['les_id' => $les->id])
         ]);
     });
 

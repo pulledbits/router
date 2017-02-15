@@ -16,8 +16,6 @@ class AppServiceProvider extends ServiceProvider
         \Blade::setContentTags('{{{', '}}}');
         \Blade::setEscapedContentTags('{{', '}}');
         \Blade::setEchoFormat('nl2br(e(%s))');
-        
-        \Form::component('checklist', 'components.form.checklist', ['name', 'options']);
     }
 
     /**

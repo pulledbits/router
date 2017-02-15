@@ -83,16 +83,17 @@
 		<section>
 			<h3>Thema {{ $index+1 }}: {{ $thema->leerdoel }}</h3>
 		</section>
-		@endforeach 
-         {{ Form::open(['route' => 'thema.create']) }}
-         {{ Form::hidden('lesplan_id', $les->id) }}
+		@endforeach
+		@formbuilder()
+		{!! $formbuilder->open()->post()->action('/thema/create') !!}
+		{!! $formbuilder->hidden('lesplan_id')->value($les->id) !!}
 		<section>
 			<h3>Thema toevoegen</h3>
-			{{ Form::label('leerdoel', 'Leerdoel:') }}
-			{{ Form::text('leerdoel') }}
+			{!! $formbuilder->label('Leerdoel:')->forId('leerdoel') !!}
+			{!! $formbuilder->text('leerdoel') !!}
 		</section>
-        {{ Form::submit('Thema toevoegen') }}
-        {{ Form::close() }}
+		{!! $formbuilder->submit('Thema toevoegen') !!}
+		{!! $formbuilder->close() !!}
 	</section>
 	<section>
 		<h2>Afsluiting</h2>
