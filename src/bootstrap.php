@@ -273,7 +273,9 @@ return function() : \Aura\Router\Matcher {
         ]);
     });
 
-    $map->get('feedback.view', '/feedback/{contactmoment}', function (App\Contactmoment $contactmoment) use ($schema) {
+    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (String $contactmomentIdentifier) use ($schema) {
+        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $contactmomentIdentifier]);
+
         if (array_key_exists('HTTPS', $_SERVER) === false) {
             $scheme = 'http';
         } else {
