@@ -19,86 +19,9 @@ class Les extends Model
         return $this->belongsTo('App\Lesweek', 'jaar', 'jaar')->where('kalenderweek', $this->kalenderweek);
     }
     
-    public function doelgroep()
-    {
-        return $this->belongsTo('App\Doelgroep');
-    }
-    
     public function contactmomenten()
     {
         return $this->hasMany('App\Contactmoment')->orderBy('starttijd', 'ASC');
     }
-    
-    public function media()
-    {
-        return $this->hasMany('App\Les\Medium');
-    }
-    public function leerdoelen()
-    {
-        return $this->hasMany('App\Les\Leerdoel');
-    }
-    
 
-    public function activerendeOpening()
-    {
-        return $this->belongsTo("App\Activiteit", "activerende_opening_id");
-    }
-    public function getActiverendeOpeningAttribute($value)
-    {
-        return $this->activerendeOpening()->findOrNew($this->activerende_opening_id);
-    }
-    public function focus()
-    {
-        return $this->belongsTo("App\Activiteit", "focus_id");
-    }
-    public function getFocusAttribute($value)
-    {
-        return $this->focus()->findOrNew($this->focus_id);
-    }
-    public function voorstellen()
-    {
-        return $this->belongsTo("App\Activiteit", "voorstellen_id");
-    }
-    public function getVoorstellenAttribute($value)
-    {
-        return $this->voorstellen()->findOrNew($this->voorstellen_id);
-    }
-    public function kennismaken()
-    {
-        return $this->belongsTo("App\Activiteit", "kennismaken_id");
-    }
-    public function getKennismakenAttribute($value)
-    {
-        return $this->kennismaken()->findOrNew($this->kennismaken_id);
-    }
-    
-    public function themas()
-    {
-        return $this->hasMany('App\Thema');
-    }
-    
-    public function huiswerk()
-    {
-        return $this->belongsTo("App\Activiteit", "huiswerk_id");
-    }
-    public function getHuiswerkAttribute($value)
-    {
-        return $this->huiswerk()->findOrNew($this->huiswerk_id);
-    }
-    public function evaluatie()
-    {
-        return $this->belongsTo("App\Activiteit", "evaluatie_id");
-    }
-    public function getEvaluatieAttribute($value)
-    {
-        return $this->evaluatie()->findOrNew($this->evaluatie_id);
-    }
-    public function pakkendSlot()
-    {
-        return $this->belongsTo("App\Activiteit", "pakkend_slot_id");
-    }
-    public function getPakkendSlotAttribute($value)
-    {
-        return $this->pakkendSlot()->findOrNew($this->pakkend_slot_id);
-    }
 }

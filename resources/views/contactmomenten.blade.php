@@ -10,7 +10,6 @@
 			<th width="80">Dag</th>
 			<th width="80">Starttijd</th>
 			<th width="80">Eindtijd</th>
-			<th width="80">&nbsp;</th>
 			<th>&nbsp;</th>
 		</tr>
 	</thead>
@@ -29,10 +28,7 @@
 			<td>{{ $contactmoment->starttijd->formatLocalized('%A') }}</td>
 			<td>{{ $contactmoment->starttijd->format('H:i') }}</td>
 			<td>{{ $contactmoment->eindtijd->format('H:i') }}</td>
-			<td><a href="/contactmoment/{{ $contactmoment->id }}" target="_blank">Lesplan</a></td>
-			<td>@foreach ($ipv4Adresses as $ipv4Adress) <a
-				href="http://{{ $ipv4Adress }}/feedback/{{ $contactmoment->id }}"
-				target="_blank">Feedback ({{ $ipv4Adress }})</a> @endforeach
+			<td>@foreach ($ipv4Adresses as $ipv4Adress) <a href="http://{{ $ipv4Adress }}/feedback/{{ $contactmoment->id }}" target="_blank" title="{{ $ipv4Adress }}">Feedback</a> @endforeach
 			</td>
 		</tr>
 		@endforeach

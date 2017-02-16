@@ -105,49 +105,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::post('/thema/create', function () {
-    $thema = \App\Thema::create([
-        'les_id' => \Request::get('lesplan_id'),
-        'leerdoel' => \Request::get('leerdoel')
-    ]);
-    
-    $thema->save();
-    
-    return redirect()->back()->withInput([
-        'thema.created',
-        []
-    ]);
-})->name('thema.create');
-
-Route::post('/activiteit/create', function () {
-    $activiteit = \App\Activiteit::create([
-        'tijd' => \Request::get('tijd'),
-        'inhoud' => \Request::get('inhoud')
-    ]);
-    
-    $activiteit->save();
-    
-    return redirect()->back()->withInput([
-        'activiteit.created',
-        [
-            'referencing_property' => \Request::get('referencing_property'),
-            'value' => $activiteit->id
-        ]
-    ]);
-})->name('activiteit.create');
-
-Route::post('/activiteit/edit/{activiteit}', function (App\Activiteit $activiteit) {
-    $activiteit->tijd = \Request::get('tijd');
-    $activiteit->inhoud = \Request::get('inhoud');
-    
-    $activiteit->save();
-    
-    return redirect()->back()->withInput([
-        'activiteit.updated',
-        []
-    ]);
-})->name('activiteit.edit');
-
 Route::get('/contactmoment/import', function () {
     return makeBlade()->render('contactmoment.import', []);
 });
@@ -203,48 +160,6 @@ Route::post('/contactmoment/import', function () {
             return abort(500, 'Unsupported import type');
     }
     return view("contactmoment.imported");
-});
-
-Route::get('/contactmoment/{contactmoment}', function (\App\Contactmoment $contactmoment) {
-    // $code = request('code');
-    // $googleService = \OAuth::consumer('Google');
-    // if ($code === null) {
-    // return redirect((string) $googleService->getAuthorizationUri() . "&hd=avans.nl");
-    // }
-    // $token = $googleService->requestAccessToken($code);
-    // $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-    $result = \Request::old('result');
-    if ($result !== null) {
-        switch ($result[0]) {
-            case 'activiteit.created':
-                $path = explode('.', $result[1]['referencing_property']);
-                if (substr_compare($path[0], 'thema', 0) === 0) {
-                    list ($themaQualifier, $referencedIndex) = explode('#', $path[0]);
-                    foreach ($contactmoment->les->themas as $index => $thema) {
-                        if ($index === (int) $referencedIndex) {
-                            $thema->{$path[1]} = $result[1]['value'];
-                            $thema->save();
-                        }
-                    }
-                } elseif ($path[0] === 'les') { // expect les
-                    $contactmoment->les->{$path[1]} = $result[1]['value'];
-                    $contactmoment->les->save();
-                } else {
-                    return abort(400);
-                }
-                break;
-            
-            case 'activiteit.updated':
-                break;
-            
-            default:
-                return abort(500, 'Unknown result ' . $result[0]);
-        }
-    }
-    
-    return view('lesplan', [
-        'contactmoment' => $contactmoment
-    ]);
 });
 
 Route::get('/feedback/{contactmoment}', function (App\Contactmoment $contactmoment) {
