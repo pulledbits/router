@@ -120,49 +120,6 @@ return function() : \Aura\Router\Matcher {
         ]);
     });
 
-    $map->post('thema.create', '/thema/create', function () use ($schema) {
-        $thema = \App\Thema::create([
-            'les_id' => \Request::get('lesplan_id'),
-            'leerdoel' => \Request::get('leerdoel')
-        ]);
-
-        $thema->save();
-
-        return redirect()->back()->withInput([
-            'thema.created',
-            []
-        ]);
-    });
-
-    $map->post('activiteit.create', '/activiteit/create', function () use ($schema) {
-        $activiteit = \App\Activiteit::create([
-            'tijd' => \Request::get('tijd'),
-            'inhoud' => \Request::get('inhoud')
-        ]);
-
-        $activiteit->save();
-
-        return redirect()->back()->withInput([
-            'activiteit.created',
-            [
-                'referencing_property' => \Request::get('referencing_property'),
-                'value' => $activiteit->id
-            ]
-        ]);
-    });
-
-    $map->post('activiteit.edit', '/activiteit/edit/{activiteit}', function (App\Activiteit $activiteit) use ($schema) {
-        $activiteit->tijd = \Request::get('tijd');
-        $activiteit->inhoud = \Request::get('inhoud');
-
-        $activiteit->save();
-
-        return redirect()->back()->withInput([
-            'activiteit.updated',
-            []
-        ]);
-    });
-
     $map->get('contactmoment.prepare-import', '/contactmoment/import', function () use ($schema) {
         return makeBlade()->render('contactmoment.import', []);
     });
@@ -218,59 +175,6 @@ return function() : \Aura\Router\Matcher {
                 return abort(500, 'Unsupported import type');
         }
         return view("contactmoment.imported");
-    });
-
-    $map->get('contactmoment.view', '/contactmoment/{contactmomentIdentifier}', function (String $contactmomentIdentifier) use ($schema) {
-        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $contactmomentIdentifier]);
-
-        // $code = request('code');
-        // $googleService = \OAuth::consumer('Google');
-        // if ($code === null) {
-        // return redirect((string) $googleService->getAuthorizationUri() . "&hd=avans.nl");
-        // }
-        // $token = $googleService->requestAccessToken($code);
-        // $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-        $result = null;
-        // TODO: $result = \Request::old('result');
-        if ($result !== null) {
-            switch ($result[0]) {
-                case 'activiteit.created':
-                    $path = explode('.', $result[1]['referencing_property']);
-                    if (substr_compare($path[0], 'thema', 0) === 0) {
-                        list ($themaQualifier, $referencedIndex) = explode('#', $path[0]);
-                        foreach ($contactmoment->les->themas as $index => $thema) {
-                            if ($index === (int) $referencedIndex) {
-                                $thema->{$path[1]} = $result[1]['value'];
-                                $thema->save();
-                            }
-                        }
-                    } elseif ($path[0] === 'les') { // expect les
-                        $contactmoment->les->{$path[1]} = $result[1]['value'];
-                        $contactmoment->les->save();
-                    } else {
-                        return abort(400);
-                    }
-                    break;
-
-                case 'activiteit.updated':
-                    break;
-
-                default:
-                    return abort(500, 'Unknown result ' . $result[0]);
-            }
-        }
-
-        $les = $contactmoment->fetchFirstByFkContactmomentLes();
-        $module = $les->fetchFirstByFkLesmodule();
-
-        return makeBlade()->render('lesplan', [
-            'contactmoment' => $contactmoment,
-            'les' => $les,
-            'module' => $module,
-            'doelgroep' => $les->fetchFirstByFkLesDoelgroep(),
-            'lesmedia' => $schema->read('mediaview', [], ['les_id' => $les->id]),
-            'lesleerdoelen' => $schema->read('leerdoelenview', [], ['les_id' => $les->id])
-        ]);
     });
 
     $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (String $contactmomentIdentifier) use ($schema) {
