@@ -192,7 +192,7 @@ return function() : \Aura\Router\Matcher {
         ]);
     });
     $map->get('feedback.prepare-supply', '/feedback/{contactmoment}/supply', function (\Illuminate\Http\Request $request, App\Contactmoment $contactmoment) use ($schema) {
-        $assetsDirectory = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
+        $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
 
         $ipRating = $contactmoment->ratings()->firstOrNew([
             'ipv4' => $_SERVER['REMOTE_ADDR']
@@ -244,8 +244,10 @@ return function() : \Aura\Router\Matcher {
         return 'Dankje!';
     });
 
-    $map->get('rating.view', '/rating/{contactmoment}', function (App\Contactmoment $contactmoment) use ($schema) {
-        $assetsDirectory = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
+    $map->get('rating.view', '/rating/{contactmoment}', function ($contactmomentIdentifier) use ($schema) {
+        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $contactmomentIdentifier]);
+
+        $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
         $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
         $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
 
@@ -255,8 +257,8 @@ return function() : \Aura\Router\Matcher {
             'unstarData' => file_get_contents($imageUnstar)
         ]);
     });
-    $map->get('qr.view', '/qr', function () use ($schema) {
-        $data = request('data');
+    $map->get('qr.view', '/qr', function ($data) use ($schema) {
+        $data = $data;
         if ($data === null) {
             return abort(400);
         }
