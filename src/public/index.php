@@ -13,6 +13,15 @@ $route = $matcher->match($request);
 if ($route === false) {
     http_response_code(404);
 } else {
-    http_response_code(201);
-    print call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams()]);
+    switch ($request->getMethod()) {
+        case 'GET':
+            http_response_code(200);
+            print call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams()]);
+            break;
+        case 'POST':
+            http_response_code(201);
+            print call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams(), $request->getParsedBody()]);
+            break;
+
+    }
 }

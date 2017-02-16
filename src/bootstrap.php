@@ -191,10 +191,12 @@ return function() : \Aura\Router\Matcher {
             'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
         ]);
     });
-    $map->get('feedback.prepare-supply', '/feedback/{contactmoment}/supply', function (array $attributes, array $query) use ($schema) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($schema) {
+        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
+
         $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
 
-        $ipRating = $contactmoment->ratings()->firstOrNew([
+        $ipRating = $contactmoment->fetchFirstByFkRatingContactmoment([
             'ipv4' => $_SERVER['REMOTE_ADDR']
         ]);
 
@@ -221,8 +223,8 @@ return function() : \Aura\Router\Matcher {
             $explanation = null;
         }
 
-        if ($request->has('rating')) {
-            $rating = $request->input('rating');
+        if (array_key_exists('rating', $query)) {
+            $rating = $query['rating'];
         }
 
         return makeBlade()->render('feedback/supply', [
