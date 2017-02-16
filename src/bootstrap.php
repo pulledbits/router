@@ -245,14 +245,12 @@ return function() : \Aura\Router\Matcher {
     });
 
     $map->get('rating.view', '/rating/{contactmoment}', function ($contactmomentIdentifier) use ($schema) {
-        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $contactmomentIdentifier]);
-
         $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
         $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
         $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
 
         return makeBlade()->render('rating', [
-            'rating' => $contactmoment->rating,
+            'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $contactmomentIdentifier])->waarde,
             'starData' => file_get_contents($imageStar),
             'unstarData' => file_get_contents($imageUnstar)
         ]);
