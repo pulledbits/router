@@ -87,7 +87,7 @@ return function() : \Aura\Router\Matcher {
      * | and give it the controller to call when that URI is requested.
      * |
      */
-    $map->get('index', '/', function () use ($schema) {
+    $map->get('index', '/', function (array $attributes, array $query) use ($schema) {
         $ipv4Adresses = [
             $_SERVER['HTTP_HOST']
         ];
@@ -120,10 +120,10 @@ return function() : \Aura\Router\Matcher {
         ]);
     });
 
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function () use ($schema) {
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($schema) {
         return makeBlade()->render('contactmoment.import', []);
     });
-    $map->post('contactmoment.import', '/contactmoment/import', function () use ($schema) {
+    $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($schema) {
         switch (\Request::get("type")) {
             case "ics":
                 $url = \Request::get("url");
@@ -177,8 +177,8 @@ return function() : \Aura\Router\Matcher {
         return view("contactmoment.imported");
     });
 
-    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (String $contactmomentIdentifier) use ($schema) {
-        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $contactmomentIdentifier]);
+    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($schema) {
+        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
         if (array_key_exists('HTTPS', $_SERVER) === false) {
             $scheme = 'http';
@@ -191,7 +191,7 @@ return function() : \Aura\Router\Matcher {
             'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
         ]);
     });
-    $map->get('feedback.prepare-supply', '/feedback/{contactmoment}/supply', function (\Illuminate\Http\Request $request, App\Contactmoment $contactmoment) use ($schema) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmoment}/supply', function (array $attributes, array $query) use ($schema) {
         $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
 
         $ipRating = $contactmoment->ratings()->firstOrNew([
@@ -234,7 +234,7 @@ return function() : \Aura\Router\Matcher {
             ]
         ]);
     });
-    $map->post('feedback.supply', '/feedback/{contactmoment}/supply', function (\Illuminate\Http\Request $request, App\Contactmoment $contactmoment) use ($schema) {
+    $map->post('feedback.supply', '/feedback/{contactmoment}/supply', function (array $attributes, array $query, array $payload) use ($schema) {
         $rating = $contactmoment->ratings()->firstOrNew([
             'ipv4' => $_SERVER['REMOTE_ADDR'],
             'waarde' => $request->rating
@@ -244,19 +244,19 @@ return function() : \Aura\Router\Matcher {
         return 'Dankje!';
     });
 
-    $map->get('rating.view', '/rating/{contactmoment}', function ($contactmomentIdentifier) use ($schema) {
+    $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($schema) {
         $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
         $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
         $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
 
         return makeBlade()->render('rating', [
-            'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $contactmomentIdentifier])->waarde,
+            'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $attributes['contactmomentIdentifier']])->waarde,
             'starData' => file_get_contents($imageStar),
             'unstarData' => file_get_contents($imageUnstar)
         ]);
     });
-    $map->get('qr.view', '/qr', function ($data) use ($schema) {
-        $data = $data;
+    $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($schema) {
+        $data = $query['data'];
         if ($data === null) {
             return abort(400);
         }
