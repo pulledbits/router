@@ -39,23 +39,10 @@ function importEvent(\App\Module $module, \DateTime $starttijd, \DateTime $eindt
         if ($lesplan->naam === null) {
             $lesplan->naam = "";
         }
-        
-        $lesplan->doelgroep()->associate(\App\Doelgroep::find(1));
+
         $lesplan->save();
         
         $contactmoment->les()->associate($lesplan);
-    }
-    
-    foreach ($groepcodes as $groepcode) {
-        $blokgroep = \App\Blokgroep::firstOrNew([
-            'code' => $groepcode
-        ]);
-        $blokgroep->collegejaar = '1516';
-        if (preg_match('/42IN(?<bloknummer>\d+)SO\w/', $groepcode, $matches) !== 1) {
-            continue;
-        }
-        $blokgroep->nummer = (int) $matches['bloknummer'];
-        $blokgroep->save();
     }
     
     $contactmoment->save();
