@@ -70,12 +70,11 @@ return function() : \Aura\Router\Matcher {
 
     $schema = $bootstrap(__DIR__ . DIRECTORY_SEPARATOR . 'gen' . DIRECTORY_SEPARATOR . 'factory.php');
 
+    $session_factory = new \Aura\Session\SessionFactory;
+    $session = $session_factory->newInstance($_COOKIE);
+
     $routerContainer = new \Aura\Router\RouterContainer();
     $map = $routerContainer->getMap();
-
-    makeBlade()->directive('formbuilder', function($expression) {
-        return '<?php $formbuilder = new \AdamWathan\Form\FormBuilder' . $expression . '; ?>';
-    });
 
     /*
      * |--------------------------------------------------------------------------
@@ -191,7 +190,7 @@ return function() : \Aura\Router\Matcher {
             'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
         ]);
     });
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($schema) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($session, $schema) {
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
         $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
@@ -230,6 +229,7 @@ return function() : \Aura\Router\Matcher {
         return makeBlade()->render('feedback/supply', [
             'rating' => $rating,
             'explanation' => $explanation,
+            'csrf_value' => $session->getCsrfToken()->getValue(),
             'uris' => [
                 'star' => 'data: ' . mime_content_type($imageStar) . ';base64,' . $starData,
                 'unstar' => 'data: ' . mime_content_type($imageUnstar) . ';base64,' . $unstarData

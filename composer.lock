@@ -4,51 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69b1b72ef158c5e0833082f424ee7fd3",
-    "content-hash": "7251376ba63f8080cdf212478b9f71c5",
+    "hash": "2a2f1ff12eb9b89f46ed77279c5c9886",
+    "content-hash": "90af95497231e8e475e8e5c3abd8461a",
     "packages": [
-        {
-            "name": "adamwathan/form",
-            "version": "v0.8.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adamwathan/form.git",
-                "reference": "b5a1e8af895a2daa22663508394633fd8ad99904"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adamwathan/form/zipball/b5a1e8af895a2daa22663508394633fd8ad99904",
-                "reference": "b5a1e8af895a2daa22663508394633fd8ad99904",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "illuminate/support": "4.*",
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "3.7.*",
-                "satooshi/php-coveralls": "^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "AdamWathan\\Form": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adam Wathan",
-                    "email": "adam.wathan@gmail.com"
-                }
-            ],
-            "description": "A basic framework agnostic form building package with a few extra niceties like remembering old input and retrieving error messages.",
-            "time": "2017-01-31 13:18:04"
-        },
         {
             "name": "aura/router",
             "version": "3.0.1",
@@ -96,6 +54,68 @@
                 "routing"
             ],
             "time": "2016-10-03 21:48:40"
+        },
+        {
+            "name": "aura/session",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Session.git",
+                "reference": "7d2f7d41ad693970b5b6b83facca0961d3378883"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Session/zipball/7d2f7d41ad693970b5b6b83facca0961d3378883",
+                "reference": "7d2f7d41ad693970b5b6b83facca0961d3378883",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0"
+            },
+            "suggest": {
+                "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens.",
+                "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
+                "ircmaxell/random-lib": "A Library For Generating Secure Random Numbers",
+                "paragonie/random_compat": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Session\\_Config\\Common"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Session\\": "src/",
+                    "Aura\\Session\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Session Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Session/contributors"
+                }
+            ],
+            "description": "Provides session management functionality, including lazy session starting, session segments, next-request-only (\"flash\") values, and CSRF tools.",
+            "homepage": "https://github.com/auraphp/Aura.Session",
+            "keywords": [
+                "csrf",
+                "flash",
+                "flash message",
+                "session",
+                "sessions"
+            ],
+            "time": "2016-10-03 20:28:32"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2880,6 +2900,48 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "adamwathan/form",
+            "version": "v0.8.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adamwathan/form.git",
+                "reference": "b5a1e8af895a2daa22663508394633fd8ad99904"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adamwathan/form/zipball/b5a1e8af895a2daa22663508394633fd8ad99904",
+                "reference": "b5a1e8af895a2daa22663508394633fd8ad99904",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "illuminate/support": "4.*",
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "3.7.*",
+                "satooshi/php-coveralls": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "AdamWathan\\Form": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Wathan",
+                    "email": "adam.wathan@gmail.com"
+                }
+            ],
+            "description": "A basic framework agnostic form building package with a few extra niceties like remembering old input and retrieving error messages.",
+            "time": "2017-01-31 13:18:04"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",

@@ -28,7 +28,7 @@ for ($i = 0; $i < 5; $i ++) {
 if ($rating !== null) {
     ?>
     <form action="supply" method="post">
-    {{ csrf_field() }}
+		<input type="hidden" name="__csrf_value" value="<?= htmlspecialchars($csrf_value, ENT_QUOTES, 'UTF-8'); ?>">
 			<h1>Waarom?</h1>
 			<input type="hidden" name="rating"
 				value="<?php print htmlentities($rating);?>" />
