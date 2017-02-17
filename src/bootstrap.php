@@ -190,7 +190,7 @@ return function() : \Aura\Router\Matcher {
             'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
         ]);
     });
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($session, $schema) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use (     $session, $schema) {
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
         $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
@@ -236,13 +236,17 @@ return function() : \Aura\Router\Matcher {
             ]
         ]);
     });
-    $map->post('feedback.supply', '/feedback/{contactmoment}/supply', function (array $attributes, array $query, array $payload) use ($schema) {
-        $rating = $contactmoment->ratings()->firstOrNew([
-            'ipv4' => $_SERVER['REMOTE_ADDR'],
-            'waarde' => $request->rating
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($session, $schema) {
+        $csrf_token = $session->getCsrfToken();
+        if ($csrf_token->isValid($payload['__csrf_value']) === false) {
+            return "This looks like a cross-site request forgery.";
+        }
+        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
+        $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
+            'ipv4' => $_SERVER['REMOTE_ADDR']
         ]);
-        $rating->inhoud = $request->explanation;
-        $rating->save();
+        $rating->waarde = $payload['rating'];
+        $rating->inhoud = $payload['explanation'];
         return 'Dankje!';
     });
 
