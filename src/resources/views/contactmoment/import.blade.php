@@ -9,7 +9,7 @@
 	</header>
     <section>
     	<form method="post">
-    		{{ csrf_field() }}
+			<input type="hidden" name="__csrf_value" value="<?= htmlspecialchars($csrf_value, ENT_QUOTES, 'UTF-8'); ?>">
     		Type: <ul>
     		<li>
     			<input type="radio" name="type" value="ics" selected />ICS<br/>

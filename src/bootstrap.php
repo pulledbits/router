@@ -8,60 +8,38 @@ function makeBlade() : \duncan3dc\Laravel\BladeInstance
     return $blade;
 }
 
-function extractModule(string $summary)
+function extractModule(\ActiveRecord\Schema $schema, string $summary)
 {
     if (preg_match('/(?<module>[A-Z]+\d{1,2})/', $summary, $matches) !== 1) {
-        return null;
+        return $schema->initializeRecord('module', ['naam' => null]);
     }
-    return \App\Module::where('naam', $matches['module'])->first();
+    return $schema->readFirst('module', [], ['naam' => $matches['module']]);
 }
 
-function importEvent(\App\Module $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte, array $groepcodes)
+function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte, array $groepcodes)
 {
     $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
     $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
 
-    $contactmoment = \App\Contactmoment::where('ical_uid', $uid)->first();
-    if ($contactmoment === null) {
-        $contactmoment = \App\Contactmoment::firstOrNew([
-            'starttijd' => $starttijd
-        ]);
-    }
+    $contactmoment = $schema->readFirst('contactmoment', [], ['ical_uid' => $uid]);
 
-    $contactmoment->ical_uid = $uid;
-    $contactmoment->starttijd = $starttijd;
-    $contactmoment->eindtijd = $eindtijd;
-    $contactmoment->ruimte = $ruimte;
-
-    if ($contactmoment->les === null) {
-        // try to find lesplan
-        $lesplan = $module->lessen()->firstOrNew([
-            'jaar' => $contactmoment->starttijd->format('Y'),
-            'kalenderweek' => (int) $contactmoment->starttijd->format('W')
+    if ($contactmoment->les_id === null) {
+        $lesplan = $module->fetchFirstByFkLesmodule([
+            'jaar' => $starttijd->format('Y'),
+            'kalenderweek' => ltrim($starttijd->format('W'), '0')
         ]);
+
         if ($lesplan->naam === null) {
             $lesplan->naam = "";
         }
-
-        $lesplan->doelgroep()->associate(\App\Doelgroep::find(1));
-        $lesplan->save();
-
-        $contactmoment->les()->associate($lesplan);
+        $contactmoment->les_id = $lesplan->id;
     }
 
-    foreach ($groepcodes as $groepcode) {
-        $blokgroep = \App\Blokgroep::firstOrNew([
-            'code' => $groepcode
-        ]);
-        $blokgroep->collegejaar = '1516';
-        if (preg_match('/42IN(?<bloknummer>\d+)SO\w/', $groepcode, $matches) !== 1) {
-            continue;
-        }
-        $blokgroep->nummer = (int) $matches['bloknummer'];
-        $blokgroep->save();
-    }
-
-    $contactmoment->save();
+    $contactmoment->ical_uid = $uid;
+    $contactmoment->starttijd = $starttijd->format('Y-m-d H:i:s');
+    $contactmoment->eindtijd = $eindtijd->format('Y-m-d H:i:s');
+    $contactmoment->ruimte = $ruimte;
+    $contactmoment->updated_at = date('Y-m-d H:i:s');
 }
 
 return function() : \Aura\Router\Matcher {
@@ -119,13 +97,15 @@ return function() : \Aura\Router\Matcher {
         ]);
     });
 
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($schema) {
-        return makeBlade()->render('contactmoment.import', []);
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($schema, $session) {
+        return makeBlade()->render('contactmoment.import', [
+            'csrf_value' => $session->getCsrfToken()->getValue()
+        ]);
     });
     $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($schema) {
-        switch (\Request::get("type")) {
+        switch ($payload["type"]) {
             case "ics":
-                $url = \Request::get("url");
+                $url = $payload['url'];
                 $icalReader = new \ICal($url);
 
                 foreach ($icalReader->events() as $event) {
@@ -133,8 +113,8 @@ return function() : \Aura\Router\Matcher {
                         continue;
                     }
 
-                    $module = extractModule($event['SUMMARY']);
-                    if ($module === null) {
+                    $module = extractModule($schema, $event['SUMMARY']);
+                    if ($module->id === null) {
                         continue;
                     }
 
@@ -142,21 +122,17 @@ return function() : \Aura\Router\Matcher {
                         $groepen = explode('\, ', $groepMatches['groepen']);
                     }
 
-                    importEvent($module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION'], $groepen);
+                    importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION'], $groepen);
                 }
 
                 // remove future, imported contactmomenten which where not touched in this batch (today)
-                \App\Contactmoment::where(function ($query) {
-                    $query->where('updated_at', '<', date('Y-m-d'))->orWhereNull('updated_at');
-                })->where('starttijd', '>', date('Y-m-d'))
-                    ->whereNotNull('ical_uid')
-                    ->delete();
+                $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
                 break;
 
             case 'avansroosterjson':
-                foreach (json_decode(\Request::get("json"), true) as $event) {
-                    $module = extractModule($event['vak']);
-                    if ($module === null) {
+                foreach (json_decode($payload['json'], true) as $event) {
+                    $module = extractModule($schema, $event['vak']);
+                    if ($module->id === null) {
                         continue;
                     } elseif (preg_match('/in\s+\<a[^\>]+\><span[^\>]+\>(?<ruimte>\w+)/', $event['title'], $matches) !== 1) {
                         continue;
@@ -166,14 +142,14 @@ return function() : \Aura\Router\Matcher {
                     $uid = 'Ical' . $event['start'] . $event['end'] . $ruimte . $event['vak'] . $event['param'] . '@rooster.avans.nl';
                     $uid = str_replace('-', '', $uid);
                     $uid = str_replace(' ', '', $uid);
-                    importEvent($module, new \DateTime($event['start']), new \DateTime($event['end']), $uid, $ruimte, []);
+                    importEvent($schema, $module, new \DateTime($event['start']), new \DateTime($event['end']), $uid, $ruimte, []);
                 }
                 break;
 
             default:
                 return abort(500, 'Unsupported import type');
         }
-        return view("contactmoment.imported");
+        return makeBlade()->render("contactmoment.imported", []);
     });
 
     $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($schema) {
