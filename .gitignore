@@ -56,8 +56,6 @@ modules.xml
 # End of https://www.gitignore.io/api/phpstorm
 
 vendor
-tests/gen
-src/gen
 .idea/inspectionProfiles/
 
 /storage/activerecord
