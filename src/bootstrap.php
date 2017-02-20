@@ -46,7 +46,7 @@ return function() : \Aura\Router\Matcher {
 
     $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-    $schema = $bootstrap(__DIR__ . DIRECTORY_SEPARATOR . 'gen' . DIRECTORY_SEPARATOR . 'factory.php');
+    $schema = $bootstrap->schema();
 
     $session_factory = new \Aura\Session\SessionFactory;
     $session = $session_factory->newInstance($_COOKIE);

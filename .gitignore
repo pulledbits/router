@@ -60,7 +60,7 @@ tests/gen
 src/gen
 .idea/inspectionProfiles/
 
-/storage/views
+/storage/activerecord
 /storage/views.reboot
 /data
 /node_modules
