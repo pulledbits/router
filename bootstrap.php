@@ -38,4 +38,8 @@ return new class {
         }
         return $this->blade;
     }
+
+    public function assetsDirectory() {
+        return __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
+    }
 };

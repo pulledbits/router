@@ -34,12 +34,7 @@ function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module,
 }
 
 return function() : \Aura\Router\Matcher {
-
     $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
-
-    $schema = $bootstrap->schema();
-
-    $session = $bootstrap->session();
 
     $routerContainer = $bootstrap->router();
     $map = $routerContainer->getMap();
@@ -54,7 +49,9 @@ return function() : \Aura\Router\Matcher {
      * | and give it the controller to call when that URI is requested.
      * |
      */
-    $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap, $schema) {
+    $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) {
+        $schema = $bootstrap->schema();
+
         $ipv4Adresses = [
             $_SERVER['HTTP_HOST']
         ];
@@ -87,12 +84,16 @@ return function() : \Aura\Router\Matcher {
         ]);
     });
 
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap, $schema, $session) {
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) {
+        $session = $bootstrap->session();
+
         return $bootstrap->blade()->render('contactmoment.import', [
             'csrf_value' => $session->getCsrfToken()->getValue()
         ]);
     });
-    $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap, $schema) {
+    $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) {
+        $schema = $bootstrap->schema();
+
         switch ($payload["type"]) {
             case "ics":
                 $url = $payload['url'];
@@ -142,7 +143,9 @@ return function() : \Aura\Router\Matcher {
         return $bootstrap->blade()->render("contactmoment.imported", []);
     });
 
-    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap, $schema) {
+    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
+        $schema = $bootstrap->schema();
+
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
         if (array_key_exists('HTTPS', $_SERVER) === false) {
@@ -156,10 +159,13 @@ return function() : \Aura\Router\Matcher {
             'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
         ]);
     });
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($bootstrap, $session, $schema) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($bootstrap) {
+        $schema = $bootstrap->schema();
+        $session = $bootstrap->session();
+
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
-        $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'assets';
+        $assetsDirectory = $bootstrap->assetsDirectory();
 
         $ipRating = $contactmoment->fetchFirstByFkRatingContactmoment([
             'ipv4' => $_SERVER['REMOTE_ADDR']
@@ -202,7 +208,10 @@ return function() : \Aura\Router\Matcher {
             ]
         ]);
     });
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($bootstrap, $session, $schema) {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($bootstrap) {
+        $schema = $bootstrap->schema();
+        $session = $bootstrap->session();
+
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
             return "This looks like a cross-site request forgery.";
@@ -216,8 +225,10 @@ return function() : \Aura\Router\Matcher {
         return 'Dankje!';
     });
 
-    $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap, $schema) {
-        $assetsDirectory = __DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'assets';
+    $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
+        $schema = $bootstrap->schema();
+
+        $assetsDirectory = $bootstrap->assetsDirectory();
         $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
         $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
 
@@ -227,7 +238,7 @@ return function() : \Aura\Router\Matcher {
             'unstarData' => file_get_contents($imageUnstar)
         ]);
     });
-    $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap, $schema) {
+    $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) {
         $data = $query['data'];
         if ($data === null) {
             return abort(400);
