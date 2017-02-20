@@ -187,8 +187,8 @@ return function() : \Aura\Router\Matcher {
             'explanation' => $explanation,
             'csrf_value' => $session->getCsrfToken()->getValue(),
             'uris' => [
-                'star' => 'data: ' . mime_content_type($starData) . ';base64,' . base64_encode($starData),
-                'unstar' => 'data: ' . mime_content_type($unstarData) . ';base64,' . base64_encode($unstarData)
+                'star' => 'data:image/png;base64,' . base64_encode($starData),
+                'unstar' => 'data:image/png;base64,' . base64_encode($unstarData)
             ]
         ]);
     });
