@@ -16,7 +16,7 @@ function extractModule(\ActiveRecord\Schema $schema, string $summary)
     return $schema->readFirst('module', [], ['naam' => $matches['module']]);
 }
 
-function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte, array $groepcodes)
+function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte)
 {
     $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
     $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
@@ -48,10 +48,9 @@ return function() : \Aura\Router\Matcher {
 
     $schema = $bootstrap->schema();
 
-    $session_factory = new \Aura\Session\SessionFactory;
-    $session = $session_factory->newInstance($_COOKIE);
+    $session = $bootstrap->session();
 
-    $routerContainer = new \Aura\Router\RouterContainer();
+    $routerContainer = $bootstrap->router();
     $map = $routerContainer->getMap();
 
     /*

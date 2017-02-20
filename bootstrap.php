@@ -17,4 +17,13 @@ return new class {
         return new \ActiveRecord\SQL\Schema($factory, new \PDO($_ENV['DB_CONNECTION'] . ':host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')));
     }
 
+    public function session() : \Aura\Session\Session {
+        $session_factory = new \Aura\Session\SessionFactory;
+        return $session_factory->newInstance($_COOKIE);
+    }
+
+    public function router() : \Aura\Router\RouterContainer {
+        return new \Aura\Router\RouterContainer();
+    }
+
 };
