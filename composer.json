@@ -1,10 +1,6 @@
 {
 	"name" : "rikmeijer/teach.php",
 	"description" : "teach support",
-	"keywords" : [
-		"framework",
-		"laravel"
-	],
 	"license" : "MIT",
 	"type" : "project",
 	"minimum-stability" : "dev",
@@ -12,12 +8,7 @@
 	"require" : {
 		"php" : ">=7.0",
 		"bacon/bacon-qr-code" : "^1.0",
-		"laravel/framework" : "5.2.*",
-		"oriceon/oauth-5-laravel" : "dev-master",
 		"johngrogg/ics-parser" : "^1.0",
-		"laravelcollective/html" : "5.2.*",
-		"way/generators" : "dev-feature/laravel-five-stable",
-		"laracasts/generators" : "^1.1",
 		"xethron/migrations-generator" : "dev-l5",
 		"duncan3dc/blade": "^3.3",
 		"rikmeijer/activerecord.php": "dev-master",
@@ -26,12 +17,7 @@
 		"aura/session": "^2.1"
 	},
 	"require-dev" : {
-		"fzaninotto/faker" : "~1.4",
-		"mockery/mockery" : "0.9.*",
-		"phpunit/phpunit" : "~5",
-		"phpunit/dbunit" : "*",
-		"symfony/css-selector" : "2.8.*|3.0.*",
-		"symfony/dom-crawler" : "2.8.*|3.0.*"
+		"phpunit/phpunit" : "~5"
 	},
 	"autoload" : {
 		"classmap" : [
@@ -43,23 +29,5 @@
 			"Teach\\Interactions\\" : "src/interactions",
 			"Teach\\Adapters\\" : "src/adapters"
 		}
-	},
-	"autoload-dev" : {
-		"classmap" : [
-			"tests/TestCase.php"
-		]
-	},
-	"scripts" : {
-		"post-install-cmd" : [
-			"Illuminate\\Foundation\\ComposerScripts::postInstall",
-			"php artisan optimize"
-		],
-		"post-update-cmd" : [
-			"Illuminate\\Foundation\\ComposerScripts::postUpdate",
-			"php artisan optimize"
-		]
-	},
-	"config" : {
-		"preferred-install" : "dist"
 	}
 }
