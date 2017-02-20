@@ -113,7 +113,7 @@ return function() : \Aura\Router\Matcher {
                         $groepen = explode('\, ', $groepMatches['groepen']);
                     }
 
-                    importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION'], $groepen);
+                    importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION']);
                 }
 
                 // remove future, imported contactmomenten which where not touched in this batch (today)
@@ -133,7 +133,7 @@ return function() : \Aura\Router\Matcher {
                     $uid = 'Ical' . $event['start'] . $event['end'] . $ruimte . $event['vak'] . $event['param'] . '@rooster.avans.nl';
                     $uid = str_replace('-', '', $uid);
                     $uid = str_replace(' ', '', $uid);
-                    importEvent($schema, $module, new \DateTime($event['start']), new \DateTime($event['end']), $uid, $ruimte, []);
+                    importEvent($schema, $module, new \DateTime($event['start']), new \DateTime($event['end']), $uid, $ruimte);
                 }
                 break;
 
