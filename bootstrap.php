@@ -1,6 +1,11 @@
 <?php
 return new class {
 
+    /**
+     * @var \duncan3dc\Laravel\BladeInstance
+     */
+    private $blade;
+
     public function __construct() {
 
         require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
@@ -26,4 +31,11 @@ return new class {
         return new \Aura\Router\RouterContainer();
     }
 
+    public function blade() : \duncan3dc\Laravel\BladeInstance
+    {
+        if ($this->blade === null) {
+            $this->blade  = new \duncan3dc\Laravel\BladeInstance(__DIR__ . "/resources/views", __DIR__ . "/storage/views.reboot");
+        }
+        return $this->blade;
+    }
 };
