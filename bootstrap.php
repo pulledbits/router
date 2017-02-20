@@ -4,12 +4,12 @@ return new class {
     public function __construct() {
 
         require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-
-        $dotenv = new Dotenv\Dotenv(__DIR__);
-        $dotenv->load();
     }
 
     public function schema() : \ActiveRecord\SQL\Schema {
+        $dotenv = new Dotenv\Dotenv(__DIR__);
+        $dotenv->load();
+
         /**
          * @var $factory \ActiveRecord\RecordFactory
          */
