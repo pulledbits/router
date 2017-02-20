@@ -59,7 +59,7 @@ vendor
 .idea/inspectionProfiles/
 
 /storage/activerecord
-/storage/views.reboot
+/storage/views
 /data
 /node_modules
 /public/storage

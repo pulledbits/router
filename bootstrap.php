@@ -34,7 +34,7 @@ return new class {
     public function blade() : \duncan3dc\Laravel\BladeInstance
     {
         if ($this->blade === null) {
-            $this->blade  = new \duncan3dc\Laravel\BladeInstance(__DIR__ . "/resources/views", __DIR__ . "/storage/views.reboot");
+            $this->blade  = new \duncan3dc\Laravel\BladeInstance(__DIR__ . "/resources/views", __DIR__ . "/storage/views");
         }
         return $this->blade;
     }
