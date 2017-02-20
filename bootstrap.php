@@ -39,7 +39,16 @@ return new class {
         return $this->blade;
     }
 
-    public function assetsDirectory() {
+    private function assetsDirectory() {
         return __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
+    }
+
+    public function readAssetStar() {
+        $image = $this->assetsDirectory() . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
+        return file_get_contents($image);
+    }
+    public function readAssetUnstar() {
+        $image = $this->assetsDirectory() . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
+        return file_get_contents($image);
     }
 };

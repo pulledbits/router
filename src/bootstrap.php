@@ -39,16 +39,6 @@ return function() : \Aura\Router\Matcher {
     $routerContainer = $bootstrap->router();
     $map = $routerContainer->getMap();
 
-    /*
-     * |--------------------------------------------------------------------------
-     * | Application Routes
-     * |--------------------------------------------------------------------------
-     * |
-     * | Here is where you can register all of the routes for an application.
-     * | It's a breeze. Simply tell Laravel the URIs it should respond to
-     * | and give it the controller to call when that URI is requested.
-     * |
-     */
     $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) {
         $schema = $bootstrap->schema();
 
@@ -165,17 +155,9 @@ return function() : \Aura\Router\Matcher {
 
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
-        $assetsDirectory = $bootstrap->assetsDirectory();
-
         $ipRating = $contactmoment->fetchFirstByFkRatingContactmoment([
             'ipv4' => $_SERVER['REMOTE_ADDR']
         ]);
-
-        $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
-        $starData = base64_encode(file_get_contents($imageStar));
-
-        $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
-        $unstarData = base64_encode(file_get_contents($imageUnstar));
 
         if ($ipRating !== null) {
             $data = [
@@ -198,13 +180,15 @@ return function() : \Aura\Router\Matcher {
             $rating = $query['rating'];
         }
 
+        $starData = $bootstrap->readAssetStar();
+        $unstarData = $bootstrap->readAssetUnstar();
         return $bootstrap->blade()->render('feedback/supply', [
             'rating' => $rating,
             'explanation' => $explanation,
             'csrf_value' => $session->getCsrfToken()->getValue(),
             'uris' => [
-                'star' => 'data: ' . mime_content_type($imageStar) . ';base64,' . $starData,
-                'unstar' => 'data: ' . mime_content_type($imageUnstar) . ';base64,' . $unstarData
+                'star' => 'data: ' . mime_content_type($starData) . ';base64,' . base64_encode($starData),
+                'unstar' => 'data: ' . mime_content_type($unstarData) . ';base64,' . base64_encode($unstarData)
             ]
         ]);
     });
@@ -228,14 +212,10 @@ return function() : \Aura\Router\Matcher {
     $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
         $schema = $bootstrap->schema();
 
-        $assetsDirectory = $bootstrap->assetsDirectory();
-        $imageStar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'star.png';
-        $imageUnstar = $assetsDirectory . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
-
         return $bootstrap->blade()->render('rating', [
             'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $attributes['contactmomentIdentifier']])->waarde,
-            'starData' => file_get_contents($imageStar),
-            'unstarData' => file_get_contents($imageUnstar)
+            'starData' => $bootstrap->readAssetStar(),
+            'unstarData' => $bootstrap->readAssetUnstar()
         ]);
     });
     $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) {
