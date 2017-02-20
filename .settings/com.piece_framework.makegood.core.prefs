@@ -1,6 +1,0 @@
-eclipse.preferences.version=1
-phpunit_config_file=/teach.php/tests/phpunit.xml
-preload_script=/teach.php/tests/bootstrap.php
-test_file_pattern=
-test_folders=/teach.php/tests
-testing_framework=PHPUnit
