@@ -8,7 +8,5 @@
 
     <migrations-namespace>DoctrineMigrations</migrations-namespace>
 
-    <table name="migrations"  column="migration"/>
-
     <migrations-directory>./migrations</migrations-directory>
 </doctrine-migrations>
