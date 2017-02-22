@@ -22,17 +22,17 @@ for ($i = 0; $i < 5; $i ++) {
         $image = $uris['unstar'];
     }
     ?><a
-			href="?rating=<?php print htmlentities(rawurldecode($i + 1));?>"><img
-			src="<?php print htmlentities($image); ?>" width="100" /></a><?php
+			href="?rating=<?= rawurldecode($i + 1) ?>"><img
+			src="<?= $image ?>" width="100" /></a><?php
 }
 if ($rating !== null) {
     ?>
     <form action="supply" method="post">
-		<input type="hidden" name="__csrf_value" value="<?= htmlspecialchars($csrf_value, ENT_QUOTES, 'UTF-8'); ?>">
+		<input type="hidden" name="__csrf_value" value="<?= $csrf_value ?>">
 			<h1>Waarom?</h1>
 			<input type="hidden" name="rating"
-				value="<?php print htmlentities($rating);?>" />
-			<textarea rows="5" cols="75" name="explanation"><?php print htmlentities($explanation); ?></textarea>
+				value="<?= $rating ?>" />
+			<textarea rows="5" cols="75" name="explanation"><?= $explanation ?></textarea>
 			<p>
 				<input type="submit" value="Verzenden!" />
 			</p>

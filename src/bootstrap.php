@@ -60,7 +60,7 @@ return function() : \Aura\Router\Matcher {
     $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) {
         $session = $bootstrap->session();
 
-        return $bootstrap->blade()->render('contactmoment.import', [
+        return $bootstrap->phpview('contactmoment/import')->render([
             'csrf_value' => $session->getCsrfToken()->getValue()
         ]);
     });
@@ -113,7 +113,7 @@ return function() : \Aura\Router\Matcher {
             default:
                 return abort(500, 'Unsupported import type');
         }
-        return $bootstrap->blade()->render("contactmoment.imported", []);
+        return $bootstrap->phpview('contactmoment/imported')->render([]);
     });
 
     $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
@@ -127,7 +127,7 @@ return function() : \Aura\Router\Matcher {
             $scheme = 'https';
         }
 
-        return $bootstrap->blade()->render('feedback', [
+        return $bootstrap->phpview('feedback')->render([
             'contactmoment' => $contactmoment,
             'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
         ]);
@@ -165,7 +165,7 @@ return function() : \Aura\Router\Matcher {
 
         $starData = $bootstrap->readAssetStar();
         $unstarData = $bootstrap->readAssetUnstar();
-        return $bootstrap->blade()->render('feedback/supply', [
+        return $bootstrap->phpview('feedback/supply')->render([
             'rating' => $rating,
             'explanation' => $explanation,
             'csrf_value' => $session->getCsrfToken()->getValue(),
@@ -195,7 +195,7 @@ return function() : \Aura\Router\Matcher {
     $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
         $schema = $bootstrap->schema();
 
-        return $bootstrap->blade()->render('rating', [
+        return $bootstrap->phpview('rating')->render([
             'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $attributes['contactmomentIdentifier']])->waarde,
             'starData' => $bootstrap->readAssetStar(),
             'unstarData' => $bootstrap->readAssetUnstar()
@@ -206,7 +206,7 @@ return function() : \Aura\Router\Matcher {
         if ($data === null) {
             return abort(400);
         }
-        return $bootstrap->blade()->render('qr', [
+        return $bootstrap->phpview('qr')->render([
             'data' => $data
         ]);
     });

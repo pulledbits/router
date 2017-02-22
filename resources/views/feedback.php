@@ -14,11 +14,11 @@ body {
 <body>
 	<center>
 		<h1>Feedback-o-meter</h1>
-		<img src="/rating/{{ $contactmoment->id }}" width="500" height="100"
+		<img src="/rating/<?=rawurlencode($contactmoment->id)?>" width="500" height="100"
 			style="margin: 25px 0;" /></br> <img
-			src="/qr?data=<?php print htmlentities(rawurlencode($url));?>"
+			src="/qr?data=<?=rawurlencode($url)?>"
 			width="400" height="400" />
-		<p><?php print htmlentities($url); ?></p>
+		<p><?=$url?></p>
 	</center>
 </body>
 </html>
