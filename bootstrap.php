@@ -73,6 +73,17 @@ return new class implements \ActiveRecord\Resources
                 return new self(dirname($this->templatePath) . DIRECTORY_SEPARATOR . $templateIdentifier . '.php', $this->layoutsPath, $this->cachePath);
             }
 
+            private function url(string $path): string
+            {
+                if (array_key_exists('HTTPS', $_SERVER) === false) {
+                    $scheme = 'http';
+                } else {
+                    $scheme = 'https';
+                }
+
+                return $scheme . '://' . $_SERVER['HTTP_HOST'] . $path;
+            }
+
             public function render(array $variables) {
                 extract($variables);
 
@@ -88,7 +99,7 @@ return new class implements \ActiveRecord\Resources
                 }
             }
 
-            public function layout(string $layoutIdentifier)
+            private function layout(string $layoutIdentifier)
             {
                 $this->layout = new class($this->layoutsPath . DIRECTORY_SEPARATOR . $layoutIdentifier . '.php') {
                     private $layoutPath;

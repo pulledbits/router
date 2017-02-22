@@ -118,18 +118,9 @@ return function() : \Aura\Router\Matcher {
 
     $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
         $schema = $bootstrap->schema();
-
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
-
-        if (array_key_exists('HTTPS', $_SERVER) === false) {
-            $scheme = 'http';
-        } else {
-            $scheme = 'https';
-        }
-
         return $bootstrap->phpview('feedback')->render([
-            'contactmoment' => $contactmoment,
-            'url' => $scheme . '://' . $_SERVER['HTTP_HOST'] . '/feedback/' . $contactmoment->id . '/supply'
+            'contactmoment' => $contactmoment
         ]);
     });
     $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($bootstrap) {

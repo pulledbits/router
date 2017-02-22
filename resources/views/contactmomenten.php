@@ -27,7 +27,7 @@
 			<td><?= strftime('%A', strtotime($contactmoment->starttijd)) ?></td>
 			<td><?= date('H:i', strtotime($contactmoment->starttijd)) ?></td>
 			<td><?= date('H:i', strtotime($contactmoment->eindtijd)) ?></td>
-			<td><a href="<?= $hostname ?>/feedback/<?= $contactmoment->id ?>" target="_blank" title="<?= $hostname ?>">Feedback</a>
+			<td><a href="<?= $this->url('/feedback/' . rawurlencode($contactmoment->id)) ?>" target="_blank">Feedback</a>
 			</td>
 		</tr>
 		<?php endforeach; ?>
