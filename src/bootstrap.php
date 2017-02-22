@@ -42,10 +42,15 @@ return function() : \Aura\Router\Matcher {
     $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) {
         $schema = $bootstrap->schema();
 
+        $protocol = 'http';
+        if (array_key_exists('HTTPS', $_SERVER)) {
+            $protocol .= 's';
+        }
+
         return $bootstrap->blade()->render('welcome', [
             'modules' => $schema->read('module', [], []),
             'contactmomenten' => $schema->read('contactmoment_vandaag', [], []),
-            'hostname' => $_SERVER['HTTP_HOST']
+            'hostname' => $protocol . '://' . $_SERVER['HTTP_HOST']
         ]);
     });
 
