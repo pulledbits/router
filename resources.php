@@ -15,8 +15,6 @@ interface Resources
 
     public function router(): \Aura\Router\RouterContainer;
 
-    public function blade(): \duncan3dc\Laravel\BladeInstance;
-
     public function phpview($templateIdentifier) : \pulledbits\View\Template;
 
     public function readAssetStar();

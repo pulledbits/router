@@ -34,14 +34,6 @@ return new class implements \ActiveRecord\Resources
         return new \Aura\Router\RouterContainer();
     }
 
-    public function blade() : \duncan3dc\Laravel\BladeInstance
-    {
-        if ($this->blade === null) {
-            $this->blade  = new \duncan3dc\Laravel\BladeInstance(__DIR__ . "/resources/views", __DIR__ . "/storage/views");
-        }
-        return $this->blade;
-    }
-
     private function assetsDirectory() {
         return __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'assets';
     }

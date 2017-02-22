@@ -9,8 +9,6 @@
 		"php" : ">=7.0",
 		"bacon/bacon-qr-code" : "^1.0",
 		"johngrogg/ics-parser" : "^1.0",
-		"xethron/migrations-generator" : "dev-l5",
-		"duncan3dc/blade": "^3.3",
 		"rikmeijer/activerecord.php": "dev-master",
 		"aura/router": "^3.0",
 		"guzzlehttp/psr7": "^1.3",
