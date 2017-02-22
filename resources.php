@@ -17,7 +17,7 @@ interface Resources
 
     public function blade(): \duncan3dc\Laravel\BladeInstance;
 
-    public function phpview($templateIdentifier) : \ActiveRecord\PHPView;
+    public function phpview($templateIdentifier) : \pulledbits\View\Template;
 
     public function readAssetStar();
 

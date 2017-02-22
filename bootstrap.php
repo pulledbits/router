@@ -55,9 +55,9 @@ return new class implements \ActiveRecord\Resources
         return file_get_contents($image);
     }
 
-    public function phpview($templateIdentifier): \ActiveRecord\PHPView
+    public function phpview($templateIdentifier): \pulledbits\View\Template
     {
-        return new class(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts', __DIR__ . "/storage/views") implements \ActiveRecord\PHPView {
+        return new class(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts', __DIR__ . "/storage/views") implements \pulledbits\View\Template {
             private $templatePath;
             private $layoutsPath;
             private $cachePath;
@@ -69,7 +69,7 @@ return new class implements \ActiveRecord\Resources
                 $this->cachePath = $cachePath;
             }
 
-            private function sub(string $templateIdentifier) {
+            private function sub(string $templateIdentifier): \pulledbits\View\Template  {
                 return new self(dirname($this->templatePath) . DIRECTORY_SEPARATOR . $templateIdentifier . '.php', $this->layoutsPath, $this->cachePath);
             }
 
@@ -99,9 +99,9 @@ return new class implements \ActiveRecord\Resources
                 }
             }
 
-            private function layout(string $layoutIdentifier)
+            private function layout(string $layoutIdentifier) : \pulledbits\View\Layout
             {
-                $this->layout = new class($this->layoutsPath . DIRECTORY_SEPARATOR . $layoutIdentifier . '.php') {
+                $this->layout = new class($this->layoutsPath . DIRECTORY_SEPARATOR . $layoutIdentifier . '.php') implements \pulledbits\View\Layout  {
                     private $layoutPath;
                     private $sections;
                     private $currentSectionIdentifier;
