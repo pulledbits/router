@@ -1,13 +1,12 @@
 <?php
 $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-$dotenv = new Dotenv\Dotenv(dirname(__DIR__));
-$dotenv->load();
+$resources = require __DIR__ . DIRECTORY_SEPARATOR . 'resources.php';
 
 return [
     'driver' => 'pdo_mysql',
-    'host' => $_ENV['DB_HOST'],
-    'dbname' => $_ENV['DB_DATABASE'],
-    'user' =>  $_ENV['DB_USERNAME'],
-    'password' => $_ENV['DB_PASSWORD']
+    'host' => $resources['DB_HOST'],
+    'dbname' => $resources['DB_DATABASE'],
+    'user' =>  $resources['DB_USERNAME'],
+    'password' => $resources['DB_PASSWORD']
 ];

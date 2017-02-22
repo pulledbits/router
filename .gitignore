@@ -66,3 +66,4 @@ vendor
 Homestead.yaml
 Homestead.json
 .env
+resources.php

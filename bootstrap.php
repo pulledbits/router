@@ -1,28 +1,23 @@
 <?php
-require __DIR__. DIRECTORY_SEPARATOR . 'resources.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'Resources.php';
 require __DIR__. DIRECTORY_SEPARATOR . 'PHPView.php';
+
 return new class implements \ActiveRecord\Resources
 {
-
-    /**
-     * @var \duncan3dc\Laravel\BladeInstance
-     */
-    private $blade;
+    private $resources;
 
     public function __construct() {
 
         require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+        $this->resources = require __DIR__ . DIRECTORY_SEPARATOR . 'resources.php';
     }
 
     public function schema() : \ActiveRecord\SQL\Schema {
-        $dotenv = new Dotenv\Dotenv(__DIR__);
-        $dotenv->load();
-
         /**
          * @var $factory \ActiveRecord\RecordFactory
          */
         $factory = new \ActiveRecord\RecordFactory(__DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'activerecord');
-        return new \ActiveRecord\SQL\Schema($factory, new \PDO($_ENV['DB_CONNECTION'] . ':host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')));
+        return new \ActiveRecord\SQL\Schema($factory, new \PDO($this->resources['DB_CONNECTION'] . ':host=' . $this->resources['DB_HOST'] . ';dbname=' . $this->resources['DB_DATABASE'], $this->resources['DB_USERNAME'], $this->resources['DB_PASSWORD'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')));
     }
 
     public function session() : \Aura\Session\Session {
