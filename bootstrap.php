@@ -57,25 +57,32 @@ return new class implements \ActiveRecord\Resources
 
     public function phpview($templateIdentifier): \ActiveRecord\PHPView
     {
-        $cacheDirectory = __DIR__ . "/storage/views";
-
-        return new class(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts') implements \ActiveRecord\PHPView {
+        return new class(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts', __DIR__ . "/storage/views") implements \ActiveRecord\PHPView {
             private $templatePath;
             private $layoutsPath;
+            private $cachePath;
             private $layout;
 
-            public function __construct(string $templatePath, string $layoutsPath) {
+            public function __construct(string $templatePath, string $layoutsPath, string $cachePath) {
                 $this->templatePath = $templatePath;
                 $this->layoutsPath = $layoutsPath;
+                $this->cachePath = $cachePath;
             }
 
             private function sub(string $templateIdentifier) {
-                return new self(dirname($this->templatePath) . DIRECTORY_SEPARATOR . $templateIdentifier . '.php', $this->layoutsPath);
+                return new self(dirname($this->templatePath) . DIRECTORY_SEPARATOR . $templateIdentifier . '.php', $this->layoutsPath, $this->cachePath);
             }
 
             public function render(array $variables) {
                 extract($variables);
-                include $this->templatePath;
+
+                $cacheFile = $this->cachePath . DIRECTORY_SEPARATOR . sha1_file($this->templatePath) . '.php';
+                if (file_exists($cacheFile) === false) {
+                    $contents = file_get_contents($this->templatePath);
+                    file_put_contents($cacheFile, preg_replace('/<\?=\s?(.*?)\s?\?>/', '<?=htmlentities($1);?>', $contents));
+                }
+                include $cacheFile;
+
                 if ($this->layout !== null) {
                     $this->layout->render();
                 }
