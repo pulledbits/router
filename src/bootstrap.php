@@ -50,7 +50,7 @@ return function() : \Aura\Router\Matcher {
             $protocol .= 's';
         }
 
-        return $bootstrap->blade()->render('welcome', [
+        return $bootstrap->phpview('welcome')->render([
             'modules' => $schema->read('module', [], []),
             'contactmomenten' => $schema->read('contactmoment_vandaag', [], []),
             'hostname' => $protocol . '://' . $_SERVER['HTTP_HOST']

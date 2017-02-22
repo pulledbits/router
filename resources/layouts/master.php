@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Teach - @yield('title')</title>
+        <title>Teach - <?= $this->harvest('title'); ?></title>
 		<link rel="stylesheet" type="text/css" href="/css/lesplan.css">	
     </head>
     <body>
-		@yield('content')
+        <?= $this->harvest('content'); ?>
     </body>
 </html>

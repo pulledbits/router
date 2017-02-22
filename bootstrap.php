@@ -1,5 +1,6 @@
 <?php
 require __DIR__. DIRECTORY_SEPARATOR . 'resources.php';
+require __DIR__. DIRECTORY_SEPARATOR . 'PHPView.php';
 return new class implements \ActiveRecord\Resources
 {
 
@@ -52,5 +53,73 @@ return new class implements \ActiveRecord\Resources
     public function readAssetUnstar() {
         $image = $this->assetsDirectory() . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'unstar.png';
         return file_get_contents($image);
+    }
+
+    public function phpview($templateIdentifier): \ActiveRecord\PHPView
+    {
+        $cacheDirectory = __DIR__ . "/storage/views";
+
+        return new class(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts') implements \ActiveRecord\PHPView {
+            private $templatePath;
+            private $layoutsPath;
+            private $layout;
+
+            public function __construct(string $templatePath, string $layoutsPath) {
+                $this->templatePath = $templatePath;
+                $this->layoutsPath = $layoutsPath;
+            }
+
+            private function sub(string $templateIdentifier) {
+                return new self(dirname($this->templatePath) . DIRECTORY_SEPARATOR . $templateIdentifier . '.php', $this->layoutsPath);
+            }
+
+            public function render(array $variables) {
+                extract($variables);
+                include $this->templatePath;
+                if ($this->layout !== null) {
+                    $this->layout->render();
+                }
+            }
+
+            public function layout(string $layoutIdentifier)
+            {
+                $this->layout = new class($this->layoutsPath . DIRECTORY_SEPARATOR . $layoutIdentifier . '.php') {
+                    private $layoutPath;
+                    private $sections;
+                    private $currentSectionIdentifier;
+                    public function __construct(string $layoutPath)
+                    {
+                        $this->layoutPath = $layoutPath;
+                        $this->sections = [];
+                        ob_start();
+                    }
+
+                    public function section(string $sectionIdentifier, string $content = null) {
+                        if ($content !== null) {
+                            $this->sections[$sectionIdentifier] = $content;
+                            return;
+                        } elseif ($this->currentSectionIdentifier !== null) {
+                            $this->sections[$this->currentSectionIdentifier] = ob_get_clean();
+                        }
+
+                        $this->currentSectionIdentifier = $sectionIdentifier;
+                        ob_start();
+                    }
+
+                    public function render() {
+                        if ($this->currentSectionIdentifier !== null) {
+                            $this->sections[$this->currentSectionIdentifier] = ob_get_clean();
+                        }
+
+                        include $this->layoutPath;
+                    }
+
+                    private function harvest(string $sectionIdentifier) {
+                        return $this->sections[$sectionIdentifier];
+                    }
+                };
+                return $this->layout;
+            }
+        };
     }
 };
