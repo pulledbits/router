@@ -34,6 +34,9 @@ function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module,
 }
 
 return function() : \Aura\Router\Matcher {
+    /**
+     * @var $bootstrap \ActiveRecord\Resources
+     */
     $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
     $routerContainer = $bootstrap->router();

@@ -1,5 +1,7 @@
 <?php
-return new class {
+require __DIR__. DIRECTORY_SEPARATOR . 'resources.php';
+return new class implements \ActiveRecord\Resources
+{
 
     /**
      * @var \duncan3dc\Laravel\BladeInstance
