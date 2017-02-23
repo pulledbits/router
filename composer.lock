@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "78a6dea41f4407343f4978012be06da6",
-    "content-hash": "937fb2fd7d39483d26ae687b70c9a7fb",
+    "hash": "b3c9e022686c36109e6d1075de9ba7ad",
+    "content-hash": "7fbe71059d10c15e735b95129f37819d",
     "packages": [
         {
             "name": "aura/router",
@@ -1019,17 +1019,17 @@
             "time": "2016-10-10 12:19:37"
         },
         {
-            "name": "rikmeijer/activerecord.php",
+            "name": "pulledbits/activerecord",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/rikmeijer/activerecord.php.git",
-                "reference": "235b982613948c0d01a7410fe8687045ec6a526d"
+                "url": "https://github.com/pulledbits/activerecord.git",
+                "reference": "15231f82c5b28a791a410e555934d55225bef4c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rikmeijer/activerecord.php/zipball/235b982613948c0d01a7410fe8687045ec6a526d",
-                "reference": "235b982613948c0d01a7410fe8687045ec6a526d",
+                "url": "https://api.github.com/repos/pulledbits/activerecord/zipball/15231f82c5b28a791a410e555934d55225bef4c7",
+                "reference": "15231f82c5b28a791a410e555934d55225bef4c7",
                 "shasum": ""
             },
             "require": {
@@ -1053,7 +1053,7 @@
                 "MIT"
             ],
             "description": "proper activerecord in PHP",
-            "time": "2017-02-21 14:34:55"
+            "time": "2017-02-23 13:15:46"
         },
         {
             "name": "symfony/console",
@@ -1705,23 +1705,23 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "4.0.5",
+            "version": "4.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c19cfc7cbb0e9338d8c469c7eedecc2a428b0971"
+                "reference": "ca060f645beeddebedb1885c97bf163e93264c35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c19cfc7cbb0e9338d8c469c7eedecc2a428b0971",
-                "reference": "c19cfc7cbb0e9338d8c469c7eedecc2a428b0971",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ca060f645beeddebedb1885c97bf163e93264c35",
+                "reference": "ca060f645beeddebedb1885c97bf163e93264c35",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "phpunit/php-file-iterator": "~1.3",
                 "phpunit/php-text-template": "~1.2",
-                "phpunit/php-token-stream": "^1.4.2",
+                "phpunit/php-token-stream": "^1.4.2 || ^2.0",
                 "sebastian/code-unit-reverse-lookup": "~1.0",
                 "sebastian/environment": "^1.3.2 || ^2.0",
                 "sebastian/version": "~1.0|~2.0"
@@ -1764,7 +1764,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-20 15:06:43"
+            "time": "2017-02-23 07:38:02"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1900,16 +1900,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.9",
+            "version": "1.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "3b402f65a4cc90abf6e1104e388b896ce209631b"
+                "reference": "284fb0679dd25fb5ffb56dad92c72860c0a22f1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/3b402f65a4cc90abf6e1104e388b896ce209631b",
-                "reference": "3b402f65a4cc90abf6e1104e388b896ce209631b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/284fb0679dd25fb5ffb56dad92c72860c0a22f1b",
+                "reference": "284fb0679dd25fb5ffb56dad92c72860c0a22f1b",
                 "shasum": ""
             },
             "require": {
@@ -1945,7 +1945,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2016-11-15 14:06:22"
+            "time": "2017-02-23 06:14:45"
         },
         {
             "name": "phpunit/phpunit",
@@ -2655,7 +2655,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "rikmeijer/activerecord.php": 20
+        "pulledbits/activerecord": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
