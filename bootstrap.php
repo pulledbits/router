@@ -2,7 +2,7 @@
 require __DIR__ . DIRECTORY_SEPARATOR . 'Resources.php';
 require __DIR__. DIRECTORY_SEPARATOR . 'PHPView.php';
 
-return new class implements \ActiveRecord\Resources
+return new class implements \rikmeijer\Teach\Resources
 {
     private $resources;
 
@@ -12,12 +12,12 @@ return new class implements \ActiveRecord\Resources
         $this->resources = require __DIR__ . DIRECTORY_SEPARATOR . 'resources.php';
     }
 
-    public function schema() : \ActiveRecord\SQL\Schema {
+    public function schema() : \pulledbits\ActiveRecord\SQL\Schema {
         /**
-         * @var $factory \ActiveRecord\RecordFactory
+         * @var $factory \pulledbits\ActiveRecord\RecordFactory
          */
-        $factory = new \ActiveRecord\RecordFactory(__DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'activerecord');
-        return new \ActiveRecord\SQL\Schema($factory, new \PDO($this->resources['DB_CONNECTION'] . ':host=' . $this->resources['DB_HOST'] . ';dbname=' . $this->resources['DB_DATABASE'], $this->resources['DB_USERNAME'], $this->resources['DB_PASSWORD'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')));
+        $factory = new \pulledbits\ActiveRecord\RecordFactory(__DIR__ . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'activerecord');
+        return new \pulledbits\ActiveRecord\SQL\Schema($factory, new \PDO($this->resources['DB_CONNECTION'] . ':host=' . $this->resources['DB_HOST'] . ';dbname=' . $this->resources['DB_DATABASE'], $this->resources['DB_USERNAME'], $this->resources['DB_PASSWORD'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')));
     }
 
     public function session() : \Aura\Session\Session {

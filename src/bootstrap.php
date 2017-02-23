@@ -1,5 +1,5 @@
 <?php
-function extractModule(\ActiveRecord\Schema $schema, string $summary)
+function extractModule(\pulledbits\ActiveRecord\Schema $schema, string $summary)
 {
     if (preg_match('/(?<module>[A-Z]+\d{1,2})/', $summary, $matches) !== 1) {
         return $schema->initializeRecord('module', ['naam' => null]);
@@ -7,7 +7,7 @@ function extractModule(\ActiveRecord\Schema $schema, string $summary)
     return $schema->readFirst('module', [], ['naam' => $matches['module']]);
 }
 
-function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte)
+function importEvent(\pulledbits\ActiveRecord\Schema $schema, \pulledbits\ActiveRecord\Record $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte)
 {
     $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
     $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
@@ -35,7 +35,7 @@ function importEvent(\ActiveRecord\Schema $schema, \ActiveRecord\Record $module,
 
 return function() : \Aura\Router\Matcher {
     /**
-     * @var $bootstrap \ActiveRecord\Resources
+     * @var $bootstrap \pulledbits\ActiveRecord\Resources
      */
     $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 

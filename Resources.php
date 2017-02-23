@@ -5,11 +5,11 @@
  * Date: 22-2-17
  * Time: 9:25
  */
-namespace ActiveRecord;
+namespace rikmeijer\Teach;
 
 interface Resources
 {
-    public function schema(): \ActiveRecord\SQL\Schema;
+    public function schema(): \pulledbits\ActiveRecord\SQL\Schema;
 
     public function session(): \Aura\Session\Session;
 
