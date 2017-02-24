@@ -25,5 +25,8 @@
 			"Teach\\Interactions\\" : "src/interactions",
 			"Teach\\Adapters\\" : "src/adapters"
 		}
+	},
+	"config" : {
+		"discard-changes" : true
 	}
 }
