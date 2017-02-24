@@ -1024,12 +1024,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pulledbits/activerecord.git",
-                "reference": "1fb636553899baaaaa64795e550a6c7bf43a73fd"
+                "reference": "2ddcd1166bc2593b3580a57085ad0b649f6641cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pulledbits/activerecord/zipball/1fb636553899baaaaa64795e550a6c7bf43a73fd",
-                "reference": "1fb636553899baaaaa64795e550a6c7bf43a73fd",
+                "url": "https://api.github.com/repos/pulledbits/activerecord/zipball/2ddcd1166bc2593b3580a57085ad0b649f6641cf",
+                "reference": "2ddcd1166bc2593b3580a57085ad0b649f6641cf",
                 "shasum": ""
             },
             "require": {
@@ -1040,12 +1040,12 @@
                 "phpunit/phpunit": "~5"
             },
             "bin": [
-                "bin/generate.php"
+                "bin/activerecord.php"
             ],
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "pulledbits\\pulledbits\ActiveRecord\\": "src/"
+                    "pulledbits\\ActiveRecord\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1053,7 +1053,7 @@
                 "MIT"
             ],
             "description": "proper activerecord in PHP",
-            "time": "2017-02-23 13:33:12"
+            "time": "2017-02-24 12:13:25"
         },
         {
             "name": "symfony/console",
