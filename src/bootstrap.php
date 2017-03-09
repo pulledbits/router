@@ -180,6 +180,10 @@ return function() : \Aura\Router\Matcher {
         ]);
         $rating->waarde = $payload['rating'];
         $rating->inhoud = $payload['explanation'];
+        if ($rating->created_at === null) {
+            $rating->created_at = date('Y-m-d H:i:s');
+        }
+        $rating->updated_at = date('Y-m-d H:i:s');
         return 'Dankje!';
     });
 
