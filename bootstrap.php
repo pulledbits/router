@@ -43,6 +43,18 @@ return new class implements \rikmeijer\Teach\Resources
 
     public function phpview($templateIdentifier): \pulledbits\View\Template
     {
-        return new pulledbits\View\File\Template(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts', __DIR__ . "/storage/views");
+        $template = new pulledbits\View\File\Template(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts', __DIR__ . "/storage/views");
+        $template->registerHelper('url', function(string $path): string
+        {
+            if (array_key_exists('HTTPS', $_SERVER) === false) {
+                $scheme = 'http';
+            } else {
+                $scheme = 'https';
+            }
+
+            return $scheme . '://' . $_SERVER['HTTP_HOST'] . $path;
+        });
+
+        return $template;
     }
 };
