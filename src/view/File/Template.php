@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hameijer
- * Date: 9-3-17
- * Time: 9:22
- */
-
 namespace pulledbits\View\File;
 
 
