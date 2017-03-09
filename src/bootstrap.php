@@ -201,7 +201,17 @@ return function() : \Aura\Router\Matcher {
         if ($data === null) {
             return abort(400);
         }
-        return $bootstrap->phpview('qr')->render([
+
+        $template = $bootstrap->phpview('qr');
+        $template->registerHelper('qr', function() use ($data) {
+            $renderer = new \BaconQrCode\Renderer\Image\Png();
+            $renderer->setHeight(400);
+            $renderer->setWidth(400);
+            $writer = new \BaconQrCode\Writer($renderer);
+            return $writer->writeString($data);
+        });
+
+        $template->render([
             'data' => $data
         ]);
     });
