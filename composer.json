@@ -23,7 +23,9 @@
 			"App\\" : "app/",
 			"Teach\\Domain\\" : "src/domain",
 			"Teach\\Interactions\\" : "src/interactions",
-			"Teach\\Adapters\\" : "src/adapters"
+			"Teach\\Adapters\\" : "src/adapters",
+
+			"pulledbits\\View\\" : "src/view"
 		}
 	},
 	"config" : {

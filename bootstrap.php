@@ -1,6 +1,5 @@
 <?php
 require __DIR__ . DIRECTORY_SEPARATOR . 'Resources.php';
-require __DIR__. DIRECTORY_SEPARATOR . 'PHPView.php';
 
 return new class implements \rikmeijer\Teach\Resources
 {
