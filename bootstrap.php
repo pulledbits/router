@@ -87,41 +87,7 @@ return new class implements \rikmeijer\Teach\Resources
 
             private function layout(string $layoutIdentifier) : \pulledbits\View\Layout
             {
-                $this->layout = new class($this->layoutsPath . DIRECTORY_SEPARATOR . $layoutIdentifier . '.php') implements \pulledbits\View\Layout  {
-                    private $layoutPath;
-                    private $sections;
-                    private $currentSectionIdentifier;
-                    public function __construct(string $layoutPath)
-                    {
-                        $this->layoutPath = $layoutPath;
-                        $this->sections = [];
-                        ob_start();
-                    }
-
-                    public function section(string $sectionIdentifier, string $content = null) {
-                        if ($content !== null) {
-                            $this->sections[$sectionIdentifier] = $content;
-                            return;
-                        } elseif ($this->currentSectionIdentifier !== null) {
-                            $this->sections[$this->currentSectionIdentifier] = ob_get_clean();
-                        }
-
-                        $this->currentSectionIdentifier = $sectionIdentifier;
-                        ob_start();
-                    }
-
-                    public function render() {
-                        if ($this->currentSectionIdentifier !== null) {
-                            $this->sections[$this->currentSectionIdentifier] = ob_get_clean();
-                        }
-
-                        include $this->layoutPath;
-                    }
-
-                    private function harvest(string $sectionIdentifier) {
-                        return $this->sections[$sectionIdentifier];
-                    }
-                };
+                $this->layout = new pulledbits\View\File\Layout($this->layoutsPath . DIRECTORY_SEPARATOR . $layoutIdentifier . '.php');
                 return $this->layout;
             }
         };
