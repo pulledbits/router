@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e5cd8835e9a6c4982eb8a5212306e51",
-    "content-hash": "7fbe71059d10c15e735b95129f37819d",
+    "hash": "7d3b6ad76bec2d6f79670de1a3d459a7",
+    "content-hash": "bf150a38a71919519024f2a686812f23",
     "packages": [
         {
             "name": "aura/router",
@@ -1055,6 +1055,39 @@
             ],
             "description": "proper activerecord in PHP",
             "time": "2017-02-24 18:47:15"
+        },
+        {
+            "name": "pulledbits/view",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pulledbits/view.git",
+                "reference": "b1bd7a213fa79592e804e5edb92836697ede50aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pulledbits/view/zipball/b1bd7a213fa79592e804e5edb92836697ede50aa",
+                "reference": "b1bd7a213fa79592e804e5edb92836697ede50aa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "pulledbits\\View\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "native PHP view engine",
+            "time": "2017-03-09 09:26:42"
         },
         {
             "name": "symfony/console",
@@ -2661,7 +2694,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "pulledbits/activerecord": 20
+        "pulledbits/activerecord": 20,
+        "pulledbits/view": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
