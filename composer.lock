@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7d3b6ad76bec2d6f79670de1a3d459a7",
+    "hash": "af64821cf1aa90fb8ee7d259bdc89fb0",
     "content-hash": "bf150a38a71919519024f2a686812f23",
     "packages": [
         {
@@ -1062,12 +1062,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pulledbits/view.git",
-                "reference": "6d6773422856335ab5975e8bb4671402d7cc6d5d"
+                "reference": "62a45c350783190de877aeff1fdb96f42723f9c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pulledbits/view/zipball/6d6773422856335ab5975e8bb4671402d7cc6d5d",
-                "reference": "6d6773422856335ab5975e8bb4671402d7cc6d5d",
+                "url": "https://api.github.com/repos/pulledbits/view/zipball/62a45c350783190de877aeff1fdb96f42723f9c2",
+                "reference": "62a45c350783190de877aeff1fdb96f42723f9c2",
                 "shasum": ""
             },
             "require": {
@@ -1087,7 +1087,7 @@
                 "MIT"
             ],
             "description": "native PHP view engine",
-            "time": "2017-03-09 11:05:14"
+            "time": "2017-03-09 15:34:22"
         },
         {
             "name": "symfony/console",
