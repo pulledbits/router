@@ -44,16 +44,9 @@ return function() : \Aura\Router\Matcher {
 
     $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) {
         $schema = $bootstrap->schema();
-
-        $protocol = 'http';
-        if (array_key_exists('HTTPS', $_SERVER)) {
-            $protocol .= 's';
-        }
-
         return $bootstrap->phpview('welcome')->render([
             'modules' => $schema->read('module', [], []),
-            'contactmomenten' => $schema->read('contactmoment_vandaag', [], []),
-            'hostname' => $protocol . '://' . $_SERVER['HTTP_HOST']
+            'contactmomenten' => $schema->read('contactmoment_vandaag', [], [])
         ]);
     });
 
