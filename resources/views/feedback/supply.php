@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php $layout = $this->layout('html5'); ?>
+<?php $layout->section('title', 'Feedback'); ?>
+<?php $layout->section('head'); ?>
 <meta charset="utf-8">
-<title>Feedback</title>
 <style>
-body {
-	font-family: arial, sans-serif;
-}
+    body {
+        font-family: arial, sans-serif;
+        text-align: center;
+    }
 </style>
-</head>
-<body style="text-align: center;">
-		<h1>Hoeveel sterren?</h1>
+<?php $layout->section('body'); ?>
+<h1>Hoeveel sterren?</h1>
 <?php
 for ($i = 0; $i < 5; $i ++) {
     if ($rating === null) {
@@ -21,23 +20,20 @@ for ($i = 0; $i < 5; $i ++) {
         $image = $uris['unstar'];
     }
     ?><a
-			href="?rating=<?= rawurldecode($i + 1) ?>"><img
-			src="<?= $image ?>" width="100" /></a><?php
+    href="?rating=<?= rawurldecode($i + 1) ?>"><img
+            src="<?= $image ?>" width="100" /></a><?php
 }
 if ($rating !== null) {
     ?>
     <form action="supply" method="post">
-		<input type="hidden" name="__csrf_value" value="<?= $csrf_value ?>">
-			<h1>Waarom?</h1>
-			<input type="hidden" name="rating"
-				value="<?= $rating ?>" />
-			<textarea rows="5" cols="75" name="explanation"><?= $explanation ?></textarea>
-			<p>
-				<input type="submit" value="Verzenden!" />
-			</p>
-		</form>
+        <input type="hidden" name="__csrf_value" value="<?= $csrf_value ?>">
+        <h1>Waarom?</h1>
+        <input type="hidden" name="rating"
+               value="<?= $rating ?>" />
+        <textarea rows="5" cols="75" name="explanation"><?= $explanation ?></textarea>
+        <p>
+            <input type="submit" value="Verzenden!" />
+        </p>
+    </form>
     <?php
 }
-?>
-</body>
-</html>
