@@ -188,12 +188,33 @@ return function() : \Aura\Router\Matcher {
     });
 
     $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
-        $schema = $bootstrap->schema();
-
+        $contactmomentIdentifier = $attributes['contactmomentIdentifier'];
         return $bootstrap->phpview('rating')->render([
-            'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $attributes['contactmomentIdentifier']])->waarde,
-            'starData' => $bootstrap->readAssetStar(),
-            'unstarData' => $bootstrap->readAssetUnstar()
+            'writeStarsPng' => function($width, $height) use ($bootstrap, $contactmomentIdentifier) : string {
+                $rating = $bootstrap->schema()->readFirst('contactmomentrating', [], ['contactmoment_id' => $contactmomentIdentifier])->waarde;
+
+                $im = imagecreatetruecolor($width, $height);
+                imagealphablending($im, false);
+                imagesavealpha($im, true);
+                $transparent = imagecolorallocatealpha($im, 255, 255, 255, 127);
+                imagefilledrectangle($im, 0, 0, $width, $height, $transparent);
+
+                $star = imagecreatefromstring($bootstrap->readAssetStar());
+                $unstar = imagecreatefromstring($bootstrap->readAssetUnstar());
+                for ($i = 0; $i < 5; $i ++) {
+                    if ($i < $rating) {
+                        $source = $star;
+                    } else {
+                        $source = $unstar;
+                    }
+                    if (imagecopyresampled($im, $source, 100 * $i, ($height / 2) - (100 / 2), 0, 0, 100, 100, imagesx($source), imagesy($source)) === false) {
+                        exit('fail to copy image');
+                    }
+                }
+                imagepng($im, null, 0);
+                imagedestroy($im);
+                imagedestroy($star);
+            }
         ]);
     });
     $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) {
