@@ -209,9 +209,7 @@ return function() : \Aura\Router\Matcher {
             return $writer->writeString($data);
         });
 
-        $template->render([
-            'data' => $data
-        ]);
+        $template->render([]);
     });
 
     return $routerContainer->getMatcher();
