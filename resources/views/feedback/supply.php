@@ -9,8 +9,7 @@ body {
 }
 </style>
 </head>
-<body>
-	<center>
+<body style="text-align: center;">
 		<h1>Hoeveel sterren?</h1>
 <?php
 for ($i = 0; $i < 5; $i ++) {
@@ -40,6 +39,5 @@ if ($rating !== null) {
     <?php
 }
 ?>
-</center>
 </body>
 </html>
