@@ -44,7 +44,7 @@ return new class implements \rikmeijer\Teach\Resources
     public function phpview($templateIdentifier): \pulledbits\View\Template
     {
         $template = new pulledbits\View\File\Template(__DIR__ . "/resources/views/" . $templateIdentifier . '.php', __DIR__ . '/resources/layouts', __DIR__ . "/storage/views");
-        $template->registerHelper('url', function(string $path): string
+        $template->registerHelper('url', function(string $path, string ...$unencoded) : string
         {
             if (array_key_exists('HTTPS', $_SERVER) === false) {
                 $scheme = 'http';
@@ -52,7 +52,9 @@ return new class implements \rikmeijer\Teach\Resources
                 $scheme = 'https';
             }
 
-            return $scheme . '://' . $_SERVER['HTTP_HOST'] . $path;
+            $encoded = array_map('rawurlencode', $unencoded);
+
+            return $scheme . '://' . $_SERVER['HTTP_HOST'] . sprintf($path, ...$encoded);
         });
 
         return $template;
