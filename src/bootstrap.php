@@ -203,11 +203,9 @@ return function() : \Aura\Router\Matcher {
         }
 
         $template = $bootstrap->phpview('qr');
-        $template->registerHelper('qr', function() use ($data) {
-            $renderer = new \BaconQrCode\Renderer\Image\Png();
-            $renderer->setHeight(400);
-            $renderer->setWidth(400);
-            $writer = new \BaconQrCode\Writer($renderer);
+        $template->registerHelper('qr', function() use ($bootstrap, $data) : string {
+            $renderer = $bootstrap->qrRenderer(400, 400);
+            $writer = $bootstrap->qrWriter($renderer);
             return $writer->writeString($data);
         });
 

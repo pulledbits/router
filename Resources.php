@@ -20,4 +20,8 @@ interface Resources
     public function readAssetStar();
 
     public function readAssetUnstar();
+
+    public function qrRenderer(int $width, int $height) : \BaconQrCode\Renderer\Image\Png;
+    public function qrWriter(\BaconQrCode\Renderer\RendererInterface $renderer) : \BaconQrCode\Writer;
+
 }

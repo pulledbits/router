@@ -57,4 +57,17 @@ return new class implements \rikmeijer\Teach\Resources
 
         return $template;
     }
+
+    public function qrRenderer(int $width, int $height): \BaconQrCode\Renderer\Image\Png
+    {
+        $renderer = new \BaconQrCode\Renderer\Image\Png();
+        $renderer->setHeight($width);
+        $renderer->setWidth($height);
+        return $renderer;
+    }
+
+    public function qrWriter(\BaconQrCode\Renderer\RendererInterface $renderer): \BaconQrCode\Writer
+    {
+        return new \BaconQrCode\Writer($renderer);
+    }
 };
