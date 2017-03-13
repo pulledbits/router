@@ -52,9 +52,26 @@ return function() : \Aura\Router\Matcher {
 
     $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) {
         $session = $bootstrap->session();
-
         return $bootstrap->phpview('contactmoment/import')->render([
-            'csrf_value' => $session->getCsrfToken()->getValue()
+            'form' => function() use ($session) {
+                ?>
+                <form method="post">
+                    <input type="hidden" name="__csrf_value" value="<?= $this->escape($session->getCsrfToken()->getValue()); ?>">
+                    Type: <ul>
+                        <li>
+                            <input type="radio" name="type" value="ics" selected />ICS<br/>
+                            URL: <input type="text" name="url" />
+                        </li>
+                        <li>
+                            <input type="radio" name="type" value="avansroosterjson" />Avans Rooster JSON<br/ >
+                            JSON: <textarea type="text" name="json" rows="10" cols="50"></textarea>
+                        </li>
+                    </ul>
+                    <input type="submit" value="Importeren" />
+                </form>
+                <?php
+            }
+
         ]);
     });
     $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) {
