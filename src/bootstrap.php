@@ -203,8 +203,8 @@ return function() : \Aura\Router\Matcher {
         }
 
         $template = $bootstrap->phpview('qr');
-        $template->registerHelper('qr', function() use ($bootstrap, $data) : string {
-            $renderer = $bootstrap->qrRenderer(400, 400);
+        $template->registerHelper('qr', function(int $width, int $height) use ($bootstrap, $data) : string {
+            $renderer = $bootstrap->qrRenderer($width, $height);
             $writer = $bootstrap->qrWriter($renderer);
             return $writer->writeString($data);
         });

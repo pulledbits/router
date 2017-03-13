@@ -1,4 +1,4 @@
 <?php
 header('Content-Type: image/png');
-print $this->qr();
+print $this->qr(400, 400);
 exit();
