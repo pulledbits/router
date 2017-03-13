@@ -7,5 +7,5 @@
     <h1>Importeer contactmomenten</h1>
 </header>
 <section>
-    <?php $this->form(); ?>
+    <?php $this->importForm(); ?>
 </section>
