@@ -1,38 +1,4 @@
 <?php
-function extractModule(\pulledbits\ActiveRecord\Schema $schema, string $summary)
-{
-    if (preg_match('/(?<module>[A-Z]+\d{1,2})/', $summary, $matches) !== 1) {
-        return $schema->initializeRecord('module', ['naam' => null]);
-    }
-    return $schema->readFirst('module', [], ['naam' => $matches['module']]);
-}
-
-function importEvent(\pulledbits\ActiveRecord\Schema $schema, \pulledbits\ActiveRecord\Record $module, \DateTime $starttijd, \DateTime $eindtijd, string $uid, string $ruimte)
-{
-    $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
-    $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
-
-    $contactmoment = $schema->readFirst('contactmoment', [], ['ical_uid' => $uid]);
-
-    if ($contactmoment->les_id === null) {
-        $lesplan = $module->fetchFirstByFkLesmodule([
-            'jaar' => $starttijd->format('Y'),
-            'kalenderweek' => ltrim($starttijd->format('W'), '0')
-        ]);
-
-        if ($lesplan->naam === null) {
-            $lesplan->naam = "";
-        }
-        $contactmoment->les_id = $lesplan->id;
-    }
-
-    $contactmoment->ical_uid = $uid;
-    $contactmoment->starttijd = $starttijd->format('Y-m-d H:i:s');
-    $contactmoment->eindtijd = $eindtijd->format('Y-m-d H:i:s');
-    $contactmoment->ruimte = $ruimte;
-    $contactmoment->updated_at = date('Y-m-d H:i:s');
-}
-
 return function() : \Aura\Router\Matcher {
     /**
      * @var $bootstrap \pulledbits\ActiveRecord\Resources
@@ -71,11 +37,43 @@ return function() : \Aura\Router\Matcher {
             if (array_key_exists('SUMMARY', $event) === false) {
                 continue;
             }
-            $module = extractModule($schema, $event['SUMMARY']);
+
+            if (preg_match('/(?<module>[A-Z]+\d{1,2})/', $event['SUMMARY'], $matches) !== 1) {
+                $module = $schema->initializeRecord('module', ['naam' => null]);
+            } else {
+                $module = $schema->readFirst('module', [], ['naam' => $matches['module']]);
+            }
+
             if ($module->id === null) {
                 continue;
             }
-            importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION']);
+
+            $starttijd = new \DateTime($event['DTSTART']);
+            $eindtijd = new \DateTime($event['DTEND']);
+            $uid = $event['UID'];
+
+            $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
+            $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
+
+            $contactmoment = $schema->readFirst('contactmoment', [], ['ical_uid' => $uid]);
+
+            if ($contactmoment->les_id === null) {
+                $lesplan = $module->fetchFirstByFkLesmodule([
+                    'jaar' => $starttijd->format('Y'),
+                    'kalenderweek' => ltrim($starttijd->format('W'), '0')
+                ]);
+
+                if ($lesplan->naam === null) {
+                    $lesplan->naam = "";
+                }
+                $contactmoment->les_id = $lesplan->id;
+            }
+
+            $contactmoment->ical_uid = $uid;
+            $contactmoment->starttijd = $starttijd->format('Y-m-d H:i:s');
+            $contactmoment->eindtijd = $eindtijd->format('Y-m-d H:i:s');
+            $contactmoment->ruimte = $event['LOCATION'];
+            $contactmoment->updated_at = date('Y-m-d H:i:s');
         }
 
         // remove future, imported contactmomenten which where not touched in this batch (today)
