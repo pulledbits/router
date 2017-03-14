@@ -83,16 +83,10 @@ return function() : \Aura\Router\Matcher {
                     if (array_key_exists('SUMMARY', $event) === false) {
                         continue;
                     }
-
                     $module = extractModule($schema, $event['SUMMARY']);
                     if ($module->id === null) {
                         continue;
                     }
-
-                    if (preg_match('/Groepen:\s+(?<groepen>[^\\n]+)\\\\n\\\\n/', $event['DESCRIPTION'], $groepMatches) === 1) {
-                        $groepen = explode('\, ', $groepMatches['groepen']);
-                    }
-
                     importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION']);
                 }
 
