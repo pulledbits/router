@@ -158,7 +158,7 @@ return function() : \Aura\Router\Matcher {
             'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $attributes['contactmomentIdentifier']])->waarde,
             'starData' => $bootstrap->readAssetStar(),
             'unstarData' => $bootstrap->readAssetUnstar()
-        ]));
+        ]))->withAddedHeader('Content-Type', 'image/png');
     });
     $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $data = $query['data'];
@@ -172,7 +172,7 @@ return function() : \Aura\Router\Matcher {
                 $writer = $bootstrap->qrWriter($renderer);
                 return $writer->writeString($data);
             }
-        ]));
+        ]))->withAddedHeader('Content-Type', 'image/png');
     });
 
     return $routerContainer->getMatcher();

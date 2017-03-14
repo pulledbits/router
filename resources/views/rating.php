@@ -1,5 +1,4 @@
 <?php
-header("Content-type: image/png");
 $height = 100;
 $im = imagecreatetruecolor(500, $height);
 imagealphablending($im, false);
