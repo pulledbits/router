@@ -50,12 +50,11 @@ return function() : \Aura\Router\Matcher {
 
             $starttijd = new \DateTime($event['DTSTART']);
             $eindtijd = new \DateTime($event['DTEND']);
-            $uid = $event['UID'];
 
             $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
             $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
 
-            $contactmoment = $schema->readFirst('contactmoment', [], ['ical_uid' => $uid]);
+            $contactmoment = $schema->readFirst('contactmoment', [], ['ical_uid' => $event['UID']]);
 
             if ($contactmoment->les_id === null) {
                 $lesplan = $module->fetchFirstByFkLesmodule([
@@ -69,7 +68,7 @@ return function() : \Aura\Router\Matcher {
                 $contactmoment->les_id = $lesplan->id;
             }
 
-            $contactmoment->ical_uid = $uid;
+            $contactmoment->ical_uid = $event['UID'];
             $contactmoment->starttijd = $starttijd->format('Y-m-d H:i:s');
             $contactmoment->eindtijd = $eindtijd->format('Y-m-d H:i:s');
             $contactmoment->ruimte = $event['LOCATION'];
