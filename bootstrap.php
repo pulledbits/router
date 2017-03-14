@@ -81,4 +81,9 @@ return new class implements \rikmeijer\Teach\Resources
     {
         return new \BaconQrCode\Writer($renderer);
     }
+
+    public function iCalReader(string $uri) : \ICal
+    {
+        return new \ICal($uri);
+    }
 };

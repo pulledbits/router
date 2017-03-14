@@ -24,4 +24,6 @@ interface Resources
     public function qrRenderer(int $width, int $height) : \BaconQrCode\Renderer\Image\Png;
     public function qrWriter(\BaconQrCode\Renderer\RendererInterface $renderer) : \BaconQrCode\Writer;
 
+    public function iCalReader(string $uri) : \ICal;
+
 }

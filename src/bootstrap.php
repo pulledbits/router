@@ -30,8 +30,7 @@ return function() : \Aura\Router\Matcher {
     $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) {
         $schema = $bootstrap->schema();
 
-        $url = $payload['url'];
-        $icalReader = new \ICal($url);
+        $icalReader = $bootstrap->iCalReader($payload['url']);
 
         foreach ($icalReader->events() as $event) {
             if (array_key_exists('SUMMARY', $event) === false) {
