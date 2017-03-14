@@ -60,8 +60,8 @@ return new class implements \rikmeijer\Teach\Resources
             ?>
             <form method="<?=$this->escape($method);?>">
                 <input type="hidden" name="__csrf_value" value="<?= $this->escape($csrftoken); ?>" />
-                <input type="submit" value="<?= $this->escape($submitValue); ?>" />
                 <?=$model;?>
+                <input type="submit" value="<?= $this->escape($submitValue); ?>" />
             </form>
             <?php
         });

@@ -54,17 +54,7 @@ return function() : \Aura\Router\Matcher {
         $session = $bootstrap->session();
         return $bootstrap->phpview('contactmoment/import')->render([
             'importForm' => function() use ($session) : void {
-                $model = '
-                    Type: <ul>
-                        <li>
-                            <input type="radio" name="type" value="ics" selected />ICS<br/>
-                            URL: <input type="text" name="url" />
-                        </li>
-                        <li>
-                            <input type="radio" name="type" value="avansroosterjson" />Avans Rooster JSON<br/ >
-                            JSON: <textarea type="text" name="json" rows="10" cols="50"></textarea>
-                        </li>
-                    </ul>';
+                $model = 'ICS URL: <input type="text" name="url" />';
 
                 print $this->form("post", $session->getCsrfToken()->getValue(), "Importeren", $model);
             }
@@ -74,46 +64,23 @@ return function() : \Aura\Router\Matcher {
     $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) {
         $schema = $bootstrap->schema();
 
-        switch ($payload["type"]) {
-            case "ics":
-                $url = $payload['url'];
-                $icalReader = new \ICal($url);
+        $url = $payload['url'];
+        $icalReader = new \ICal($url);
 
-                foreach ($icalReader->events() as $event) {
-                    if (array_key_exists('SUMMARY', $event) === false) {
-                        continue;
-                    }
-                    $module = extractModule($schema, $event['SUMMARY']);
-                    if ($module->id === null) {
-                        continue;
-                    }
-                    importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION']);
-                }
-
-                // remove future, imported contactmomenten which where not touched in this batch (today)
-                $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
-                break;
-
-            case 'avansroosterjson':
-                foreach (json_decode($payload['json'], true) as $event) {
-                    $module = extractModule($schema, $event['vak']);
-                    if ($module->id === null) {
-                        continue;
-                    } elseif (preg_match('/in\s+\<a[^\>]+\><span[^\>]+\>(?<ruimte>\w+)/', $event['title'], $matches) !== 1) {
-                        continue;
-                    }
-
-                    $ruimte = $matches['ruimte'];
-                    $uid = 'Ical' . $event['start'] . $event['end'] . $ruimte . $event['vak'] . $event['param'] . '@rooster.avans.nl';
-                    $uid = str_replace('-', '', $uid);
-                    $uid = str_replace(' ', '', $uid);
-                    importEvent($schema, $module, new \DateTime($event['start']), new \DateTime($event['end']), $uid, $ruimte);
-                }
-                break;
-
-            default:
-                return abort(500, 'Unsupported import type');
+        foreach ($icalReader->events() as $event) {
+            if (array_key_exists('SUMMARY', $event) === false) {
+                continue;
+            }
+            $module = extractModule($schema, $event['SUMMARY']);
+            if ($module->id === null) {
+                continue;
+            }
+            importEvent($schema, $module, new \DateTime($event['DTSTART']), new \DateTime($event['DTEND']), $event['UID'], $event['LOCATION']);
         }
+
+        // remove future, imported contactmomenten which where not touched in this batch (today)
+        $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
+
         return $bootstrap->phpview('contactmoment/imported')->render([]);
     });
 
