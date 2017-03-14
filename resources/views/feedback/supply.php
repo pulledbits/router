@@ -12,16 +12,7 @@
 <h1>Hoeveel sterren?</h1>
 <?php
 for ($i = 0; $i < 5; $i ++) {
-    if ($rating === null) {
-        $image = $uris['star'];
-    } elseif ($i < $rating) {
-        $image = $uris['star'];
-    } else {
-        $image = $uris['unstar'];
-    }
-    ?><a
-    href="?rating=<?= rawurldecode($i + 1) ?>"><img
-            src="<?= $image ?>" width="100" /></a><?php
+    ?><a href="?rating=<?= rawurldecode($i + 1) ?>"><img src="<?= $this->star($i) ?>" width="100" /></a><?php
 }
 if ($rating !== null) {
     ?>

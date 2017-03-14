@@ -118,16 +118,20 @@ return function() : \Aura\Router\Matcher {
             $rating = $query['rating'];
         }
 
-        $starData = $bootstrap->readAssetStar();
-        $unstarData = $bootstrap->readAssetUnstar();
         return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->render([
             'rating' => $rating,
             'explanation' => $explanation,
             'csrf_value' => $session->getCsrfToken()->getValue(),
-            'uris' => [
-                'star' => 'data:image/png;base64,' . base64_encode($starData),
-                'unstar' => 'data:image/png;base64,' . base64_encode($unstarData)
-            ]
+            'star' => function(int $i) use ($rating, $bootstrap) : string {
+                if ($rating === null) {
+                    $data = $bootstrap->readAssetStar();
+                } elseif ($i < $rating) {
+                    $data = $bootstrap->readAssetStar();
+                } else {
+                    $data = $bootstrap->readAssetUnstar();
+                }
+                return 'data:image/png;base64,' . base64_encode($data);
+            }
         ]));
     });
     $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
