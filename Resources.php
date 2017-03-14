@@ -9,6 +9,8 @@ namespace rikmeijer\Teach;
 
 interface Resources
 {
+    public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface;
+
     public function schema(): \pulledbits\ActiveRecord\SQL\Schema;
 
     public function session(): \Aura\Session\Session;

@@ -13,15 +13,23 @@ $route = $matcher->match($request);
 if ($route === false) {
     http_response_code(404);
 } else {
+    /**
+     * @var $response \Psr\Http\Message\ResponseInterface
+     */
+    $response;
     switch ($request->getMethod()) {
         case 'GET':
-            http_response_code(200);
-            print call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams()]);
+            $response = call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams()]);
             break;
         case 'POST':
-            http_response_code(201);
-            print call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams(), $request->getParsedBody()]);
+            $response = call_user_func_array($route->handler, [$route->attributes, $request->getQueryParams(), $request->getParsedBody()]);
             break;
 
     }
+
+    http_response_code($response->getStatusCode());
+    foreach ($response->getHeaders() as $headerIdentifier => $headerValue) {
+        header($headerIdentifier . ': ' . $headerValue);
+    }
+    print $response->getBody();
 }

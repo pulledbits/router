@@ -86,4 +86,8 @@ return new class implements \rikmeijer\Teach\Resources
     {
         return new \ICal($uri);
     }
+
+    public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface {
+        return (new \GuzzleHttp\Psr7\Response($code))->withBody(\GuzzleHttp\Psr7\stream_for($stream));
+    }
 };

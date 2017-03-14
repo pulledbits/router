@@ -1,33 +1,33 @@
 <?php
 return function() : \Aura\Router\Matcher {
     /**
-     * @var $bootstrap \pulledbits\ActiveRecord\Resources
+     * @var $bootstrap \rikmeijer\Teach\Resources
      */
     $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
     $routerContainer = $bootstrap->router();
     $map = $routerContainer->getMap();
 
-    $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) {
+    $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
-        return $bootstrap->phpview('welcome')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('welcome')->render([
             'modules' => $schema->read('module', [], []),
             'contactmomenten' => $schema->read('contactmoment_vandaag', [], [])
-        ]);
+        ]));
     });
 
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) {
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $session = $bootstrap->session();
-        return $bootstrap->phpview('contactmoment/import')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('contactmoment/import')->render([
             'importForm' => function() use ($session) : void {
                 $model = 'ICS URL: <input type="text" name="url" />';
 
                 print $this->form("post", $session->getCsrfToken()->getValue(), "Importeren", $model);
             }
 
-        ]);
+        ]));
     });
-    $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) {
+    $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
 
         $icalReader = $bootstrap->iCalReader($payload['url']);
@@ -77,17 +77,17 @@ return function() : \Aura\Router\Matcher {
         // remove future, imported contactmomenten which where not touched in this batch (today)
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
-        return $bootstrap->phpview('contactmoment/imported')->render([]);
+        return $bootstrap->response(201, $bootstrap->phpview('contactmoment/imported')->render([]));
     });
 
-    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
+    $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
-        return $bootstrap->phpview('feedback')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('feedback')->render([
             'contactmoment' => $contactmoment
-        ]);
+        ]));
     });
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($bootstrap) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
         $session = $bootstrap->session();
 
@@ -120,7 +120,7 @@ return function() : \Aura\Router\Matcher {
 
         $starData = $bootstrap->readAssetStar();
         $unstarData = $bootstrap->readAssetUnstar();
-        return $bootstrap->phpview('feedback/supply')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->render([
             'rating' => $rating,
             'explanation' => $explanation,
             'csrf_value' => $session->getCsrfToken()->getValue(),
@@ -128,15 +128,15 @@ return function() : \Aura\Router\Matcher {
                 'star' => 'data:image/png;base64,' . base64_encode($starData),
                 'unstar' => 'data:image/png;base64,' . base64_encode($unstarData)
             ]
-        ]);
+        ]));
     });
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($bootstrap) {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
         $session = $bootstrap->session();
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            return "This looks like a cross-site request forgery.";
+            return $bootstrap->response(403, "This looks like a cross-site request forgery.");
         }
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
         $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
@@ -148,32 +148,31 @@ return function() : \Aura\Router\Matcher {
             $rating->created_at = date('Y-m-d H:i:s');
         }
         $rating->updated_at = date('Y-m-d H:i:s');
-        return 'Dankje!';
+        return $bootstrap->response(201, 'Dankje!');
     });
 
-    $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) {
+    $map->get('rating.view', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
 
-        return $bootstrap->phpview('rating')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('rating')->capture([
             'rating' => $schema->readFirst('contactmomentrating', [], ['contactmoment_id' => $attributes['contactmomentIdentifier']])->waarde,
             'starData' => $bootstrap->readAssetStar(),
             'unstarData' => $bootstrap->readAssetUnstar()
-        ]);
+        ]));
     });
-    $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) {
+    $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $data = $query['data'];
         if ($data === null) {
-            return abort(400);
+            return $bootstrap->response(400);
         }
 
-        $template = $bootstrap->phpview('qr');
-        $template->render([
+        return $bootstrap->response(200, $bootstrap->phpview('qr')->capture([
             'qr' => function(int $width, int $height) use ($bootstrap, $data) : string {
                 $renderer = $bootstrap->qrRenderer($width, $height);
                 $writer = $bootstrap->qrWriter($renderer);
                 return $writer->writeString($data);
             }
-        ]);
+        ]));
     });
 
     return $routerContainer->getMatcher();
