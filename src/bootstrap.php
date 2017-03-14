@@ -53,7 +53,7 @@ return function() : \Aura\Router\Matcher {
     $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) {
         $session = $bootstrap->session();
         return $bootstrap->phpview('contactmoment/import')->render([
-            'importForm' => function() use ($session) : string {
+            'importForm' => function() use ($session) : void {
                 $model = '
                     Type: <ul>
                         <li>
@@ -67,7 +67,6 @@ return function() : \Aura\Router\Matcher {
                     </ul>';
 
                 print $this->form("post", $session->getCsrfToken()->getValue(), "Importeren", $model);
-                return '';
             }
 
         ]);

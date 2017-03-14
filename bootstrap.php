@@ -56,7 +56,7 @@ return new class implements \rikmeijer\Teach\Resources
 
             return $scheme . '://' . $_SERVER['HTTP_HOST'] . sprintf($path, ...$encoded);
         });
-        $template->registerHelper('form', function(string $method, string $csrftoken, string $submitValue, string $model) : string {
+        $template->registerHelper('form', function(string $method, string $csrftoken, string $submitValue, string $model) : void {
             ?>
             <form method="<?=$this->escape($method);?>">
                 <input type="hidden" name="__csrf_value" value="<?= $this->escape($csrftoken); ?>" />
@@ -64,7 +64,6 @@ return new class implements \rikmeijer\Teach\Resources
                 <?=$model;?>
             </form>
             <?php
-            return '';
         });
 
         return $template;

@@ -6,7 +6,7 @@
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
 	"require" : {
-		"php" : ">=7.0",
+		"php" : ">=7.1",
 		"bacon/bacon-qr-code" : "^1.0",
 		"johngrogg/ics-parser" : "^1.0",
 		"pulledbits/activerecord": "dev-master",
