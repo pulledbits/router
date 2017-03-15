@@ -1,1 +1,1 @@
-<?php print $this->qr(400, 400);
+<?php $this->qr(400, 400);

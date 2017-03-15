@@ -22,9 +22,8 @@ return function() : \Aura\Router\Matcher {
             'importForm' => function() use ($session) : void {
                 $model = 'ICS URL: <input type="text" name="url" />';
 
-                print $this->form("post", $session->getCsrfToken()->getValue(), "Importeren", $model);
+                $this->form("post", $session->getCsrfToken()->getValue(), "Importeren", $model);
             }
-
         ]));
     });
     $map->post('contactmoment.import', '/contactmoment/import', function (array $attributes, array $query, array $payload) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
@@ -171,10 +170,10 @@ return function() : \Aura\Router\Matcher {
         }
 
         return $bootstrap->response(200, $bootstrap->phpview('qr')->capture([
-            'qr' => function(int $width, int $height) use ($bootstrap, $data) : string {
+            'qr' => function(int $width, int $height) use ($bootstrap, $data) : void {
                 $renderer = $bootstrap->qrRenderer($width, $height);
                 $writer = $bootstrap->qrWriter($renderer);
-                return $writer->writeString($data);
+                print $writer->writeString($data);
             }
         ]))->withAddedHeader('Content-Type', 'image/png');
     });
