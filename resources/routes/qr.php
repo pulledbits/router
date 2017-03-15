@@ -1,5 +1,5 @@
 <?php return function(\rikmeijer\Teach\Resources $bootstrap, \Aura\Router\Map $map) {
-    $map->get('qr.view', '/qr', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
+    $map->get('qr', '/qr', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $data = $query['data'];
         if ($data === null) {
             return $bootstrap->response(400);
