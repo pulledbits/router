@@ -96,7 +96,7 @@ return function() : \Aura\Router\Matcher {
             'ipv4' => $_SERVER['REMOTE_ADDR']
         ]);
 
-        if ($ipRating !== null) {
+        if ($ipRating->waarde !== null) {
             $data = [
                 'rating' => $ipRating->waarde,
                 'explanation' => $ipRating->inhoud
@@ -109,7 +109,7 @@ return function() : \Aura\Router\Matcher {
             $rating = $data['rating'];
             $explanation = $data['explanation'] !== null ? $data['explanation'] : '';
         } else {
-            $rating = '';
+            $rating = null;
             $explanation = '';
         }
 
@@ -122,7 +122,7 @@ return function() : \Aura\Router\Matcher {
             'explanation' => $explanation,
             'star' => function (int $i, $rating) use ($bootstrap) : string {
                 if ($rating === null) {
-                    $data = $bootstrap->readAssetStar();
+                    $data = $bootstrap->readAssetUnstar();
                 } elseif ($i < $rating) {
                     $data = $bootstrap->readAssetStar();
                 } else {
