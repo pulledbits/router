@@ -109,8 +109,8 @@ return function() : \Aura\Router\Matcher {
             $rating = $data['rating'];
             $explanation = $data['explanation'];
         } else {
-            $rating = null;
-            $explanation = null;
+            $rating = '';
+            $explanation = '';
         }
 
         if (array_key_exists('rating', $query)) {
@@ -118,8 +118,9 @@ return function() : \Aura\Router\Matcher {
         }
 
         return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->capture([
+            'rated' => $rating !== null,
             'rating' => $rating,
-            'explanation' => $explanation,
+            'explanation' => $explanation !== null ? $explanation : '',
             'csrf_value' => $session->getCsrfToken()->getValue(),
             'star' => function(int $i) use ($rating, $bootstrap) : string {
                 if ($rating === null) {

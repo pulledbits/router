@@ -13,7 +13,7 @@
 <nav>
 	<ul class="horizontal-menu">
 		<?php foreach ($modules as $module): ?>
-		<li><a href="#<?= $module->naam ?>"><?= $module->naam ?></a></li>
+		<li><a href="#<?=$this->escape($module->naam); ?>"><?=$this->escape($module->naam); ?></a></li>
 		<?php endforeach;?>
 	</ul>
 </nav>
@@ -26,8 +26,8 @@
 
 <?php foreach ($modules as $module): ?>
 <section>
-	<a name="<?= $module->naam ?>"></a>
-	<h2><?= $module->naam ?></h2>
+	<a name="<?=$this->escape($module->naam); ?>"></a>
+	<h2><?=$this->escape($module->naam); ?></h2>
     <?php $this->sub('contactmomenten')->render([
 		'caption'=> 'Contactmomenten',
 		'contactmomenten' => $module->read("contactmoment_module", ["module_id" => "id"])

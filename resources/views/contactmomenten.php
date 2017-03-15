@@ -1,8 +1,8 @@
 <?php if (count($contactmomenten) === 0): ?>
-<p>Geen <?= strtolower($caption) ?></p>
+<p>Geen <?=$this->escape(strtolower($caption)); ?></p>
 <?php else: ?>
 <table>
-	<caption><?= $caption ?></caption>
+	<caption><?=$this->escape($caption); ?></caption>
 	<thead>
 		<tr>
 			<th width="30">KW</th>
@@ -22,12 +22,12 @@
 		<?php else: ?>
 			<tr>
 		<?php endif;?>
-			<td><?= $contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->kalenderweek ?></td>
-			<td><?= $contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->blokweek ?></td>
-			<td><?= strftime('%A', strtotime($contactmoment->starttijd)) ?></td>
-			<td><?= date('H:i', strtotime($contactmoment->starttijd)) ?></td>
-			<td><?= date('H:i', strtotime($contactmoment->eindtijd)) ?></td>
-			<td><a href="<?= $this->url('/feedback/%s', $contactmoment->id) ?>" target="_blank">Feedback</a>
+			<td><?=$this->escape($contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->kalenderweek); ?></td>
+			<td><?=$this->escape($contactmoment->fetchFirstByFkContactmomentLes()->fetchFirstByFkLeslesweek()->blokweek); ?></td>
+			<td><?=$this->escape(strftime('%A', strtotime($contactmoment->starttijd))); ?></td>
+			<td><?=$this->escape(date('H:i', strtotime($contactmoment->starttijd))); ?></td>
+			<td><?=$this->escape(date('H:i', strtotime($contactmoment->eindtijd))); ?></td>
+			<td><a href="<?=$this->url('/feedback/%s', $contactmoment->id); ?>" target="_blank">Feedback</a>
 			</td>
 		</tr>
 		<?php endforeach; ?>

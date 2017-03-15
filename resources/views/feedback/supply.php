@@ -12,16 +12,16 @@
 <h1>Hoeveel sterren?</h1>
 <?php
 for ($i = 0; $i < 5; $i ++) {
-    ?><a href="?rating=<?= rawurldecode($i + 1) ?>"><img src="<?= $this->star($i) ?>" width="100" /></a><?php
+    ?><a href="?rating=<?=$this->escape(rawurldecode($i + 1)); ?>"><img src="<?=$this->star($i); ?>" width="100" /></a><?php
 }
-if ($rating !== null) {
+if ($rated) {
     ?>
     <form action="supply" method="post">
-        <input type="hidden" name="__csrf_value" value="<?= $csrf_value ?>">
+        <input type="hidden" name="__csrf_value" value="<?=$this->escape($csrf_value); ?>">
         <h1>Waarom?</h1>
         <input type="hidden" name="rating"
-               value="<?= $rating ?>" />
-        <textarea rows="5" cols="75" name="explanation"><?= $explanation ?></textarea>
+               value="<?=$this->escape($rating); ?>" />
+        <textarea rows="5" cols="75" name="explanation"><?=$this->escape($explanation); ?></textarea>
         <p>
             <input type="submit" value="Verzenden!" />
         </p>
