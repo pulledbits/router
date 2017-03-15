@@ -18,6 +18,6 @@
      style="margin: 25px 0;"/></br> <img
         src="<?=$this->url('/qr?data=%s', $url); ?>"
         width="400" height="400"/>
-<p><?=$this->escape($url); ?></p>
+<p><?=$url; ?></p>
 </body>
 </html>
