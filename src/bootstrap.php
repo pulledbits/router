@@ -10,7 +10,7 @@ return function() : \Aura\Router\Matcher {
 
     $map->get('index', '/', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
-        return $bootstrap->response(200, $bootstrap->phpview('welcome')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('welcome')->capture([
             'modules' => $schema->read('module', [], []),
             'contactmomenten' => $schema->read('contactmoment_vandaag', [], [])
         ]));
@@ -18,7 +18,7 @@ return function() : \Aura\Router\Matcher {
 
     $map->get('contactmoment.prepare-import', '/contactmoment/import', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $session = $bootstrap->session();
-        return $bootstrap->response(200, $bootstrap->phpview('contactmoment/import')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('contactmoment/import')->capture([
             'importForm' => function() use ($session) : void {
                 $model = 'ICS URL: <input type="text" name="url" />';
 
@@ -76,13 +76,13 @@ return function() : \Aura\Router\Matcher {
         // remove future, imported contactmomenten which where not touched in this batch (today)
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
-        return $bootstrap->response(201, $bootstrap->phpview('contactmoment/imported')->render([]));
+        return $bootstrap->response(201, $bootstrap->phpview('contactmoment/imported')->capture([]));
     });
 
     $map->get('feedback.view', '/feedback/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
-        return $bootstrap->response(200, $bootstrap->phpview('feedback')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('feedback')->capture([
             'contactmoment' => $contactmoment
         ]));
     });
@@ -117,7 +117,7 @@ return function() : \Aura\Router\Matcher {
             $rating = $query['rating'];
         }
 
-        return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->render([
+        return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'csrf_value' => $session->getCsrfToken()->getValue(),
