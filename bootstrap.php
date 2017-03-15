@@ -25,7 +25,16 @@ return new class implements \rikmeijer\Teach\Resources
     }
 
     public function router() : \Aura\Router\RouterContainer {
-        return new \Aura\Router\RouterContainer();
+        $routerContainer = new \Aura\Router\RouterContainer();
+        $map = $routerContainer->getMap();
+
+        $routes = [];
+        foreach (glob(__DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . '*.php') as $routeFile) {
+            $routeFactory = require $routeFile;
+            $routes[] = $routeFactory($this, $map);
+        }
+
+        return $routerContainer;
     }
 
     private function assetsDirectory() {
