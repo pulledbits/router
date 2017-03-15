@@ -130,10 +130,10 @@ return function() : \Aura\Router\Matcher {
                 }
                 return 'data:image/png;base64,' . base64_encode($data);
             },
-            'rateForm' => function ($rating, $explanation) use ($session) : void {
+            'rateForm' => function ($rating, $explanation) use ($session, $attributes) : void {
                 ?><h1>Hoeveel sterren?</h1><?php
                 for ($i = 0; $i < 5; $i ++) {
-                    ?><a href="?rating=<?= $this->escape(rawurldecode($i + 1)); ?>"><img
+                    ?><a href="<?=$this->url('/feedback/%s/supply?rating=%s', $attributes['contactmomentIdentifier'], $i + 1); ?>"><img
                         src="<?= $this->star($i, $rating); ?>" width="100"/></a><?php
                 }
                 if ($rating !== null) {
