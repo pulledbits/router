@@ -1,7 +1,7 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
-        $session = $bootstrap->session();
-        return $bootstrap->response(200, $bootstrap->phpview('contactmoment/import')->capture([
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
+        $session = $resources->session();
+        return $resources->response(200, $resources->phpview('contactmoment/import')->capture([
             'importForm' => function() use ($session) : void {
                 $model = 'ICS URL: <input type="text" name="url" />';
 
@@ -10,10 +10,10 @@
         ]));
     });
 
-    $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
-        $schema = $bootstrap->schema();
+    $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
+        $schema = $resources->schema();
 
-        $icalReader = $bootstrap->iCalReader($payload['url']);
+        $icalReader = $resources->iCalReader($payload['url']);
 
         foreach ($icalReader->events() as $event) {
             if (array_key_exists('SUMMARY', $event) === false) {
@@ -60,6 +60,6 @@
         // remove future, imported contactmomenten which where not touched in this batch (today)
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
-        return $bootstrap->response(201, $bootstrap->phpview('contactmoment/imported')->capture([]));
+        return $resources->response(201, $resources->phpview('contactmoment/imported')->capture([]));
     });
 };

@@ -1,15 +1,15 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('qr', '/qr', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
+    $map->get('qr', '/qr', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
         $data = $query['data'];
         if ($data === null) {
-            return $bootstrap->response(400);
+            return $resources->response(400);
         }
 
-        return $bootstrap->response(200, $bootstrap->phpview('qr')->capture([
+        return $resources->response(200, $resources->phpview('qr')->capture([
             'data' => $data,
-            'qr' => function (int $width, int $height, string $data) use ($bootstrap) : void {
-                $renderer = $bootstrap->qrRenderer($width, $height);
-                $writer = $bootstrap->qrWriter($renderer);
+            'qr' => function (int $width, int $height, string $data) use ($resources) : void {
+                $renderer = $resources->qrRenderer($width, $height);
+                $writer = $resources->qrWriter($renderer);
                 print $writer->writeString($data);
             }
         ]))->withAddedHeader('Content-Type', 'image/png');

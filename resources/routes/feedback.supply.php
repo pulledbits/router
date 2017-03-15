@@ -1,7 +1,7 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
-        $schema = $bootstrap->schema();
-        $session = $bootstrap->session();
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
+        $schema = $resources->schema();
+        $session = $resources->session();
 
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
 
@@ -30,16 +30,16 @@
             $rating = $query['rating'];
         }
 
-        return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->capture([
+        return $resources->response(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
-            'star' => function (int $i, $rating) use ($bootstrap) : string {
+            'star' => function (int $i, $rating) use ($resources) : string {
                 if ($rating === null) {
-                    $data = $bootstrap->readAssetUnstar();
+                    $data = $resources->readAssetUnstar();
                 } elseif ($i < $rating) {
-                    $data = $bootstrap->readAssetStar();
+                    $data = $resources->readAssetStar();
                 } else {
-                    $data = $bootstrap->readAssetUnstar();
+                    $data = $resources->readAssetUnstar();
                 }
                 return 'data:image/png;base64,' . base64_encode($data);
             },
@@ -59,13 +59,13 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
-        $schema = $bootstrap->schema();
-        $session = $bootstrap->session();
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
+        $schema = $resources->schema();
+        $session = $resources->session();
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            return $bootstrap->response(403, "This looks like a cross-site request forgery.");
+            return $resources->response(403, "This looks like a cross-site request forgery.");
         }
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
         $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
@@ -77,6 +77,6 @@
             $rating->created_at = date('Y-m-d H:i:s');
         }
         $rating->updated_at = date('Y-m-d H:i:s');
-        return $bootstrap->response(201, 'Dankje!');
+        return $resources->response(201, 'Dankje!');
     });
 };
