@@ -14,10 +14,10 @@ return function() : \Psr\Http\Message\ResponseInterface {
 
     switch ($request->getMethod()) {
         case 'GET':
-            return call_user_func($route->handler, $bootstrap, $route->attributes, $request->getQueryParams());
+            return call_user_func($route->handler, $bootstrap->resources(), $route->attributes, $request->getQueryParams());
 
         case 'POST':
-            return call_user_func($route->handler, $bootstrap, $route->attributes, $request->getQueryParams(), $request->getParsedBody());
+            return call_user_func($route->handler, $bootstrap->resources(), $route->attributes, $request->getQueryParams(), $request->getParsedBody());
 
         default:
             return $bootstrap->response(405);

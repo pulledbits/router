@@ -1,13 +1,13 @@
 <?php return function(\Aura\Router\Map $map) {
     $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
         $session = $resources->session();
-        return $resources->response(200, $resources->phpview('contactmoment/import')->capture([
+        return $resources->phpview('contactmoment/import')->response(200, [
             'importForm' => function() use ($session) : void {
                 $model = 'ICS URL: <input type="text" name="url" />';
 
                 $this->form("post", $session->getCsrfToken()->getValue(), "Importeren", $model);
             }
-        ]));
+        ]);
     });
 
     $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
@@ -60,6 +60,6 @@
         // remove future, imported contactmomenten which where not touched in this batch (today)
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
-        return $resources->response(201, $resources->phpview('contactmoment/imported')->capture([]));
+        return $resources->phpview('contactmoment/imported')->response(201, []);
     });
 };

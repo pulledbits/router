@@ -1064,15 +1064,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pulledbits/view.git",
-                "reference": "fc547342c00c95b7eb7b96959833c1ee41a4bd5e"
+                "reference": "d7a8fa4d4d1d3a5c66bca8ed00a2e0e6bffe37d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pulledbits/view/zipball/fc547342c00c95b7eb7b96959833c1ee41a4bd5e",
-                "reference": "fc547342c00c95b7eb7b96959833c1ee41a4bd5e",
+                "url": "https://api.github.com/repos/pulledbits/view/zipball/d7a8fa4d4d1d3a5c66bca8ed00a2e0e6bffe37d8",
+                "reference": "d7a8fa4d4d1d3a5c66bca8ed00a2e0e6bffe37d8",
                 "shasum": ""
             },
             "require": {
+                "guzzlehttp/psr7": "^1.3",
                 "php": ">=7.1"
             },
             "require-dev": {
@@ -1089,7 +1090,7 @@
                 "MIT"
             ],
             "description": "native PHP view engine",
-            "time": "2017-03-15 10:47:20"
+            "time": "2017-03-15 14:10:52"
         },
         {
             "name": "symfony/console",
@@ -1990,16 +1991,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.15",
+            "version": "5.7.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5"
+                "reference": "dafc78e2a7d12139b0e97078d1082326bd09363d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b99112aecc01f62acf3d81a3f59646700a1849e5",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/dafc78e2a7d12139b0e97078d1082326bd09363d",
+                "reference": "dafc78e2a7d12139b0e97078d1082326bd09363d",
                 "shasum": ""
             },
             "require": {
@@ -2068,7 +2069,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-02 15:22:43"
+            "time": "2017-03-15 13:02:34"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
