@@ -9,13 +9,16 @@ namespace rikmeijer\Teach;
 
 interface Resources
 {
+    public function route(\Psr\Http\Message\ServerRequestInterface $request);
+
+    public function request() : \Psr\Http\Message\ServerRequestInterface;
+
     public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface;
 
     public function schema(): \pulledbits\ActiveRecord\SQL\Schema;
 
     public function session(): \Aura\Session\Session;
 
-    public function router(): \Aura\Router\RouterContainer;
 
     public function phpview($templateIdentifier) : \pulledbits\View\Template;
 

@@ -24,7 +24,7 @@ return new class implements \rikmeijer\Teach\Resources
         return $session_factory->newInstance($_COOKIE);
     }
 
-    public function router() : \Aura\Router\RouterContainer {
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Aura\Router\Route {
         $routerContainer = new \Aura\Router\RouterContainer();
         $map = $routerContainer->getMap();
 
@@ -34,7 +34,7 @@ return new class implements \rikmeijer\Teach\Resources
             $routes[] = $routeFactory($this, $map);
         }
 
-        return $routerContainer;
+        return $routerContainer->getMatcher()->match($request);
     }
 
     private function assetsDirectory() {
@@ -98,5 +98,10 @@ return new class implements \rikmeijer\Teach\Resources
 
     public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface {
         return (new \GuzzleHttp\Psr7\Response($code))->withBody(\GuzzleHttp\Psr7\stream_for($stream));
+    }
+
+    public function request(): \Psr\Http\Message\ServerRequestInterface
+    {
+        return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
     }
 };
