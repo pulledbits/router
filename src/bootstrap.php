@@ -107,7 +107,7 @@ return function() : \Aura\Router\Matcher {
 
         if ($data !== null) {
             $rating = $data['rating'];
-            $explanation = $data['explanation'];
+            $explanation = $data['explanation'] !== null ? $data['explanation'] : '';
         } else {
             $rating = '';
             $explanation = '';
@@ -118,11 +118,9 @@ return function() : \Aura\Router\Matcher {
         }
 
         return $bootstrap->response(200, $bootstrap->phpview('feedback/supply')->capture([
-            'rated' => $rating !== null,
             'rating' => $rating,
-            'explanation' => $explanation !== null ? $explanation : '',
-            'csrf_value' => $session->getCsrfToken()->getValue(),
-            'star' => function(int $i) use ($rating, $bootstrap) : string {
+            'explanation' => $explanation,
+            'star' => function (int $i, $rating) use ($bootstrap) : string {
                 if ($rating === null) {
                     $data = $bootstrap->readAssetStar();
                 } elseif ($i < $rating) {
@@ -131,6 +129,19 @@ return function() : \Aura\Router\Matcher {
                     $data = $bootstrap->readAssetUnstar();
                 }
                 return 'data:image/png;base64,' . base64_encode($data);
+            },
+            'rateForm' => function ($rating, $explanation) use ($session) : void {
+                ?><h1>Hoeveel sterren?</h1><?php
+                for ($i = 0; $i < 5; $i ++) {
+                    ?><a href="?rating=<?= $this->escape(rawurldecode($i + 1)); ?>"><img
+                        src="<?= $this->star($i, $rating); ?>" width="100"/></a><?php
+                }
+                if ($rating !== null) {
+                    $this->form("post", $session->getCsrfToken()->getValue(), "Verzenden", '<h1>Waarom?</h1>
+                        <input type="hidden" name="rating" value="' . $this->escape($rating) . '" />
+                        <textarea rows="5" cols="75" name="explanation">' . $this->escape($explanation) . '</textarea>
+                    ');
+                }
             }
         ]));
     });
