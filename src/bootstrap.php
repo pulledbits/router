@@ -182,7 +182,8 @@ return function() : \Aura\Router\Matcher {
         }
 
         return $bootstrap->response(200, $bootstrap->phpview('qr')->capture([
-            'qr' => function(int $width, int $height) use ($bootstrap, $data) : void {
+            'data' => $data,
+            'qr' => function (int $width, int $height, string $data) use ($bootstrap) : void {
                 $renderer = $bootstrap->qrRenderer($width, $height);
                 $writer = $bootstrap->qrWriter($renderer);
                 print $writer->writeString($data);
