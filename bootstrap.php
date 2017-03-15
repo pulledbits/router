@@ -11,6 +11,29 @@ return new class implements \rikmeijer\Teach\Resources
         $this->resources = require __DIR__ . DIRECTORY_SEPARATOR . 'resources.php';
     }
 
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Aura\Router\Route {
+        $routerContainer = new \Aura\Router\RouterContainer();
+        $map = $routerContainer->getMap();
+
+        $routes = [];
+        foreach (glob(__DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . '*.php') as $routeFile) {
+            $routeFactory = require $routeFile;
+            $routes[] = $routeFactory($map);
+        }
+
+        return $routerContainer->getMatcher()->match($request);
+    }
+
+    public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface {
+        return (new \GuzzleHttp\Psr7\Response($code))->withBody(\GuzzleHttp\Psr7\stream_for($stream));
+    }
+
+    public function request(): \Psr\Http\Message\ServerRequestInterface
+    {
+        return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+    }
+
+
     public function schema() : \pulledbits\ActiveRecord\SQL\Schema {
         /**
          * @var $factory \pulledbits\ActiveRecord\RecordFactory
@@ -22,19 +45,6 @@ return new class implements \rikmeijer\Teach\Resources
     public function session() : \Aura\Session\Session {
         $session_factory = new \Aura\Session\SessionFactory;
         return $session_factory->newInstance($_COOKIE);
-    }
-
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Aura\Router\Route {
-        $routerContainer = new \Aura\Router\RouterContainer();
-        $map = $routerContainer->getMap();
-
-        $routes = [];
-        foreach (glob(__DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . '*.php') as $routeFile) {
-            $routeFactory = require $routeFile;
-            $routes[] = $routeFactory($this, $map);
-        }
-
-        return $routerContainer->getMatcher()->match($request);
     }
 
     private function assetsDirectory() {
@@ -94,14 +104,5 @@ return new class implements \rikmeijer\Teach\Resources
     public function iCalReader(string $uri) : \ICal
     {
         return new \ICal($uri);
-    }
-
-    public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface {
-        return (new \GuzzleHttp\Psr7\Response($code))->withBody(\GuzzleHttp\Psr7\stream_for($stream));
-    }
-
-    public function request(): \Psr\Http\Message\ServerRequestInterface
-    {
-        return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
     }
 };

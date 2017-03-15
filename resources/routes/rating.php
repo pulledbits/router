@@ -1,5 +1,5 @@
-<?php return function(\rikmeijer\Teach\Resources $bootstrap, \Aura\Router\Map $map) {
-    $map->get('rating', '/rating/{contactmomentIdentifier}', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
+<?php return function(\Aura\Router\Map $map) {
+    $map->get('rating', '/rating/{contactmomentIdentifier}', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
 
         return $bootstrap->response(200, $bootstrap->phpview('rating')->capture([

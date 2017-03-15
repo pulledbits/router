@@ -1,5 +1,5 @@
-<?php return function(\rikmeijer\Teach\Resources $bootstrap, \Aura\Router\Map $map) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
+<?php return function(\Aura\Router\Map $map) {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
         $session = $bootstrap->session();
 
@@ -59,7 +59,7 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (array $attributes, array $query, array $payload) use ($bootstrap) : \Psr\Http\Message\ResponseInterface {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $bootstrap, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
         $schema = $bootstrap->schema();
         $session = $bootstrap->session();
 
