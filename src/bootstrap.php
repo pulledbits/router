@@ -1,5 +1,5 @@
 <?php
-return function() : \Psr\Http\Message\ResponseInterface {
+return function(callable $responseSender) : \Psr\Http\Message\ResponseInterface {
     /**
      * @var $resources \rikmeijer\Teach\Resources
      */
@@ -9,17 +9,22 @@ return function() : \Psr\Http\Message\ResponseInterface {
     $route = $resources->route($request);
 
     if ($route === false) {
-        return $resources->response(404);
+        $response = $resources->response(404);
+    } else {
+        switch ($request->getMethod()) {
+            case 'GET':
+                $response = call_user_func($route->handler, $resources, $route->attributes, $request->getQueryParams());
+                break;
+
+            case 'POST':
+                $response = call_user_func($route->handler, $resources, $route->attributes, $request->getQueryParams(), $request->getParsedBody());
+                break;
+
+            default:
+                $response = $resources->response(405);
+                break;
+        }
     }
 
-    switch ($request->getMethod()) {
-        case 'GET':
-            return call_user_func($route->handler, $resources, $route->attributes, $request->getQueryParams());
-
-        case 'POST':
-            return call_user_func($route->handler, $resources, $route->attributes, $request->getQueryParams(), $request->getParsedBody());
-
-        default:
-            return $resources->response(405);
-    }
+    $responseSender($response);
 };
