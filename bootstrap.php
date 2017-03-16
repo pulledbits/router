@@ -44,7 +44,8 @@ return new class implements \rikmeijer\Teach\Bootstrap
         if ($route === false) {
             $response->send(404, 'Failure');
         } else {
-            call_user_func(\Closure::bind($route->handler, $response, '\rikmeijer\Teach\Response'), $this->resources(), $psrRequest);
+            $handler = $response->bind($route->handler);
+            call_user_func($handler, $this->resources(), $psrRequest);
         }
     }
 
