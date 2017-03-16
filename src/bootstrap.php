@@ -1,25 +1,25 @@
 <?php
 return function() : \Psr\Http\Message\ResponseInterface {
     /**
-     * @var $bootstrap \rikmeijer\Teach\Resources
+     * @var $resources \rikmeijer\Teach\Resources
      */
-    $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
+    $resources = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-    $request = $bootstrap->request();
-    $route = $bootstrap->route($request);
+    $request = $resources->request();
+    $route = $resources->route($request);
 
     if ($route === false) {
-        return $bootstrap->response(404);
+        return $resources->response(404);
     }
 
     switch ($request->getMethod()) {
         case 'GET':
-            return call_user_func($route->handler, $bootstrap, $route->attributes, $request->getQueryParams());
+            return call_user_func($route->handler, $resources, $route->attributes, $request->getQueryParams());
 
         case 'POST':
-            return call_user_func($route->handler, $bootstrap, $route->attributes, $request->getQueryParams(), $request->getParsedBody());
+            return call_user_func($route->handler, $resources, $route->attributes, $request->getQueryParams(), $request->getParsedBody());
 
         default:
-            return $bootstrap->response(405);
+            return $resources->response(405);
     }
 };
