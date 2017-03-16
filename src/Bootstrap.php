@@ -13,10 +13,8 @@ interface Bootstrap
 
     public function request() : \Psr\Http\Message\ServerRequestInterface;
 
-    public function response(callable $responseSender) : \rikmeijer\Teach\Response;
-
     public function responseFactory() : callable;
 
     public function resources() : \rikmeijer\Teach\Resources;
-    public function handle(callable $responseSender);
+
 }
