@@ -21,9 +21,8 @@ class Request
      */
     private $response;
 
-    public function __construct(\Psr\Http\Message\ServerRequestInterface $request, Response $response)
+    public function __construct(Response $response)
     {
-        $this->request = $request;
         $this->response = $response;
     }
 
@@ -35,12 +34,12 @@ class Request
         $this->response->sendWithHeaders($status, $headers, $body);
     }
 
-    public function handle($route, Resources $resources)
+    public function handle($route, \Psr\Http\Message\ServerRequestInterface $request, Resources $resources)
     {
         if ($route === false) {
             $this->respond(404, 'Failure');
         } else {
-            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $this->request);
+            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $request);
         }
     }
 }

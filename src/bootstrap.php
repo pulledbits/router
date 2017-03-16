@@ -17,7 +17,7 @@ namespace {
             $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
-        $request = new Request($psrRequest, $bootstrap->response($responseSender));
-        $request->handle($route, $bootstrap->resources());
+        $request = new Request($bootstrap->response($responseSender));
+        $request->handle($route, $psrRequest, $bootstrap->resources());
     };
 }
