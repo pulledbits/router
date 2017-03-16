@@ -6,7 +6,7 @@ namespace {
 
     return function (callable $responseSender): \Psr\Http\Message\ResponseInterface {
         /**
-         * @var $resources \rikmeijer\Teach\Resources
+         * @var $resources \rikmeijer\Teach\Bootstrap
          */
         $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
@@ -17,7 +17,7 @@ namespace {
             $rawRequest = $rawRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
-        $response = new \rikmeijer\Teach\Response($responseSender, $bootstrap);
+        $response = new \rikmeijer\Teach\Response($responseSender, $bootstrap->responseFactory());
         $request = new Request($rawRequest, $response);
 
         if ($route === false) {

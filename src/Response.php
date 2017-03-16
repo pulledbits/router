@@ -1,25 +1,32 @@
 <?php
 namespace rikmeijer\Teach;
 
+use Psr\Http\Message\ResponseInterface;
+
 class Response
 {
     private $responseSender;
-    private $bootstrap;
+    private $responseFactory;
 
-    public function __construct(callable $responseSender, \rikmeijer\Teach\Bootstrap $bootstrap)
+    public function __construct(callable $responseSender, callable $responseFactory)
     {
         $this->responseSender = $responseSender;
-        $this->bootstrap = $bootstrap;
+        $this->responseFactory = $responseFactory;
+    }
+
+    private function makeResponse(int $status, string $body) : ResponseInterface
+    {
+        return call_user_func($this->responseFactory, $status, $body);
     }
 
     public function send(int $status, string $body) : void
     {
-        call_user_func($this->responseSender, $this->bootstrap->response($status, $body));
+        call_user_func($this->responseSender, $this->makeResponse($status, $body));
     }
 
     public function sendWithHeaders(int $status, array $headers, string $body) : void
     {
-        $response = $this->bootstrap->response($status, $body);
+        $response = $this->makeResponse($status, $body);
         foreach ($headers as $headerIdentifier => $headerValue) {
             $response = $response->withHeader($headerIdentifier, $headerValue);
         }

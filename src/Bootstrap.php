@@ -13,7 +13,7 @@ interface Bootstrap
 
     public function request() : \Psr\Http\Message\ServerRequestInterface;
 
-    public function response(int $code, $stream) : \Psr\Http\Message\ResponseInterface;
+    public function responseFactory() : callable;
 
     public function resources() : \rikmeijer\Teach\Resources;
 }
