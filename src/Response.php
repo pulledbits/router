@@ -4,22 +4,22 @@ namespace rikmeijer\Teach;
 class Response
 {
     private $responseSender;
-    private $resources;
+    private $bootstrap;
 
-    public function __construct(callable $responseSender, \rikmeijer\Teach\Resources $resources)
+    public function __construct(callable $responseSender, \rikmeijer\Teach\Bootstrap $bootstrap)
     {
         $this->responseSender = $responseSender;
-        $this->resources = $resources;
+        $this->bootstrap = $bootstrap;
     }
 
     public function send(int $status, string $body) : void
     {
-        call_user_func($this->responseSender, $this->resources->response($status, $body));
+        call_user_func($this->responseSender, $this->bootstrap->response($status, $body));
     }
 
     public function sendWithHeaders(int $status, array $headers, string $body) : void
     {
-        $response = $this->resources->response($status, $body);
+        $response = $this->bootstrap->response($status, $body);
         foreach ($headers as $headerIdentifier => $headerValue) {
             $response = $response->withHeader($headerIdentifier, $headerValue);
         }
