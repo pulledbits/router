@@ -12,7 +12,7 @@ namespace {
 
         $psrRequest = $bootstrap->request();
 
-        $request = new Request($bootstrap->response($responseSender));
-        $request->handle($bootstrap->route($psrRequest), $psrRequest, $bootstrap->resources());
+        $request = new Request();
+        $request->handle($bootstrap->route($psrRequest), $psrRequest, $bootstrap->resources(), $bootstrap->response($responseSender));
     };
 }

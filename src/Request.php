@@ -10,40 +10,17 @@ namespace rikmeijer\Teach;
 
 class Request
 {
-    /**
-     * @var \Psr\Http\Message\ServerRequestInterface
-     */
-    private $request;
 
-
-    /**
-     * @var Response
-     */
-    private $response;
-
-    public function __construct(Response $response)
-    {
-        $this->response = $response;
-    }
-
-    public function respond(int $status, string $body) : void {
-        $this->response->send($status, $body);
-    }
-
-    public function respondWithHeaders(int $status, array $headers, string $body) : void {
-        $this->response->sendWithHeaders($status, $headers, $body);
-    }
-
-    public function handle($route, \Psr\Http\Message\ServerRequestInterface $psrRequest, Resources $resources)
+    public function handle($route, \Psr\Http\Message\ServerRequestInterface $psrRequest, Resources $resources, Response $response)
     {
         foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
             $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
         if ($route === false) {
-            $this->respond(404, 'Failure');
+            $response->send(404, 'Failure');
         } else {
-            call_user_func(\Closure::bind($route->handler, $this->response, '\rikmeijer\Teach\Response'), $resources, $psrRequest);
+            call_user_func(\Closure::bind($route->handler, $response, '\rikmeijer\Teach\Response'), $resources, $psrRequest);
         }
     }
 }
