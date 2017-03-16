@@ -45,8 +45,7 @@ class Request
         if ($route === false) {
             $this->respond(404, 'Failure');
         } else {
-            \Closure::bind($route->handler, $this, __CLASS__);
-            call_user_func($route->handler, $resources, $this);
+            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $this);
         }
     }
 }
