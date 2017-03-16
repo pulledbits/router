@@ -11,13 +11,8 @@ namespace {
         $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
         $psrRequest = $bootstrap->request();
-        $route = $bootstrap->route($psrRequest);
-
-        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
-            $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
-        }
 
         $request = new Request($bootstrap->response($responseSender));
-        $request->handle($route, $psrRequest, $bootstrap->resources());
+        $request->handle($bootstrap->route($psrRequest), $psrRequest, $bootstrap->resources());
     };
 }

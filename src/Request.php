@@ -34,12 +34,16 @@ class Request
         $this->response->sendWithHeaders($status, $headers, $body);
     }
 
-    public function handle($route, \Psr\Http\Message\ServerRequestInterface $request, Resources $resources)
+    public function handle($route, \Psr\Http\Message\ServerRequestInterface $psrRequest, Resources $resources)
     {
+        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
+            $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
+        }
+
         if ($route === false) {
             $this->respond(404, 'Failure');
         } else {
-            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $request);
+            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $psrRequest);
         }
     }
 }
