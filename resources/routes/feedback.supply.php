@@ -30,7 +30,7 @@
             $rating = $query['rating'];
         }
 
-        return $resources->phpview('feedback/supply')->response(200, [
+        return $resources->response(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'star' => function (int $i, $rating) use ($resources) : string {
@@ -56,7 +56,7 @@
                     ');
                 }
             }
-        ]);
+        ]));
     });
 
     $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
