@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
         $schema = $resources->schema();
         $session = $resources->session();
 
@@ -62,7 +62,7 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
         $schema = $resources->schema();
         $session = $resources->session();
         $payload = $request->getParsedBody();

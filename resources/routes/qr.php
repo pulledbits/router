@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('qr', '/qr', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
+    $map->get('qr', '/qr', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
         $query = $request->getQueryParams();
         if (array_key_exists('data', $query) === false) {
             $this->respond(400, 'Query incomplete');

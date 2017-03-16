@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('rating', '/rating/{contactmomentIdentifier}', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : \Psr\Http\Message\ResponseInterface {
+    $map->get('rating', '/rating/{contactmomentIdentifier}', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
 
         $this->respondWithHeaders(200, ['Content-Type' => 'image/png'], $resources->phpview('rating')->capture([

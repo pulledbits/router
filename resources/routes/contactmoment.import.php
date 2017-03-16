@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
         $session = $resources->session();
         $this->respond(200, $resources->phpview('contactmoment/import')->capture([
             'importForm' => function() use ($session) : void {
@@ -10,7 +10,7 @@
         ]));
     });
 
-    $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
+    $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
         $schema = $resources->schema();
 
         $icalReader = $resources->iCalReader($request->getParsedBody()['url']);

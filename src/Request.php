@@ -35,17 +35,12 @@ class Request
         $this->response->sendWithHeaders($status, $headers, $body);
     }
 
-    public function __call(string $method, array $arguments)
-    {
-        return $this->request->$method(...$arguments);
-    }
-
     public function handle($route, Resources $resources)
     {
         if ($route === false) {
             $this->respond(404, 'Failure');
         } else {
-            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $this);
+            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $this->request);
         }
     }
 }
