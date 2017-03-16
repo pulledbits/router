@@ -1,37 +1,30 @@
 <?php
 
 namespace {
+
+    use rikmeijer\Teach\Request;
+
     return function (callable $responseSender): \Psr\Http\Message\ResponseInterface {
         /**
          * @var $resources \rikmeijer\Teach\Resources
          */
         $resources = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-        $request = $resources->request();
-        $route = $resources->route($request);
+        $rawRequest = $resources->request();
+        $route = $resources->route($rawRequest);
 
         foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
-            $request = $request->withAttribute($attributeIdentifier, $attributeValue);
+            $rawRequest = $rawRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
         $response = new \rikmeijer\Teach\Response($responseSender, $resources);
+        $request = new Request($rawRequest, $response);
+
 
         if ($route === false) {
-            $response->send(404, 'Failure');
+            $request->respond(404, 'Failure');
         } else {
-            switch ($request->getMethod()) {
-                case 'GET':
-                    call_user_func($route->handler, $resources, $response, $request);
-                    break;
-
-                case 'POST':
-                    call_user_func($route->handler, $resources, $response, $request);
-                    break;
-
-                default:
-                    $response->send(405, 'Method not allowed');
-                    break;
-            }
+            call_user_func($route->handler, $resources, $request);
         }
     };
 }

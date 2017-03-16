@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, \Psr\Http\Message\ServerRequestInterface $request) : void {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
         $schema = $resources->schema();
         $session = $resources->session();
 
@@ -32,7 +32,7 @@
             $rating = $query['rating'];
         }
 
-        $response->send(200, $resources->phpview('feedback/supply')->capture([
+        $request->respond(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'contactmomentIdentifier' => $request->getAttribute('contactmomentIdentifier'),
@@ -62,14 +62,14 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, \Psr\Http\Message\ServerRequestInterface $request) : void {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Request $request) : void {
         $schema = $resources->schema();
         $session = $resources->session();
         $payload = $request->getParsedBody();
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            $response->send(403, "This looks like a cross-site request forgery.");
+            $request->respond(403, "This looks like a cross-site request forgery.");
         } else {
             $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
             $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
@@ -81,7 +81,7 @@
                 $rating->created_at = date('Y-m-d H:i:s');
             }
             $rating->updated_at = date('Y-m-d H:i:s');
-            $response->send(201, 'Dankje!');
+            $request->respond(201, 'Dankje!');
         }
     });
 };
