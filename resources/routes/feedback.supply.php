@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query) : \Psr\Http\Message\ResponseInterface {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, array $attributes, array $query) : void {
         $schema = $resources->schema();
         $session = $resources->session();
 
@@ -30,7 +30,7 @@
             $rating = $query['rating'];
         }
 
-        return $resources->response(200, $resources->phpview('feedback/supply')->capture([
+        $response->send(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'star' => function (int $i, $rating) use ($resources) : string {
@@ -59,24 +59,25 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, array $attributes, array $query, array $payload) : \Psr\Http\Message\ResponseInterface {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, array $attributes, array $query, array $payload) : void {
         $schema = $resources->schema();
         $session = $resources->session();
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            return $resources->response(403, "This looks like a cross-site request forgery.");
+            $response->send(403, "This looks like a cross-site request forgery.");
+        } else {
+            $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
+            $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
+                'ipv4' => $_SERVER['REMOTE_ADDR']
+            ]);
+            $rating->waarde = $payload['rating'];
+            $rating->inhoud = $payload['explanation'];
+            if ($rating->created_at === null) {
+                $rating->created_at = date('Y-m-d H:i:s');
+            }
+            $rating->updated_at = date('Y-m-d H:i:s');
+            $response->send(201, 'Dankje!');
         }
-        $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
-        $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
-            'ipv4' => $_SERVER['REMOTE_ADDR']
-        ]);
-        $rating->waarde = $payload['rating'];
-        $rating->inhoud = $payload['explanation'];
-        if ($rating->created_at === null) {
-            $rating->created_at = date('Y-m-d H:i:s');
-        }
-        $rating->updated_at = date('Y-m-d H:i:s');
-        return $resources->response(201, 'Dankje!');
     });
 };
