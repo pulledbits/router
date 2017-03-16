@@ -10,14 +10,14 @@ namespace {
          */
         $bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-        $rawRequest = $bootstrap->request();
-        $route = $bootstrap->route($rawRequest);
+        $psrRequest = $bootstrap->request();
+        $route = $bootstrap->route($psrRequest);
 
         foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
-            $rawRequest = $rawRequest->withAttribute($attributeIdentifier, $attributeValue);
+            $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
-        $request = new Request($rawRequest, $bootstrap->response($responseSender));
+        $request = new Request($psrRequest, $bootstrap->response($responseSender));
 
         if ($route === false) {
             $request->respond(404, 'Failure');
