@@ -31,6 +31,23 @@ return new class implements \rikmeijer\Teach\Bootstrap
         return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
     }
 
+    public function handle(callable $responseSender)
+    {
+        $psrRequest = $this->request();
+        $route = $this->route($psrRequest);
+
+        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
+            $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
+        }
+
+        $response = $this->response($responseSender);
+        if ($route === false) {
+            $response->send(404, 'Failure');
+        } else {
+            call_user_func(\Closure::bind($route->handler, $response, '\rikmeijer\Teach\Response'), $this->resources(), $psrRequest);
+        }
+    }
+
     public function resources() : \rikmeijer\Teach\Resources
     {
         return new class implements \rikmeijer\Teach\Resources

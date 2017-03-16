@@ -18,4 +18,5 @@ interface Bootstrap
     public function responseFactory() : callable;
 
     public function resources() : \rikmeijer\Teach\Resources;
+    public function handle(callable $responseSender);
 }
