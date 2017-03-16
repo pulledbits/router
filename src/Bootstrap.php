@@ -9,7 +9,7 @@ namespace rikmeijer\Teach;
 
 interface Bootstrap
 {
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Aura\Router\Route;
+    public function matcher() : \Aura\Router\Matcher;
 
     public function request() : \Psr\Http\Message\ServerRequestInterface;
 

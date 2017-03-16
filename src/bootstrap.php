@@ -6,22 +6,28 @@ return new class {
      */
     private $bootstrap;
 
+    /**
+     * @var \Aura\Router\Matcher
+     */
+    private $matcher;
+
+    /**
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    private $psrRequest;
+
     public function __construct()
     {
         $this->bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
-    }
-
-    public function response(callable $responseSender) : \rikmeijer\Teach\Response {
-        return new \rikmeijer\Teach\Response($responseSender, $this->bootstrap->responseFactory());
+        $this->matcher = $this->bootstrap->matcher();
+        $this->psrRequest = $this->bootstrap->request();
     }
 
     public function handle(callable $responseSender)
     {
-        $psrRequest = $this->bootstrap->request();
-        $route = $this->bootstrap->route($psrRequest);
-
+        $route = $this->matcher->match($this->psrRequest);
         foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
-            $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
+            $this->psrRequest = $this->psrRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
         if ($route !== false) {
@@ -32,8 +38,8 @@ return new class {
             };
         }
 
-        $response = $this->response($responseSender);
+        $response = new \rikmeijer\Teach\Response($responseSender, $this->bootstrap->responseFactory());
         $handler = $response->bind($handler);
-        call_user_func($handler, $this->bootstrap->resources(), $psrRequest);
+        call_user_func($handler, $this->bootstrap->resources(), $this->psrRequest);
     }
 };

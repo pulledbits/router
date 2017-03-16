@@ -3,7 +3,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autolo
 
 return new class implements \rikmeijer\Teach\Bootstrap
 {
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Aura\Router\Route {
+    public function matcher() : \Aura\Router\Matcher {
         $routerContainer = new \Aura\Router\RouterContainer();
         $map = $routerContainer->getMap();
 
@@ -13,7 +13,7 @@ return new class implements \rikmeijer\Teach\Bootstrap
             $routes[] = $routeFactory($map);
         }
 
-        return $routerContainer->getMatcher()->match($request);
+        return $routerContainer->getMatcher();
     }
 
     public function responseFactory() : callable {
