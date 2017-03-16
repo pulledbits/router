@@ -10,6 +10,10 @@ namespace {
         $request = $resources->request();
         $route = $resources->route($request);
 
+        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
+            $request = $request->withAttribute($attributeIdentifier, $attributeValue);
+        }
+
         $response = new \rikmeijer\Teach\Response($responseSender, $resources);
 
         if ($route === false) {
@@ -17,11 +21,11 @@ namespace {
         } else {
             switch ($request->getMethod()) {
                 case 'GET':
-                    call_user_func($route->handler, $resources, $response, $route->attributes, $request->getQueryParams());
+                    call_user_func($route->handler, $resources, $response, $request);
                     break;
 
                 case 'POST':
-                    call_user_func($route->handler, $resources, $response, $route->attributes, $request->getQueryParams(), $request->getParsedBody());
+                    call_user_func($route->handler, $resources, $response, $request);
                     break;
 
                 default:

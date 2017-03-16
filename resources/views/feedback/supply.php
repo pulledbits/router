@@ -9,4 +9,4 @@
     }
 </style>
 <?php $layout->section('body');
-$this->rateForm($rating, $explanation);
+$this->rateForm($contactmomentIdentifier, $rating, $explanation);

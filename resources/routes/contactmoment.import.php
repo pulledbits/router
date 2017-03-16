@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map) {
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, array $attributes, array $query) : void {
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, \Psr\Http\Message\ServerRequestInterface $request) : void {
         $session = $resources->session();
         $response->send(200, $resources->phpview('contactmoment/import')->capture([
             'importForm' => function() use ($session) : void {
@@ -10,10 +10,10 @@
         ]));
     });
 
-    $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, array $attributes, array $query, array $payload) : void {
+    $map->post('contactmoment.import', '/contactmoment/import', function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response, \Psr\Http\Message\ServerRequestInterface $request) : void {
         $schema = $resources->schema();
 
-        $icalReader = $resources->iCalReader($payload['url']);
+        $icalReader = $resources->iCalReader($request->getParsedBody()['url']);
 
         foreach ($icalReader->events() as $event) {
             if (array_key_exists('SUMMARY', $event) === false) {
