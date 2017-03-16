@@ -7,9 +7,9 @@ return new class {
     private $bootstrap;
 
     /**
-     * @var \Aura\Router\Matcher
+     * @var \Aura\Router\Route
      */
-    private $matcher;
+    private $route;
 
     /**
      * @var \Psr\Http\Message\ServerRequestInterface
@@ -19,19 +19,13 @@ return new class {
     public function __construct()
     {
         $this->bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
-        $this->matcher = $this->bootstrap->matcher();
-        $this->psrRequest = $this->bootstrap->request();
+        list($this->route, $this->psrRequest) = $this->bootstrap->match();
     }
 
     public function handle(callable $responseSender)
     {
-        $route = $this->matcher->match($this->psrRequest);
-        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
-            $this->psrRequest = $this->psrRequest->withAttribute($attributeIdentifier, $attributeValue);
-        }
-
-        if ($route !== false) {
-            $handler = $route->handler;
+        if ($this->route !== false) {
+            $handler = $this->route->handler;
         } else {
             $handler = function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
                 $this->send(404, 'Failure');

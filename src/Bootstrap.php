@@ -9,9 +9,7 @@ namespace rikmeijer\Teach;
 
 interface Bootstrap
 {
-    public function matcher() : \Aura\Router\Matcher;
-
-    public function request() : \Psr\Http\Message\ServerRequestInterface;
+    public function match() : array;
 
     public function responseFactory() : callable;
 

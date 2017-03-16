@@ -3,7 +3,7 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autolo
 
 return new class implements \rikmeijer\Teach\Bootstrap
 {
-    public function matcher() : \Aura\Router\Matcher {
+    public function match() : array {
         $routerContainer = new \Aura\Router\RouterContainer();
         $map = $routerContainer->getMap();
 
@@ -13,18 +13,20 @@ return new class implements \rikmeijer\Teach\Bootstrap
             $routes[] = $routeFactory($map);
         }
 
-        return $routerContainer->getMatcher();
+        $routerContainer->getMatcher();
+
+        $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+        $route = $this->matcher->match($request);
+        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
+            $request = $request->withAttribute($attributeIdentifier, $attributeValue);
+        }
+        return [$route, $request];
     }
 
     public function responseFactory() : callable {
         return function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return (new \GuzzleHttp\Psr7\Response($status))->withBody(\GuzzleHttp\Psr7\stream_for($body));
         };
-    }
-
-    public function request(): \Psr\Http\Message\ServerRequestInterface
-    {
-        return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
     }
 
     public function resources() : \rikmeijer\Teach\Resources
