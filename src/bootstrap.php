@@ -24,12 +24,16 @@ return new class {
             $psrRequest = $psrRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
-        $response = $this->response($responseSender);
-        if ($route === false) {
-            $response->send(404, 'Failure');
+        if ($route !== false) {
+            $handler = $route->handler;
         } else {
-            $handler = $response->bind($route->handler);
-            call_user_func($handler, $this->bootstrap->resources(), $psrRequest);
+            $handler = function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
+                $this->send(404, 'Failure');
+            };
         }
+
+        $response = $this->response($responseSender);
+        $handler = $response->bind($handler);
+        call_user_func($handler, $this->bootstrap->resources(), $psrRequest);
     }
 };
