@@ -16,6 +16,10 @@ return new class implements \rikmeijer\Teach\Bootstrap
         return $routerContainer->getMatcher()->match($request);
     }
 
+    public function response(callable $responseSender) : \rikmeijer\Teach\Response {
+        return new \rikmeijer\Teach\Response($responseSender, $this->responseFactory());
+    }
+
     public function responseFactory() : callable {
         return function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return (new \GuzzleHttp\Psr7\Response($status))->withBody(\GuzzleHttp\Psr7\stream_for($body));

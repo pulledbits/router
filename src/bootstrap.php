@@ -17,8 +17,7 @@ namespace {
             $rawRequest = $rawRequest->withAttribute($attributeIdentifier, $attributeValue);
         }
 
-        $response = new \rikmeijer\Teach\Response($responseSender, $bootstrap->responseFactory());
-        $request = new Request($rawRequest, $response);
+        $request = new Request($rawRequest, $bootstrap->response($responseSender));
 
         if ($route === false) {
             $request->respond(404, 'Failure');
