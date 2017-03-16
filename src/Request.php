@@ -39,4 +39,14 @@ class Request
     {
         return $this->request->$method(...$arguments);
     }
+
+    public function handle($route, Resources $resources)
+    {
+        if ($route === false) {
+            $this->respond(404, 'Failure');
+        } else {
+            \Closure::bind($route->handler, $this, __CLASS__);
+            call_user_func($route->handler, $resources, $this);
+        }
+    }
 }

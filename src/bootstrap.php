@@ -18,11 +18,6 @@ namespace {
         }
 
         $request = new Request($psrRequest, $bootstrap->response($responseSender));
-
-        if ($route === false) {
-            $request->respond(404, 'Failure');
-        } else {
-            call_user_func($route->handler, $bootstrap->resources(), $request);
-        }
+        $request->handle($route, $bootstrap->resources());
     };
 }
