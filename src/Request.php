@@ -43,7 +43,7 @@ class Request
         if ($route === false) {
             $this->respond(404, 'Failure');
         } else {
-            call_user_func(\Closure::bind($route->handler, $this, __CLASS__), $resources, $psrRequest);
+            call_user_func(\Closure::bind($route->handler, $this->response, '\rikmeijer\Teach\Response'), $resources, $psrRequest);
         }
     }
 }

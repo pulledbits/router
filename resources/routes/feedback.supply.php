@@ -32,7 +32,7 @@
             $rating = $query['rating'];
         }
 
-        $this->respond(200, $resources->phpview('feedback/supply')->capture([
+        $this->send(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'contactmomentIdentifier' => $request->getAttribute('contactmomentIdentifier'),
@@ -69,7 +69,7 @@
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            $this->respond(403, "This looks like a cross-site request forgery.");
+            $this->send(403, "This looks like a cross-site request forgery.");
         } else {
             $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
             $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
@@ -81,7 +81,7 @@
                 $rating->created_at = date('Y-m-d H:i:s');
             }
             $rating->updated_at = date('Y-m-d H:i:s');
-            $this->respond(201, 'Dankje!');
+            $this->send(201, 'Dankje!');
         }
     });
 };
