@@ -1,5 +1,5 @@
 <?php
-$resources = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'resources.php';
+$resources = require dirname(__DIR__) . DIRECTORY_SEPARATOR;
 
 return [
     'driver' => 'pdo_mysql',
