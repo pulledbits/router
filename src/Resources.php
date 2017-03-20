@@ -10,6 +10,8 @@ namespace rikmeijer\Teach;
 class Resources
 {
     private $resourcesPath;
+    private $resources;
+    private $storagePath;
 
     public function __construct(string $resourcesPath)
     {
@@ -22,7 +24,7 @@ class Resources
         /**
          * @var $factory \pulledbits\ActiveRecord\RecordFactory
          */
-        $factory = new \pulledbits\ActiveRecord\RecordFactory(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'activerecord');
+        $factory = new \pulledbits\ActiveRecord\RecordFactory($this->resourcesPath . DIRECTORY_SEPARATOR . 'activerecord');
         return new \pulledbits\ActiveRecord\SQL\Schema($factory,
             new \PDO($this->resources['DB_CONNECTION'] . ':host=' . $this->resources['DB_HOST'] . ';dbname=' . $this->resources['DB_DATABASE'],
                 $this->resources['DB_USERNAME'], $this->resources['DB_PASSWORD'],

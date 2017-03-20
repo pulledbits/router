@@ -58,7 +58,7 @@ modules.xml
 vendor
 .idea/inspectionProfiles/
 
-/storage/activerecord
+resources/activerecord
 /data
 /node_modules
 /public/storage
