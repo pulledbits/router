@@ -10,7 +10,7 @@ return new class implements \rikmeijer\Teach\Bootstrap
         $routes = [];
         foreach (glob(__DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . '*.php') as $routeFile) {
             $routeFactory = require $routeFile;
-            $routes[] = $routeFactory($map);
+            $routes[] = $routeFactory($map, $this->resources());
         }
 
         $matcher = $routerContainer->getMatcher();

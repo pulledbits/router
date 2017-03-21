@@ -1,5 +1,5 @@
-<?php return function(\Aura\Router\Map $map) {
-    $map->get('index', '/', function (\rikmeijer\Teach\Resources $resources, \Psr\Http\Message\RequestInterface $request) : void {
+<?php return function(\Aura\Router\Map $map, \rikmeijer\Teach\Resources $resources) {
+    $map->get('index', '/', function (\Psr\Http\Message\RequestInterface $request) use ($resources) : void {
         $schema = $resources->schema();
         $this->send(200, $resources->phpview('welcome')->capture([
             'modules' => $schema->read('module', [], []),

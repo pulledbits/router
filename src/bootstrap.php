@@ -32,6 +32,6 @@ return new class {
             return $this->bootstrap->response($status, $body);
         });
         $handler = $response->bind($handler);
-        call_user_func($handler, $this->bootstrap->resources(), $psrRequest);
+        call_user_func($handler, $psrRequest);
     }
 };
