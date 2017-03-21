@@ -59,15 +59,8 @@ class Resources
         $template = new \pulledbits\View\File\Template($this->resourcesPath . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . $templateIdentifier . '.php',
             $this->resourcesPath . DIRECTORY_SEPARATOR . 'layouts');
         $template->registerHelper('url', function (string $path, string ...$unencoded): string {
-            if (array_key_exists('HTTPS', $_SERVER) === false) {
-                $scheme = 'http';
-            } else {
-                $scheme = 'https';
-            }
-
             $encoded = array_map('rawurlencode', $unencoded);
-
-            return $scheme . '://' . $_SERVER['HTTP_HOST'] . sprintf($path, ...$encoded);
+            return \GuzzleHttp\Psr7\ServerRequest::getUriFromGlobals()->withPath(sprintf($path, ...$encoded));
         });
         $template->registerHelper('form',
             function (string $method, string $csrftoken, string $submitValue, string $model): void {

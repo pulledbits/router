@@ -6,7 +6,7 @@
 <header>
 	<h1>Overzicht contactmomenten</h1>
     <ul class="horizontal-menu">
-        <li><a href="/contactmoment/import" target="_blank">Importeer contactmomenten</a></li>
+        <li><a href="<?=$this->url('/contactmoment/import');?>" target="_blank">Importeer contactmomenten</a></li>
     </ul>
 </header>
 
