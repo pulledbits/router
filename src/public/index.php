@@ -1,6 +1,6 @@
 <?php
 
-$bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
+$bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'application.php';
 $response = $bootstrap->handle();
 
 http_response_code($response->getStatusCode());
