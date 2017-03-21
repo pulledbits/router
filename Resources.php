@@ -47,7 +47,13 @@ class Resources
             $this->resourcesPath . DIRECTORY_SEPARATOR . 'layouts');
         $template->registerHelper('url', function (string $path, string ...$unencoded): string {
             $encoded = array_map('rawurlencode', $unencoded);
-            return \GuzzleHttp\Psr7\ServerRequest::getUriFromGlobals()->withPath(sprintf($path, ...$encoded));
+            $path = sprintf($path, ...$encoded);
+            if (strpos($path, '?') === false) {
+                $query = '';
+            } else {
+                list($path, $query) = explode('?', $path, 2);
+            }
+            return (string)\GuzzleHttp\Psr7\ServerRequest::getUriFromGlobals()->withPath($path)->withQuery($query);
         });
         $template->registerHelper('form',
             function (string $method, string $csrftoken, string $submitValue, string $model): void {
