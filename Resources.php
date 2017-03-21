@@ -1,17 +1,9 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: hameijer
- * Date: 22-2-17
- * Time: 9:25
- */
-namespace rikmeijer\Teach;
+<?php namespace rikmeijer\Teach;
 
 class Resources
 {
     private $resourcesPath;
     private $resources;
-    private $storagePath;
 
     public function __construct(string $resourcesPath)
     {

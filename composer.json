@@ -20,6 +20,7 @@
 		"phpunit/phpunit" : "~5"
 	},
 	"autoload" : {
+		"files": ["Resources.php"],
 		"psr-4" : {
 			"rikmeijer\\Teach\\" : "src"
 		}
