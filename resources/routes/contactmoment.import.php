@@ -1,7 +1,7 @@
 <?php return function(\Aura\Router\Map $map, \rikmeijer\Teach\Resources $resources) {
-    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\Psr\Http\Message\RequestInterface $request) use ($resources) : void {
+    $map->get('contactmoment.prepare-import', '/contactmoment/import', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : void {
         $session = $resources->session();
-        $this->send(200, $resources->phpview('contactmoment/import')->capture([
+        $response->send(200, $resources->phpview('contactmoment/import')->capture([
             'importForm' => function() use ($session) : void {
                 $model = 'ICS URL: <input type="text" name="url" />';
 
@@ -10,7 +10,7 @@
         ]));
     });
 
-    $map->post('contactmoment.import', '/contactmoment/import', function (\Psr\Http\Message\RequestInterface $request) use ($resources) : void {
+    $map->post('contactmoment.import', '/contactmoment/import', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : void {
         $schema = $resources->schema();
 
         $icalReader = $resources->iCalReader($request->getParsedBody()['url']);
@@ -60,6 +60,6 @@
         // remove future, imported contactmomenten which where not touched in this batch (today)
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
-        $this->send(201, $resources->phpview('contactmoment/imported')->capture([]));
+        $response->send(201, $resources->phpview('contactmoment/imported')->capture([]));
     });
 };

@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map, \rikmeijer\Teach\Resources $resources) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request) use ($resources) : void {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : void {
         $schema = $resources->schema();
         $session = $resources->session();
 
@@ -32,7 +32,7 @@
             $rating = $query['rating'];
         }
 
-        $this->send(200, $resources->phpview('feedback/supply')->capture([
+        $response->send(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'contactmomentIdentifier' => $request->getAttribute('contactmomentIdentifier'),
@@ -62,16 +62,16 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request) use ($resources) : void {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : void {
         $schema = $resources->schema();
         $session = $resources->session();
         $payload = $request->getParsedBody();
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            $this->send(403, "This looks like a cross-site request forgery.");
+            $response->send(403, "This looks like a cross-site request forgery.");
         } else {
-            $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $attributes['contactmomentIdentifier']]);
+            $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $request->getAttribute('contactmomentIdentifier')]);
             $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
                 'ipv4' => $_SERVER['REMOTE_ADDR']
             ]);
@@ -81,7 +81,7 @@
                 $rating->created_at = date('Y-m-d H:i:s');
             }
             $rating->updated_at = date('Y-m-d H:i:s');
-            $this->send(201, 'Dankje!');
+            $response->send(201, 'Dankje!');
         }
     });
 };

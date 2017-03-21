@@ -19,11 +19,6 @@ class Response
         return call_user_func($this->responseFactory, $status, $body);
     }
 
-    public function bind(callable $handler) : callable
-    {
-        return \Closure::bind($handler, $this, __CLASS__);
-    }
-
     public function send(int $status, string $body) : void
     {
         call_user_func($this->responseSender, $this->makeResponse($status, $body));
