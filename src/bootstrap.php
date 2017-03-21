@@ -28,8 +28,10 @@ return new class {
             };
         }
 
-        call_user_func($handler, $psrRequest, new \rikmeijer\Teach\Response($responseSender, function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+        $response = call_user_func($handler, $psrRequest, new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return $this->bootstrap->response($status, $body);
         }));
+
+        $responseSender($response);
     }
 };

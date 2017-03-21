@@ -5,12 +5,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class Response
 {
-    private $responseSender;
     private $responseFactory;
 
-    public function __construct(callable $responseSender, callable $responseFactory)
+    public function __construct(callable $responseFactory)
     {
-        $this->responseSender = $responseSender;
         $this->responseFactory = $responseFactory;
     }
 
@@ -19,18 +17,18 @@ class Response
         return call_user_func($this->responseFactory, $status, $body);
     }
 
-    public function send(int $status, string $body) : void
+    public function send(int $status, string $body) : ResponseInterface
     {
-        call_user_func($this->responseSender, $this->makeResponse($status, $body));
+        return $this->makeResponse($status, $body);
     }
 
-    public function sendWithHeaders(int $status, array $headers, string $body) : void
+    public function sendWithHeaders(int $status, array $headers, string $body) : ResponseInterface
     {
         $response = $this->makeResponse($status, $body);
         foreach ($headers as $headerIdentifier => $headerValue) {
             $response = $response->withHeader($headerIdentifier, $headerValue);
         }
-        call_user_func($this->responseSender, $response);
+        return $response;
 
     }
 }

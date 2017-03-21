@@ -1,5 +1,5 @@
 <?php return function(\Aura\Router\Map $map, \rikmeijer\Teach\Resources $resources) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : void {
+    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
         $session = $resources->session();
 
@@ -32,7 +32,7 @@
             $rating = $query['rating'];
         }
 
-        $response->send(200, $resources->phpview('feedback/supply')->capture([
+        return $response->send(200, $resources->phpview('feedback/supply')->capture([
             'rating' => $rating,
             'explanation' => $explanation,
             'contactmomentIdentifier' => $request->getAttribute('contactmomentIdentifier'),
@@ -62,14 +62,14 @@
         ]));
     });
 
-    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : void {
+    $map->post('feedback.supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
         $session = $resources->session();
         $payload = $request->getParsedBody();
 
         $csrf_token = $session->getCsrfToken();
         if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-            $response->send(403, "This looks like a cross-site request forgery.");
+            return $response->send(403, "This looks like a cross-site request forgery.");
         } else {
             $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $request->getAttribute('contactmomentIdentifier')]);
             $rating = $contactmoment->fetchFirstByFkRatingContactmoment([
@@ -81,7 +81,7 @@
                 $rating->created_at = date('Y-m-d H:i:s');
             }
             $rating->updated_at = date('Y-m-d H:i:s');
-            $response->send(201, 'Dankje!');
+            return $response->send(201, 'Dankje!');
         }
     });
 };
