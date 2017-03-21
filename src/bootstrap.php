@@ -28,7 +28,9 @@ return new class {
             };
         }
 
-        $response = new \rikmeijer\Teach\Response($responseSender, $this->bootstrap->responseFactory());
+        $response = new \rikmeijer\Teach\Response($responseSender, function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+            return $this->bootstrap->response($status, $body);
+        });
         $handler = $response->bind($handler);
         call_user_func($handler, $this->bootstrap->resources(), $psrRequest);
     }

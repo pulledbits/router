@@ -11,7 +11,7 @@ interface Bootstrap
 {
     public function match() : array;
 
-    public function responseFactory() : callable;
+    public function response(int $status, string $body) : \Psr\Http\Message\ResponseInterface;
 
     public function resources() : \rikmeijer\Teach\Resources;
 
