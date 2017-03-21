@@ -3,12 +3,10 @@
 class Resources
 {
     private $resourcesPath;
-    private $resources;
 
     public function __construct(string $resourcesPath)
     {
         $this->resourcesPath = $resourcesPath;
-        $this->resources = require $resourcesPath . DIRECTORY_SEPARATOR . 'config.php';
     }
 
     public function schema(): \pulledbits\ActiveRecord\SQL\Schema
@@ -17,10 +15,7 @@ class Resources
          * @var $factory \pulledbits\ActiveRecord\RecordFactory
          */
         $factory = new \pulledbits\ActiveRecord\RecordFactory($this->resourcesPath . DIRECTORY_SEPARATOR . 'activerecord');
-        return new \pulledbits\ActiveRecord\SQL\Schema($factory,
-            new \PDO($this->resources['DB_CONNECTION'] . ':host=' . $this->resources['DB_HOST'] . ';dbname=' . $this->resources['DB_DATABASE'],
-                $this->resources['DB_USERNAME'], $this->resources['DB_PASSWORD'],
-                array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'')));
+        return new \pulledbits\ActiveRecord\SQL\Schema($factory, require $this->resourcesPath . DIRECTORY_SEPARATOR . 'pdo.php');
     }
 
     public function session(): \Aura\Session\Session
