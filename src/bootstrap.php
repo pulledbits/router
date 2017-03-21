@@ -12,7 +12,7 @@ return new class {
         $this->bootstrap = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
     }
 
-    public function handle(callable $responseSender)
+    public function handle()
     {
         /**
          * @var $route \Aura\Router\Route
@@ -32,6 +32,11 @@ return new class {
             return $this->bootstrap->response($status, $body);
         }));
 
-        $responseSender($response);
+        http_response_code($response->getStatusCode());
+        foreach ($response->getHeaders() as $headerIdentifier => $headerValue) {
+            header($headerIdentifier . ': ' . implode(', ', $headerValue));
+        }
+        print $response->getBody();
+        exit;
     }
 };
