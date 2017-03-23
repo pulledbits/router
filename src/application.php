@@ -14,11 +14,7 @@ return new class {
 
     public function handle() : \Psr\Http\Message\ResponseInterface
     {
-        /**
-         * @var $handler callable
-         * @var $psrRequest \Psr\Http\Message\ServerRequestInterface
-         */
-        list($handler, $psrRequest) = $this->bootstrap->match([
+        $router = $this->bootstrap->router([
             '/' => 'index',
             '/qr' => 'qr',
             '/rating/(?<contactmomentIdentifier>\d+)' => 'rating',
@@ -28,11 +24,13 @@ return new class {
 
         ]);
 
+        list($handler, $request) = $router->route($this->bootstrap->request());
+
         if ($handler === false) {
             return $this->bootstrap->response(404, 'Failure');
         }
 
-        return call_user_func($handler, $psrRequest, $this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+        return call_user_func($handler, $request, $this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return $this->bootstrap->response($status, $body);
         }));
     }
