@@ -3,23 +3,38 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autolo
 
 return new class implements \rikmeijer\Teach\Bootstrap
 {
-    public function match() : array {
+    public function match(array $routes) : array {
+        uksort($routes, function($a,$b){
+            return strlen($b) - strlen($a);
+        });
+
+        $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+
         $routerContainer = new \Aura\Router\RouterContainer();
         $map = $routerContainer->getMap();
 
-        $routes = [];
-        foreach (glob(__DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . '*.php') as $routeFile) {
-            $routeFactory = require $routeFile;
-            $routes[] = $routeFactory($map, $this->resources());
+        $path = $request->getUri()->getPath();
+        $routeFile = null;
+        foreach ($routes as $routeRegularExpression => $routeIdentifier) {
+            if (preg_match('#^' . $routeRegularExpression . '#', $path, $matches) === 1) {
+                $routeFile = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . $request->getMethod() . DIRECTORY_SEPARATOR . $routeIdentifier . '.php';
+                foreach ($matches as $attributeIdentifier => $attributeValue) {
+                    $request = $request->withAttribute($attributeIdentifier, $attributeValue);
+                }
+                break;
+            }
         }
+        if ($routeFile === null) {
+            return [false, $request];
+        }
+
+
+        $routeFactory = require $routeFile;
+        $routeFactory($map, $this->resources());
 
         $matcher = $routerContainer->getMatcher();
 
-        $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
         $route = $matcher->match($request);
-        foreach ($route->attributes as $attributeIdentifier => $attributeValue) {
-            $request = $request->withAttribute($attributeIdentifier, $attributeValue);
-        }
         return [$route, $request];
     }
 

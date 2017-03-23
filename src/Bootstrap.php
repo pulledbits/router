@@ -9,7 +9,7 @@ namespace rikmeijer\Teach;
 
 interface Bootstrap
 {
-    public function match() : array;
+    public function match(array $routes) : array;
 
     public function response(int $status, string $body) : \Psr\Http\Message\ResponseInterface;
 

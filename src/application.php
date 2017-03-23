@@ -18,7 +18,15 @@ return new class {
          * @var $route \Aura\Router\Route
          * @var $psrRequest \Psr\Http\Message\ServerRequestInterface
          */
-        list($route, $psrRequest) = $this->bootstrap->match();
+        list($route, $psrRequest) = $this->bootstrap->match([
+            '/' => 'index',
+            '/qr' => 'qr',
+            '/rating/(?<contactmomentIdentifier>\d+)' => 'rating',
+            '/contactmoment/import' => 'contactmoment.import',
+            '/feedback/(?<contactmomentIdentifier>\d+)' => 'feedback',
+            '/feedback/(?<contactmomentIdentifier>\d+)/supply' => 'feedback.supply'
+
+        ]);
 
         if ($route === false) {
             return $this->bootstrap->response(404, 'Failure');
