@@ -35,6 +35,12 @@ class Resources
         return file_get_contents($image);
     }
 
+    public function session(): \Aura\Session\Session
+    {
+        $session_factory = new \Aura\Session\SessionFactory;
+        return $session_factory->newInstance($_COOKIE);
+    }
+
     public function phpview(): \pulledbits\View\Template
     {
         $template = new \pulledbits\View\File\Template($this->resourcesPath . DIRECTORY_SEPARATOR . "views", $this->resourcesPath . DIRECTORY_SEPARATOR . 'layouts');

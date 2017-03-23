@@ -1,4 +1,4 @@
-<?php function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response): \Psr\Http\Message\ResponseInterface {
+<?php return function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response): \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
 
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $request->getAttribute('contactmomentIdentifier')]);
