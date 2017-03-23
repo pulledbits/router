@@ -43,8 +43,7 @@ class Resources
 
     public function phpview(): \pulledbits\View\Template
     {
-        $template = new \pulledbits\View\File\Template($this->resourcesPath . DIRECTORY_SEPARATOR . "views" ,
-            $this->resourcesPath . DIRECTORY_SEPARATOR . 'layouts');
+        $template = new \pulledbits\View\File\Template($this->resourcesPath . DIRECTORY_SEPARATOR . "views", $this->resourcesPath . DIRECTORY_SEPARATOR . 'layouts');
         $template->registerHelper('url', function (string $path, string ...$unencoded): string {
             $encoded = array_map('rawurlencode', $unencoded);
             $path = sprintf($path, ...$encoded);
@@ -55,6 +54,7 @@ class Resources
             }
             return (string)\GuzzleHttp\Psr7\ServerRequest::getUriFromGlobals()->withPath($path)->withQuery($query);
         });
+
         $template->registerHelper('form',
             function (string $method, string $csrftoken, string $submitValue, string $model): void {
                 ?>
@@ -66,15 +66,15 @@ class Resources
                 <?php
             });
 
+        $template->registerHelper('qr', function(int $width, int $height, string $data) : void
+        {
+            $renderer = new \BaconQrCode\Renderer\Image\Png();
+            $renderer->setHeight($width);
+            $renderer->setWidth($height);
+            $writer = new \BaconQrCode\Writer($renderer);
+            print $writer->writeString($data);
+        });
         return $template;
-    }
-
-    public function qrWriter(int $width, int $height): \BaconQrCode\Writer
-    {
-        $renderer = new \BaconQrCode\Renderer\Image\Png();
-        $renderer->setHeight($width);
-        $renderer->setWidth($height);
-        return new \BaconQrCode\Writer($renderer);
     }
 
     public function iCalReader(string $uri): \ICal
