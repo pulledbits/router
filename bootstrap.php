@@ -10,9 +10,6 @@ return new class implements \rikmeijer\Teach\Bootstrap
 
         $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
-        $routerContainer = new \Aura\Router\RouterContainer();
-        $map = $routerContainer->getMap();
-
         $path = $request->getUri()->getPath();
         $routeFile = null;
         foreach ($routes as $routeRegularExpression => $routeIdentifier) {
@@ -28,14 +25,8 @@ return new class implements \rikmeijer\Teach\Bootstrap
             return [false, $request];
         }
 
-
-        $routeFactory = require $routeFile;
-        $routeFactory($map, $this->resources());
-
-        $matcher = $routerContainer->getMatcher();
-
-        $route = $matcher->match($request);
-        return [$route, $request];
+        $resources = $this->resources();
+        return [require $routeFile, $request];
     }
 
     public function response(int $status, string $body) : \Psr\Http\Message\ResponseInterface {

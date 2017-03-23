@@ -1,5 +1,4 @@
-<?php return function(\Aura\Router\Map $map, \rikmeijer\Teach\Resources $resources) {
-    $map->get('feedback.prepare-supply', '/feedback/{contactmomentIdentifier}/supply', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
+<?php function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
         $session = $resources->session();
 
@@ -60,5 +59,4 @@
                 }
             }
         ]));
-    });
 };

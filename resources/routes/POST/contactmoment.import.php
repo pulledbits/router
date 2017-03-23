@@ -1,5 +1,4 @@
-<?php return function(\Aura\Router\Map $map, \rikmeijer\Teach\Resources $resources) {
-    $map->post('contactmoment.import', '/contactmoment/import', function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
+<?php function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
 
         $icalReader = $resources->iCalReader($request->getParsedBody()['url']);
@@ -50,5 +49,4 @@
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
         return $response->send(201, $resources->phpview('contactmoment/imported')->capture([]));
-    });
 };
