@@ -5,7 +5,7 @@
         } elseif ($query['data'] === null) {
             return $response->send(400, 'Query data incomplete');
         } else  {
-            return $response->sendWithHeaders(200, ['Content-Type' => 'image/png'], $resources->phpview('qr')->capture([
+            return $response->sendWithHeaders(200, ['Content-Type' => 'image/png'], $resources->phpview()->capture('qr', [
                 'data' => $query['data'],
                 'qr' => function (int $width, int $height, string $data) use ($resources) : void {
                     $renderer = $resources->qrRenderer($width, $height);

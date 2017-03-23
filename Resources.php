@@ -41,9 +41,9 @@ class Resources
         return file_get_contents($image);
     }
 
-    public function phpview($templateIdentifier): \pulledbits\View\Template
+    public function phpview(): \pulledbits\View\Template
     {
-        $template = new \pulledbits\View\File\Template($this->resourcesPath . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . $templateIdentifier . '.php',
+        $template = new \pulledbits\View\File\Template($this->resourcesPath . DIRECTORY_SEPARATOR . "views" ,
             $this->resourcesPath . DIRECTORY_SEPARATOR . 'layouts');
         $template->registerHelper('url', function (string $path, string ...$unencoded): string {
             $encoded = array_map('rawurlencode', $unencoded);

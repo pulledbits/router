@@ -18,7 +18,7 @@
 	</ul>
 </nav>
 <section>
-    <?php $this->sub('contactmomenten')->render([
+    <?php $this->render('contactmomenten', [
 		'caption'=> 'Contactmomenten vandaag',
 		'contactmomenten' => $contactmomenten
 	]); ?>
@@ -28,7 +28,7 @@
 <section>
 	<a name="<?=$this->escape($module->naam); ?>"></a>
 	<h2><?=$this->escape($module->naam); ?></h2>
-    <?php $this->sub('contactmomenten')->render([
+    <?php $this->render('contactmomenten', [
 		'caption'=> 'Contactmomenten',
 		'contactmomenten' => $module->read("contactmoment_module", ["module_id" => "id"])
 	]); ?>

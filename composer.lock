@@ -1015,12 +1015,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pulledbits/view.git",
-                "reference": "cf8f875258d0695d3b0aea5bacd883cfd363c655"
+                "reference": "df6549945eccec37221b9f471eb8d375acf9909d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pulledbits/view/zipball/cf8f875258d0695d3b0aea5bacd883cfd363c655",
-                "reference": "cf8f875258d0695d3b0aea5bacd883cfd363c655",
+                "url": "https://api.github.com/repos/pulledbits/view/zipball/df6549945eccec37221b9f471eb8d375acf9909d",
+                "reference": "df6549945eccec37221b9f471eb8d375acf9909d",
                 "shasum": ""
             },
             "require": {
@@ -1040,7 +1040,7 @@
                 "MIT"
             ],
             "description": "native PHP view engine",
-            "time": "2017-03-16 08:36:48"
+            "time": "2017-03-23 18:44:40"
         },
         {
             "name": "symfony/console",
