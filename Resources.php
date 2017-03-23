@@ -69,16 +69,11 @@ class Resources
         return $template;
     }
 
-    public function qrRenderer(int $width, int $height): \BaconQrCode\Renderer\Image\Png
+    public function qrWriter(int $width, int $height): \BaconQrCode\Writer
     {
         $renderer = new \BaconQrCode\Renderer\Image\Png();
         $renderer->setHeight($width);
         $renderer->setWidth($height);
-        return $renderer;
-    }
-
-    public function qrWriter(\BaconQrCode\Renderer\RendererInterface $renderer): \BaconQrCode\Writer
-    {
         return new \BaconQrCode\Writer($renderer);
     }
 

@@ -8,9 +8,7 @@
             return $response->sendWithHeaders(200, ['Content-Type' => 'image/png'], $resources->phpview()->capture('qr', [
                 'data' => $query['data'],
                 'qr' => function (int $width, int $height, string $data) use ($resources) : void {
-                    $renderer = $resources->qrRenderer($width, $height);
-                    $writer = $resources->qrWriter($renderer);
-                    print $writer->writeString($data);
+                    print $resources->qrWriter($width, $height)->writeString($data);
                 }
             ]));
         }
