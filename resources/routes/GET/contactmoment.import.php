@@ -1,4 +1,4 @@
-<?php return function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Response $response) use ($resources) : \Psr\Http\Message\ResponseInterface {
+<?php return function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
         $session = $resources->session();
         return $response->send(200, $resources->phpview('contactmoment/import')->capture([
             'importForm' => function() use ($session) : void {

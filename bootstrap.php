@@ -4,29 +4,8 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autolo
 return new class implements \rikmeijer\Teach\Bootstrap
 {
     public function match(array $routes) : array {
-        uksort($routes, function($a,$b){
-            return strlen($b) - strlen($a);
-        });
-
-        $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
-
-        $path = $request->getUri()->getPath();
-        $routeFile = null;
-        foreach ($routes as $routeRegularExpression => $routeIdentifier) {
-            if (preg_match('#^' . $routeRegularExpression . '#', $path, $matches) === 1) {
-                $routeFile = __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . $request->getMethod() . DIRECTORY_SEPARATOR . $routeIdentifier . '.php';
-                foreach ($matches as $attributeIdentifier => $attributeValue) {
-                    $request = $request->withAttribute($attributeIdentifier, $attributeValue);
-                }
-                break;
-            }
-        }
-        if ($routeFile === null) {
-            return [false, $request];
-        }
-
-        $resources = $this->resources();
-        return [require $routeFile, $request];
+        $router = new \rikmeijer\Teach\Router($routes, __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'routes');
+        return $router->route(\GuzzleHttp\Psr7\ServerRequest::fromGlobals(), $this->resources());
     }
 
     public function response(int $status, string $body) : \Psr\Http\Message\ResponseInterface {

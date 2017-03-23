@@ -32,7 +32,7 @@ return new class {
             return $this->bootstrap->response(404, 'Failure');
         }
 
-        return call_user_func($handler, $psrRequest, new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+        return call_user_func($handler, $psrRequest, $this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return $this->bootstrap->response($status, $body);
         }));
     }
