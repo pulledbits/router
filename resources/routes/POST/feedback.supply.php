@@ -1,6 +1,6 @@
 <?php return function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
     $schema = $resources->schema();
-    $session = $resources->session();
+    $session = $resources->phpview()->csrfToken();
     $payload = $request->getParsedBody();
 
     $csrf_token = $session->getCsrfToken();

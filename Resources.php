@@ -18,12 +18,6 @@ class Resources
         return new \pulledbits\ActiveRecord\SQL\Schema($factory, require $this->resourcesPath . DIRECTORY_SEPARATOR . 'pdo.php');
     }
 
-    public function session(): \Aura\Session\Session
-    {
-        $session_factory = new \Aura\Session\SessionFactory;
-        return $session_factory->newInstance($_COOKIE);
-    }
-
     private function assetsDirectory()
     {
         return $this->resourcesPath . DIRECTORY_SEPARATOR . 'assets';
@@ -55,11 +49,17 @@ class Resources
             return (string)\GuzzleHttp\Psr7\ServerRequest::getUriFromGlobals()->withPath($path)->withQuery($query);
         });
 
+        $template->registerHelper('csrfToken',
+            function () : string {
+                $session_factory = new \Aura\Session\SessionFactory;
+                $session = $session_factory->newInstance($_COOKIE);
+                return $session->getCsrfToken()->getValue();
+            });
         $template->registerHelper('form',
-            function (string $method, string $csrftoken, string $submitValue, string $model): void {
+            function (string $method, string $submitValue, string $model): void {
                 ?>
                 <form method="<?= $this->escape($method); ?>">
-                    <input type="hidden" name="__csrf_value" value="<?= $this->escape($csrftoken); ?>"/>
+                    <input type="hidden" name="__csrf_value" value="<?= $this->csrfToken(); ?>"/>
                     <?= $model; ?>
                     <input type="submit" value="<?= $this->escape($submitValue); ?>"/>
                 </form>

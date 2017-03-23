@@ -1,6 +1,5 @@
 <?php function (\Psr\Http\Message\RequestInterface $request, \rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response): \Psr\Http\Message\ResponseInterface {
         $schema = $resources->schema();
-        $session = $resources->session();
 
         $contactmoment = $schema->readFirst('contactmoment', [], ['id' => $request->getAttribute('contactmomentIdentifier')]);
 
@@ -45,14 +44,14 @@
                 }
                 return 'data:image/png;base64,' . base64_encode($data);
             },
-            'rateForm' => function (string $contactmomentIdentifier, $rating, string $explanation) use ($session) : void {
+            'rateForm' => function (string $contactmomentIdentifier, $rating, string $explanation) : void {
                 ?><h1>Hoeveel sterren?</h1><?php
                 for ($i = 0; $i < 5; $i ++) {
                     ?><a href="<?=$this->url('/feedback/%s/supply?rating=%s', $contactmomentIdentifier, $i + 1); ?>"><img
                         src="<?= $this->star($i, $rating); ?>" width="100"/></a><?php
                 }
                 if ($rating !== null) {
-                    $this->form("post", $session->getCsrfToken()->getValue(), "Verzenden", '<h1>Waarom?</h1>
+                    $this->form("post", "Verzenden", '<h1>Waarom?</h1>
                         <input type="hidden" name="rating" value="' . $this->escape($rating) . '" />
                         <textarea rows="5" cols="75" name="explanation">' . $this->escape($explanation) . '</textarea>
                     ');
