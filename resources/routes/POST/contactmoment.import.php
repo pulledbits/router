@@ -48,5 +48,5 @@
         // remove future, imported contactmomenten which where not touched in this batch (today)
         $schema->delete('contactmoment_toekomst_geimporteerd_verleden', []);
 
-        return $response->send(201, $resources->phpview()->capture('contactmoment/imported', []));
+        return $response->make(201, $resources->phpview()->capture('contactmoment/imported', []));
 };

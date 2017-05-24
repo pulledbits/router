@@ -5,7 +5,7 @@
 
     $csrf_token = $session->getCsrfToken();
     if ($csrf_token->isValid($payload['__csrf_value']) === false) {
-        return $response->send(403, "This looks like a cross-site request forgery.");
+        return $response->make(403, "This looks like a cross-site request forgery.");
     } else {
         $contactmoment = $schema->readFirst('contactmoment', [],
             ['id' => $request->getAttribute('contactmomentIdentifier')]);
@@ -18,6 +18,6 @@
             $rating->created_at = date('Y-m-d H:i:s');
         }
         $rating->updated_at = date('Y-m-d H:i:s');
-        return $response->send(201, 'Dankje!');
+        return $response->make(201, 'Dankje!');
     }
 };

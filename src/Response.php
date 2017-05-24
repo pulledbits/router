@@ -17,12 +17,12 @@ class Response
         return call_user_func($this->responseFactory, $status, $body);
     }
 
-    public function send(int $status, string $body) : ResponseInterface
+    public function make(int $status, string $body) : ResponseInterface
     {
         return $this->makeResponse($status, $body);
     }
 
-    public function sendWithHeaders(int $status, array $headers, string $body) : ResponseInterface
+    public function makeWithHeaders(int $status, array $headers, string $body) : ResponseInterface
     {
         $response = $this->makeResponse($status, $body);
         foreach ($headers as $headerIdentifier => $headerValue) {
