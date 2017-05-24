@@ -29,7 +29,7 @@ return new class {
             return $this->bootstrap->response(404, 'Failure');
         }
 
-        return call_user_func($handler, $this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+        return $handler($this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return $this->bootstrap->response($status, $body);
         }));
     }
