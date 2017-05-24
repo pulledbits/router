@@ -15,12 +15,12 @@ return new class {
     public function handle() : \Psr\Http\Message\ResponseInterface
     {
         $router = $this->bootstrap->router([
-            '/' => 'index',
-            '/qr' => 'qr',
+            '/feedback/(?<contactmomentIdentifier>\d+)/supply' => 'feedback.supply',
+            '/feedback/(?<contactmomentIdentifier>\d+)' => 'feedback',
             '/rating/(?<contactmomentIdentifier>\d+)' => 'rating',
             '/contactmoment/import' => 'contactmoment.import',
-            '/feedback/(?<contactmomentIdentifier>\d+)' => 'feedback',
-            '/feedback/(?<contactmomentIdentifier>\d+)/supply' => 'feedback.supply'
+            '/qr' => 'qr',
+            '/' => 'index'
         ]);
 
         $handler = $router->route($this->bootstrap->request());

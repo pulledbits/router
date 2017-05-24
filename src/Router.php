@@ -24,9 +24,6 @@ class Router
 
     public function __construct(array $routes, string $routesPath)
     {
-        uksort($routes, function($a,$b){
-            return strlen($b) - strlen($a);
-        });
         $this->routes = $routes;
         $this->routesPath = $routesPath;
     }
