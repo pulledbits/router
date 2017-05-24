@@ -48,7 +48,7 @@ class Router
                 };
             }
         }
-        return [false, $request];
+        return false;
     }
 
 }
