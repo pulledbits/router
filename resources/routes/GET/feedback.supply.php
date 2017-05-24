@@ -7,21 +7,15 @@
             'ipv4' => $_SERVER['REMOTE_ADDR']
         ]);
 
+        $rating = null;
+        $explanation = '';
         if ($ipRating->waarde !== null) {
             $data = [
                 'rating' => $ipRating->waarde,
                 'explanation' => $ipRating->inhoud
             ];
-        } else {
-            $data = null;
-        }
-
-        if ($data !== null) {
             $rating = $data['rating'];
             $explanation = $data['explanation'] !== null ? $data['explanation'] : '';
-        } else {
-            $rating = null;
-            $explanation = '';
         }
 
         $query = $request->getQueryParams();
