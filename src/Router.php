@@ -41,7 +41,11 @@ class Router
                 foreach ($matches as $attributeIdentifier => $attributeValue) {
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }
-                return [require $routeFile, $request];
+
+                return function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) use ($routeFile, $request) : \Psr\Http\Message\ResponseInterface {
+                    $handler = require $routeFile;
+                    return $handler($request, $resources, $response);
+                };
             }
         }
         return [false, $request];

@@ -21,16 +21,15 @@ return new class {
             '/contactmoment/import' => 'contactmoment.import',
             '/feedback/(?<contactmomentIdentifier>\d+)' => 'feedback',
             '/feedback/(?<contactmomentIdentifier>\d+)/supply' => 'feedback.supply'
-
         ]);
 
-        list($handler, $request) = $router->route($this->bootstrap->request());
+        $handler = $router->route($this->bootstrap->request());
 
         if ($handler === false) {
             return $this->bootstrap->response(404, 'Failure');
         }
 
-        return call_user_func($handler, $request, $this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+        return call_user_func($handler, $this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return $this->bootstrap->response($status, $body);
         }));
     }
