@@ -39,10 +39,22 @@ class Router
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }
 
-                return function (\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) use ($routeFile, $request) : \Psr\Http\Message\ResponseInterface {
-                    $handler = require $routeFile;
-                    return $handler($request, $resources, $response);
+                return new class($routeFile, $request) {
+
+                    private $routeFile;
+                    private $request;
+
+                    public function __construct(string $routeFile, \Psr\Http\Message\RequestInterface $request) {
+                        $this->routeFile = $routeFile;
+                        $this->request = $request;
+                    }
+
+                    public function __invoke(\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
+                        $handler = require $this->routeFile;
+                        return $handler($this->request, $resources, $response);
+                    }
                 };
+
             }
         }
         return false;
