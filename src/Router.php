@@ -28,7 +28,7 @@ class Router
         $this->routesPath = $routesPath;
     }
 
-    public function route(ServerRequestInterface $request)
+    public function route(ServerRequestInterface $request) : Route
     {
         $path = $request->getUri()->getPath();
         $routeFile = null;
@@ -39,21 +39,7 @@ class Router
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }
 
-                return new class($routeFile, $request) {
-
-                    private $routeFile;
-                    private $request;
-
-                    public function __construct(string $routeFile, \Psr\Http\Message\RequestInterface $request) {
-                        $this->routeFile = $routeFile;
-                        $this->request = $request;
-                    }
-
-                    public function __invoke(\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
-                        $handler = require $this->routeFile;
-                        return $handler($this->request, $resources, $response);
-                    }
-                };
+                return new Route($routeFile, $request);
 
             }
         }
