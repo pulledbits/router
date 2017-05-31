@@ -23,13 +23,13 @@ return new class {
             '/' => 'index'
         ]);
 
-        $handler = $router->route($this->bootstrap->request());
+        $route = $router->route($this->bootstrap->request());
 
-        if ($handler === false) {
+        if ($route === false) {
             return $this->bootstrap->response(404, 'Failure');
         }
 
-        return $handler($this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
+        return $route->execute($this->bootstrap->resources(), new \rikmeijer\Teach\Response(function(int $status, string $body) : \Psr\Http\Message\ResponseInterface {
             return $this->bootstrap->response($status, $body);
         }));
     }

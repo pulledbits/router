@@ -18,7 +18,7 @@ class Route
         $this->request = $request;
     }
 
-    public function __invoke(\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
+    public function execute(\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
         $handler = require $this->routeFile;
         return $handler($this->request, $resources, $response);
     }
