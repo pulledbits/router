@@ -5,7 +5,7 @@
  * Time: 10:06
  */
 
-namespace rikmeijer\Teach;
+namespace pulledbits\Router;
 
 
 use Psr\Http\Message\ServerRequestInterface;

@@ -5,7 +5,7 @@
  * Time: 16:18
  */
 
-namespace rikmeijer\Teach;
+namespace pulledbits\Router;
 
 
 class Route
