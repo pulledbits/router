@@ -20,6 +20,7 @@ class Route
 
     public function execute(array $arguments) : \Psr\Http\Message\ResponseInterface {
         $handler = require $this->routeFile;
-        return call_user_func_array($handler, $this->request, $arguments);
+        array_unshift($arguments, $this->request);
+        return call_user_func_array($handler, $arguments);
     }
 };
