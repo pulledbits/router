@@ -18,18 +18,12 @@
                 continue;
             }
 
-            $starttijd = new \DateTime($event['DTSTART']);
-            $eindtijd = new \DateTime($event['DTEND']);
-
-            $starttijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
-            $eindtijd->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
-
             $contactmoment = $schema->readFirst('contactmoment', [], ['ical_uid' => $event['UID']]);
 
             if ($contactmoment->les_id === null) {
                 $lesplan = $module->fetchFirstByFkLesmodule([
-                    'jaar' => $starttijd->format('Y'),
-                    'kalenderweek' => ltrim($starttijd->format('W'), '0')
+                    'jaar' => $resources->convertToYear($event['DTSTART']),
+                    'kalenderweek' => $resources->convertToWeek($event['DTSTART'])
                 ]);
 
                 if ($lesplan->naam === null) {
@@ -39,8 +33,8 @@
             }
 
             $contactmoment->ical_uid = $event['UID'];
-            $contactmoment->starttijd = $starttijd->format('Y-m-d H:i:s');
-            $contactmoment->eindtijd = $eindtijd->format('Y-m-d H:i:s');
+            $contactmoment->starttijd = $resources->convertToSQLDateTime($event['DTSTART']);
+            $contactmoment->eindtijd = $resources->convertToSQLDateTime($event['DTEND']);
             $contactmoment->ruimte = $event['LOCATION'];
             $contactmoment->updated_at = date('Y-m-d H:i:s');
         }

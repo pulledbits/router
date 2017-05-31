@@ -87,4 +87,22 @@ class Resources
     {
         return new \ICal($uri);
     }
+
+    private function reformatDateTime(string $datetime, string $format) : string {
+        $datetime = new \DateTime($datetime);
+        $datetime->setTimezone(new \DateTimeZone(ini_get('date.timezone')));
+        return $datetime->format($format);
+    }
+
+    public function convertToYear(string $datetime) : string {
+        return $this->reformatDateTime($datetime, 'Y');
+    }
+
+    public function convertToWeek(string $datetime) : string {
+        return ltrim($this->reformatDateTime($datetime, 'W'), '0');
+    }
+
+    public function convertToSQLDateTime(string $datetime) : string {
+        return $this->reformatDateTime($datetime, 'Y-m-d H:i:s');
+    }
 }
