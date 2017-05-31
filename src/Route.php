@@ -18,8 +18,8 @@ class Route
         $this->request = $request;
     }
 
-    public function execute(\rikmeijer\Teach\Resources $resources, \rikmeijer\Teach\Response $response) : \Psr\Http\Message\ResponseInterface {
+    public function execute(array $arguments) : \Psr\Http\Message\ResponseInterface {
         $handler = require $this->routeFile;
-        return $handler($this->request, $resources, $response);
+        return call_user_func_array($handler, $this->request, $arguments);
     }
 };
