@@ -1,9 +1,4 @@
 <?php
-/**
- * User: hameijer
- * Date: 23-3-17
- * Time: 10:06
- */
 
 namespace pulledbits\Router;
 
