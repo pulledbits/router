@@ -12,24 +12,17 @@ class Router
      */
     private $routes;
 
-    /**
-     * @var string
-     */
-    private $routesPath;
-
-    public function __construct(array $routes, string $routesPath)
+    public function __construct(array $routes)
     {
         $this->routes = $routes;
-        $this->routesPath = $routesPath;
     }
 
     public function route(ServerRequestInterface $request) : Route
     {
         $path = $request->getUri()->getPath();
         $routeFile = null;
-        foreach ($this->routes as $routeRegularExpression => $routeIdentifier) {
-            if (preg_match('#^' . $routeRegularExpression . '#', $path, $matches) === 1) {
-                $routeFile = $this->routesPath . DIRECTORY_SEPARATOR . $request->getMethod() . DIRECTORY_SEPARATOR . $routeIdentifier . '.php';
+        foreach ($this->routes as $routeRegularExpression => $routeFile) {
+            if (preg_match('#^' . $routeRegularExpression . '#', $request->getMethod() . ':' . $path, $matches) === 1) {
                 foreach ($matches as $attributeIdentifier => $attributeValue) {
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }

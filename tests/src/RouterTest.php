@@ -946,13 +946,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         };
 
         $router = new Router([
-            "/hello/world" => "hello.world"
+            "GET:/hello/world" => sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET" . DIRECTORY_SEPARATOR . "hello.world.php"
         ], sys_get_temp_dir());
 
         if (is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET") === false) {
             mkdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET");
         }
-        file_put_contents(sys_get_temp_dir() . "/GET/hello.world.php", '<?php
+        file_put_contents(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET" . DIRECTORY_SEPARATOR . "hello.world.php", '<?php
         use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
         return function() {
