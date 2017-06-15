@@ -949,7 +949,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         };
 
         $router = new Router([
-            "GET:/hello/world" => function () {
+            "/hello/world" => function () {
                 return new class implements \Psr\Http\Message\ResponseInterface
                 {
 
