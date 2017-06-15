@@ -17,7 +17,7 @@ use Psr\Http\Message\UriInterface;
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testRoute_When_ExistingRoute_Expect_RouteReturned()
+    public function testRoute_When_ExistingRoute_Expect_ResponseReturned()
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
@@ -33,4 +33,20 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testRoute_When_MissingRoute_Expect_404ResponseReturned()
+    {
+        $request = new ServerRequest('GET', new Uri("/hello/world"));
+
+        $router = new Router([
+            "/not/found" => function () {
+                return new Response(202, [],"Hello World!");
+            }
+        ], sys_get_temp_dir());
+
+        $response = $router->route($request);
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals("Not Found", $response->getReasonPhrase());
+
+    }
 }

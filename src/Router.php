@@ -28,7 +28,7 @@ class Router
 
             }
         }
-        return new Response(404, 'File not found');
+        return new Response(404);
     }
 
 }
