@@ -2,6 +2,8 @@
 
 namespace pulledbits\Router;
 
+use GuzzleHttp\Psr7\Response;
+
 class Router
 {
     /**
@@ -14,7 +16,7 @@ class Router
         $this->routes = $routes;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : Route
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
         $path = $request->getUri()->getPath();
         foreach ($this->routes as $routeRegularExpression => $handler) {
@@ -22,12 +24,11 @@ class Router
                 foreach ($matches as $attributeIdentifier => $attributeValue) {
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }
-
-                return new Route($handler, $request);
+                return $handler($request);
 
             }
         }
-        return false;
+        return new Response(404, 'File not found');
     }
 
 }
