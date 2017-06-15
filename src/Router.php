@@ -20,14 +20,13 @@ class Router
     public function route(ServerRequestInterface $request) : Route
     {
         $path = $request->getUri()->getPath();
-        $routeFile = null;
-        foreach ($this->routes as $routeRegularExpression => $routeFile) {
+        foreach ($this->routes as $routeRegularExpression => $handler) {
             if (preg_match('#^' . $routeRegularExpression . '#', $request->getMethod() . ':' . $path, $matches) === 1) {
                 foreach ($matches as $attributeIdentifier => $attributeValue) {
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }
 
-                return new Route($routeFile, $request);
+                return new Route($handler, $request);
 
             }
         }

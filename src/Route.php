@@ -4,17 +4,16 @@ namespace pulledbits\Router;
 
 class Route
 {
-    private $routeFile;
+    private $handler;
     private $request;
 
-    public function __construct(string $routeFile, \Psr\Http\Message\RequestInterface $request) {
-        $this->routeFile = $routeFile;
+    public function __construct(callable $handler, \Psr\Http\Message\RequestInterface $request) {
+        $this->handler = $handler;
         $this->request = $request;
     }
 
     public function execute(array $arguments) : \Psr\Http\Message\ResponseInterface {
-        $handler = require $this->routeFile;
         array_unshift($arguments, $this->request);
-        return call_user_func_array($handler, $arguments);
+        return call_user_func_array($this->handler, $arguments);
     }
 };

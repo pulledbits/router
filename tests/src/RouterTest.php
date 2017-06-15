@@ -14,8 +14,10 @@ use Psr\Http\Message\UriInterface;
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testRoute_When_ExistingRoute_Expect_RouteReturned() {
-        $request = new class implements ServerRequestInterface {
+    public function testRoute_When_ExistingRoute_Expect_RouteReturned()
+    {
+        $request = new class implements ServerRequestInterface
+        {
 
             /**
              * Retrieves the HTTP protocol version as a string.
@@ -303,7 +305,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
              */
             public function getUri()
             {
-                return new class implements UriInterface {
+                return new class implements UriInterface
+                {
 
                     /**
                      * Retrieve the scheme component of the URI.
@@ -946,100 +949,87 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         };
 
         $router = new Router([
-            "GET:/hello/world" => sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET" . DIRECTORY_SEPARATOR . "hello.world.php"
+            "GET:/hello/world" => function () {
+                return new class implements \Psr\Http\Message\ResponseInterface
+                {
+
+                    public function getProtocolVersion()
+                    {
+                        // TODO: Implement getProtocolVersion() method.
+                    }
+
+                    public function withProtocolVersion($version)
+                    {
+                        // TODO: Implement withProtocolVersion() method.
+                    }
+
+                    public function getHeaders()
+                    {
+                        // TODO: Implement getHeaders() method.
+                    }
+
+                    public function hasHeader($name)
+                    {
+                        // TODO: Implement hasHeader() method.
+                    }
+
+                    public function getHeader($name)
+                    {
+                        // TODO: Implement getHeader() method.
+                    }
+
+                    public function getHeaderLine($name)
+                    {
+                        // TODO: Implement getHeaderLine() method.
+                    }
+
+                    public function withHeader($name, $value)
+                    {
+                        // TODO: Implement withHeader() method.
+                    }
+
+                    public function withAddedHeader($name, $value)
+                    {
+                        // TODO: Implement withAddedHeader() method.
+                    }
+
+                    public function withoutHeader($name)
+                    {
+                        // TODO: Implement withoutHeader() method.
+                    }
+
+                    public function getBody()
+                    {
+                        return "Hello World!";
+                    }
+
+                    public function withBody(\Psr\Http\Message\StreamInterface $body)
+                    {
+                        // TODO: Implement withBody() method.
+                    }
+
+                    public function getStatusCode()
+                    {
+                        // TODO: Implement getStatusCode() method.
+                    }
+
+                    public function withStatus($code, $reasonPhrase = '')
+                    {
+                        // TODO: Implement withStatus() method.
+                    }
+
+                    public function getReasonPhrase()
+                    {
+                        // TODO: Implement getReasonPhrase() method.
+                    }
+                };
+            }
         ], sys_get_temp_dir());
-
-        if (is_dir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET") === false) {
-            mkdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET");
-        }
-        file_put_contents(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET" . DIRECTORY_SEPARATOR . "hello.world.php", '<?php
-        use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
-        return function() {
-        return new class implements ResponseInterface {
-
-            public function getProtocolVersion()
-            {
-                // TODO: Implement getProtocolVersion() method.
-            }
-            
-            public function withProtocolVersion($version)
-            {
-                // TODO: Implement withProtocolVersion() method.
-            }
-
-            public function getHeaders()
-            {
-                // TODO: Implement getHeaders() method.
-            }
-
-            public function hasHeader($name)
-            {
-                // TODO: Implement hasHeader() method.
-            }
-
-            public function getHeader($name)
-            {
-                // TODO: Implement getHeader() method.
-            }
-
-            public function getHeaderLine($name)
-            {
-                // TODO: Implement getHeaderLine() method.
-            }
-
-            public function withHeader($name, $value)
-            {
-                // TODO: Implement withHeader() method.
-            }
-
-            public function withAddedHeader($name, $value)
-            {
-                // TODO: Implement withAddedHeader() method.
-            }
-
-            public function withoutHeader($name)
-            {
-                // TODO: Implement withoutHeader() method.
-            }
-
-            public function getBody()
-            {
-                return "Hello World!";
-            }
-
-            public function withBody(StreamInterface $body)
-            {
-                // TODO: Implement withBody() method.
-            }
-
-            public function getStatusCode()
-            {
-                // TODO: Implement getStatusCode() method.
-            }
-
-            public function withStatus($code, $reasonPhrase = \'\')
-            {
-                // TODO: Implement withStatus() method.
-            }
-
-            public function getReasonPhrase()
-            {
-                // TODO: Implement getReasonPhrase() method.
-            }
-        };
-        };');
 
         $route = $router->route($request);
 
         $response = $route->execute([]);
         $this->assertEquals("Hello World!", $response->getBody());
-
-
-        unlink(sys_get_temp_dir() . "/GET/hello.world.php");
-        rmdir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . "GET");
-
-
 
     }
 
