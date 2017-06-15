@@ -2,9 +2,6 @@
 
 namespace pulledbits\Router;
 
-
-use Psr\Http\Message\ServerRequestInterface;
-
 class Router
 {
     /**
@@ -17,7 +14,7 @@ class Router
         $this->routes = $routes;
     }
 
-    public function route(ServerRequestInterface $request) : Route
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : Route
     {
         $path = $request->getUri()->getPath();
         foreach ($this->routes as $routeRegularExpression => $handler) {
