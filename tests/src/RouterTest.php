@@ -10,9 +10,8 @@ namespace pulledbits\Router;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +21,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            "/hello/world" => function () {
-                return new Response(202, [],"Hello World!");
+            "/hello/world" => new class implements Handler {
+                function handleRequest(RequestInterface $request) : ResponseInterface {
+                    return new Response(202, [],"Hello World!");
+                }
             }
         ], sys_get_temp_dir());
 
@@ -38,8 +39,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            "/not/found" => function () {
-                return new Response(202, [],"Hello World!");
+            "/not/found" => new class implements Handler {
+                function handleRequest(RequestInterface $request) : ResponseInterface {
+                    return new Response(202, [],"Hello World!");
+                }
             }
         ], sys_get_temp_dir());
 

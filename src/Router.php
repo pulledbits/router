@@ -24,7 +24,7 @@ class Router
                 foreach ($matches as $attributeIdentifier => $attributeValue) {
                     $request = $request->withAttribute($attributeIdentifier, $attributeValue);
                 }
-                return $handler($request);
+                return $handler->handleRequest($request);
 
             }
         }
