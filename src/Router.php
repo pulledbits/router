@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Response;
 class Router
 {
     /**
-     * @var array
+     * @var Handler[]
      */
     private $routes;
 
