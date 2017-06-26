@@ -10,7 +10,7 @@ namespace pulledbits\Router;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +22,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $router = new Router([
             "/hello/world" => new class implements Handler {
-                function handleRequest(RequestInterface $request) : ResponseInterface {
+                function handleRequest(ServerRequestInterface $request) : ResponseInterface {
                     return new Response(202, [],"Hello World!");
                 }
             }
@@ -40,7 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $router = new Router([
             "/not/found" => new class implements Handler {
-                function handleRequest(RequestInterface $request) : ResponseInterface {
+                function handleRequest(ServerRequestInterface $request) : ResponseInterface {
                     return new Response(202, [],"Hello World!");
                 }
             }
