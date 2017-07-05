@@ -27,7 +27,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                 }
                 public function makeHandler(ServerRequestInterface $request): Handler {
                     return new class implements Handler {
-                        public function handleRequest(ServerRequestInterface $request) : ResponseInterface {
+                        public function makeResponse() : ResponseInterface {
                             return new Response(202, [],"Hello World!");
                         }
                     };
@@ -52,7 +52,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                 }
                 public function makeHandler(ServerRequestInterface $request): Handler {
                     return new class implements Handler {
-                        public function handleRequest(ServerRequestInterface $request) : ResponseInterface {}
+                        public function makeResponse() : ResponseInterface {}
                     };
                 }
             }

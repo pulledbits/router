@@ -23,7 +23,7 @@ class Router
          */
         foreach ($this->routes as $routeRegularExpression => $matcher) {
             if ($matcher->matchRequest($request)) {
-                return $matcher->makeHandler($request)->handleRequest($request);
+                return $matcher->makeHandler($request)->makeResponse();
             }
         }
         return new Response(404);
