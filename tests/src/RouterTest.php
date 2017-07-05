@@ -22,7 +22,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $router = new Router([
             new class implements Matcher {
-                public function matchRequest(ServerRequestInterface $request): Handler {
+                public function matchRequest(ServerRequestInterface $request) : bool {
+                    return true;
+                }
+                public function makeHandler(ServerRequestInterface $request): Handler {
                     return new class implements Handler {
                         public function handleRequest(ServerRequestInterface $request) : ResponseInterface {
                             return new Response(202, [],"Hello World!");
@@ -35,6 +38,30 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $response = $router->route($request);
 
         $this->assertEquals("Hello World!", $response->getBody());
+
+    }
+
+    public function testRoute_When_NoMatchingRouteExists_Expect_404ResponseReturned()
+    {
+        $request = new ServerRequest('GET', new Uri("/hello/world"));
+
+        $router = new Router([
+            new class implements Matcher {
+                public function matchRequest(ServerRequestInterface $request) : bool {
+                    return false;
+                }
+                public function makeHandler(ServerRequestInterface $request): Handler {
+                    return new class implements Handler {
+                        public function handleRequest(ServerRequestInterface $request) : ResponseInterface {}
+                    };
+                }
+            }
+        ], sys_get_temp_dir());
+
+        $response = $router->route($request);
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals("Not Found", $response->getReasonPhrase());
 
     }
 

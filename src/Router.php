@@ -18,9 +18,13 @@ class Router
 
     public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
+        /**
+         * @var $matcher Matcher
+         */
         foreach ($this->routes as $routeRegularExpression => $matcher) {
-            $handler = $matcher->matchRequest($request);
-            return $handler->handleRequest($request);
+            if ($matcher->matchRequest($request)) {
+                return $matcher->makeHandler($request)->handleRequest($request);
+            }
         }
         return new Response(404);
     }
