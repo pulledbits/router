@@ -18,14 +18,9 @@ class Router
 
     public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
     {
-        $path = $request->getUri()->getPath();
         foreach ($this->routes as $routeRegularExpression => $handler) {
-            if (preg_match('#^' . $routeRegularExpression . '#', $path, $matches) === 1) {
-                foreach ($matches as $attributeIdentifier => $attributeValue) {
-                    $request = $request->withAttribute($attributeIdentifier, $attributeValue);
-                }
+            if ($handler->match($request)) {
                 return $handler->handleRequest($request);
-
             }
         }
         return new Response(404);
