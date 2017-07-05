@@ -21,12 +21,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            new class implements Handler {
-                public function match(ServerRequestInterface $request): bool {
-                    return true;
-                }
-                public function handleRequest(ServerRequestInterface $request) : ResponseInterface {
-                    return new Response(202, [],"Hello World!");
+            new class implements Matcher {
+                public function matchRequest(ServerRequestInterface $request): Handler {
+                    return new class implements Handler {
+                        public function handleRequest(ServerRequestInterface $request) : ResponseInterface {
+                            return new Response(202, [],"Hello World!");
+                        }
+                    };
                 }
             }
         ], sys_get_temp_dir());
