@@ -4,7 +4,7 @@ namespace pulledbits\Router;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface Handler
+interface ResponseFactory
 {
     public function makeResponse() : ResponseInterface;
 }

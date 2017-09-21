@@ -21,19 +21,19 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            new class implements Matcher {
+            new class implements ResponseFactoryFactory {
                 public function matchRequest(ServerRequestInterface $request) : bool {
                     return true;
                 }
-                public function makeHandler(ServerRequestInterface $request): Handler {
-                    return new class implements Handler {
+                public function makeResponseFactory(ServerRequestInterface $request): ResponseFactory {
+                    return new class implements ResponseFactory {
                         public function makeResponse() : ResponseInterface {
                             return new Response(202, [],"Hello World!");
                         }
                     };
                 }
             }
-        ], sys_get_temp_dir());
+        ]);
 
         $response = $router->route($request);
 
@@ -46,17 +46,19 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            new class implements Matcher {
+            new class implements ResponseFactoryFactory {
                 public function matchRequest(ServerRequestInterface $request) : bool {
                     return false;
                 }
-                public function makeHandler(ServerRequestInterface $request): Handler {
-                    return new class implements Handler {
-                        public function makeResponse() : ResponseInterface {}
+                public function makeResponseFactory(ServerRequestInterface $request): ResponseFactory {
+                    return new class implements ResponseFactory {
+                        public function makeResponse() : ResponseInterface {
+                            return new class extends Response {};
+                        }
                     };
                 }
             }
-        ], sys_get_temp_dir());
+        ]);
 
         $response = $router->route($request);
 
@@ -69,7 +71,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-        $router = new Router([], sys_get_temp_dir());
+        $router = new Router([]);
 
         $response = $router->route($request);
 
