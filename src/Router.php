@@ -22,7 +22,7 @@ class Router
          * @var $responseFactoryFactory ResponseFactoryFactory
          */
         foreach ($this->routes as $responseFactoryFactory) {
-            if ($responseFactoryFactory->matchRequest($request)) {
+            if ($responseFactoryFactory->matchURI($request->getUri())) {
                 return $responseFactoryFactory->makeResponseFactory($request)->makeResponse();
             }
         }

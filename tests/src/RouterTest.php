@@ -12,6 +12,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +23,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $router = new Router([
             new class implements ResponseFactoryFactory {
-                public function matchRequest(ServerRequestInterface $request) : bool {
+                public function matchURI(UriInterface $uri) : bool {
                     return true;
                 }
                 public function makeResponseFactory(ServerRequestInterface $request): ResponseFactory {
@@ -47,7 +48,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $router = new Router([
             new class implements ResponseFactoryFactory {
-                public function matchRequest(ServerRequestInterface $request) : bool {
+                public function matchURI(UriInterface $uri) : bool {
                     return false;
                 }
                 public function makeResponseFactory(ServerRequestInterface $request): ResponseFactory {
