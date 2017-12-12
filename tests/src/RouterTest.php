@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testRoute_When_ExistingRoute_Expect_ResponseReturned()
@@ -38,7 +38,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $response = $router->route($request);
 
-        $this->assertEquals("Hello World!", $response->getBody());
+        $this->assertEquals("Hello World!", $response->makeResponse()->getBody());
 
     }
 
@@ -61,7 +61,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             }
         ]);
 
-        $response = $router->route($request);
+        $response = $router->route($request)->makeResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());
@@ -74,7 +74,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $router = new Router([]);
 
-        $response = $router->route($request);
+        $response = $router->route($request)->makeResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());

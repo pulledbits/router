@@ -3,7 +3,7 @@
 namespace pulledbits\Router;
 
 
-class ErrorFactoryTest extends \PHPUnit_Framework_TestCase
+class ErrorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testMakeResponse_WhenErrorCode_ExpectMatchingPhraseInResponse()
     {

@@ -16,17 +16,17 @@ class Router
         $this->routes = $routes;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : \Psr\Http\Message\ResponseInterface
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : ResponseFactory
     {
         /**
          * @var $responseFactoryFactory ResponseFactoryFactory
          */
         foreach ($this->routes as $responseFactoryFactory) {
             if ($responseFactoryFactory->matchURI($request->getUri())) {
-                return $responseFactoryFactory->makeResponseFactory($request)->makeResponse();
+                return $responseFactoryFactory->makeResponseFactory($request);
             }
         }
-        return new Response(404);
+        return ErrorFactory::makeInstance(404);
     }
 
 }
