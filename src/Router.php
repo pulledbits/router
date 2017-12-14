@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Response;
 class Router
 {
     /**
-     * @var ResponseFactory[]
+     * @var RouteEndPoint[]
      */
     private $routes;
 
@@ -16,14 +16,14 @@ class Router
         $this->routes = $routes;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : ResponseFactory
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : RouteEndPoint
     {
         /**
-         * @var $responseFactoryFactory ResponseFactoryFactory
+         * @var $responseFactoryFactory RouteEndPointFactory
          */
         foreach ($this->routes as $responseFactoryFactory) {
             if ($responseFactoryFactory->matchURI($request->getUri())) {
-                return $responseFactoryFactory->makeResponseFactory($request);
+                return $responseFactoryFactory->makeRouteEndPointForRequest($request);
             }
         }
         return ErrorFactory::makeInstance(404);

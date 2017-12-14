@@ -1,13 +1,10 @@
 <?php
-
-
 namespace pulledbits\Router;
 
-
-use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use pulledbits\Response\Factory;
 
-class ErrorFactory implements ResponseFactory
+class ErrorFactory implements RouteEndPoint
 {
     private $code;
 
@@ -23,8 +20,8 @@ class ErrorFactory implements ResponseFactory
     }
 
 
-    public function makeResponse(): ResponseInterface
+    public function respond(Factory $psrResponseFactory): ResponseInterface
     {
-        return new Response($this->code);
+        return $psrResponseFactory->make($this->code, '');
     }
 }

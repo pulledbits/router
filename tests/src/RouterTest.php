@@ -13,6 +13,7 @@ use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use pulledbits\Response\Factory;
 
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,13 +23,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            new class implements ResponseFactoryFactory {
+            new class implements RouteEndPointFactory {
                 public function matchURI(UriInterface $uri) : bool {
                     return true;
                 }
-                public function makeResponseFactory(ServerRequestInterface $request): ResponseFactory {
-                    return new class implements ResponseFactory {
-                        public function makeResponse() : ResponseInterface {
+                public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint {
+                    return new class implements RouteEndPoint {
+                        public function respond(Factory $psrResponseFactory) : ResponseInterface {
                             return new Response(202, [],"Hello World!");
                         }
                     };
@@ -38,7 +39,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $response = $router->route($request);
 
-        $this->assertEquals("Hello World!", $response->makeResponse()->getBody());
+        $this->assertEquals("Hello World!", $response->respond(new Factory())->getBody());
 
     }
 
@@ -47,13 +48,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([
-            new class implements ResponseFactoryFactory {
+            new class implements RouteEndPointFactory {
                 public function matchURI(UriInterface $uri) : bool {
                     return false;
                 }
-                public function makeResponseFactory(ServerRequestInterface $request): ResponseFactory {
-                    return new class implements ResponseFactory {
-                        public function makeResponse() : ResponseInterface {
+                public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint {
+                    return new class implements RouteEndPoint {
+                        public function respond(Factory $psrResponseFactory) : ResponseInterface {
                             return new class extends Response {};
                         }
                     };
@@ -61,7 +62,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             }
         ]);
 
-        $response = $router->route($request)->makeResponse();
+        $response = $router->route($request)->respond(new Factory());
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());
@@ -74,7 +75,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $router = new Router([]);
 
-        $response = $router->route($request)->makeResponse();
+        $response = $router->route($request)->respond(new Factory());
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());
