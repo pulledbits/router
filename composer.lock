@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "eaa13c3225709e0aeb1877c979f054f7",
+    "content-hash": "e0fb4a963d1f917ce73fcfa81d614331",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -120,6 +120,39 @@
                 "response"
             ],
             "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "pulledbits/view",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pulledbits/view.git",
+                "reference": "50eb0ba77cb34d9143f158ffee38b3b8da072167"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pulledbits/view/zipball/50eb0ba77cb34d9143f158ffee38b3b8da072167",
+                "reference": "50eb0ba77cb34d9143f158ffee38b3b8da072167",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "pulledbits\\View\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "native PHP view engine",
+            "time": "2017-12-14T14:22:46+00:00"
         }
     ],
     "packages-dev": [
