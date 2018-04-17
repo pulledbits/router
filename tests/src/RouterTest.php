@@ -13,6 +13,7 @@ use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use pulledbits\View\TemplateInstance;
 
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +30,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                 public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint {
                     return new class implements RouteEndPoint {
                         public function respond(ResponseFactory $psrResponseFactory) : ResponseInterface {
-                            return new Response(202, [],"Hello World!");
+                            return $psrResponseFactory->make('Hello World!');
                         }
                     };
                 }
@@ -38,16 +39,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $response = $router->route($request);
 
-        $this->assertEquals("Hello World!", $response->respond(new class implements ResponseFactory {
-            public function make(string $statusCode,string $body): ResponseInterface
-            {
-                return new Response($status);
-            }
-
-            public function makeWithHeaders(string $statusCode,array $headers, string $body): ResponseInterface
-            {
-            }
-        })->getBody());
+        $this->assertEquals("Hello World!", $response->respond(new ResponseFactory('202'))->getBody());
 
     }
 
@@ -63,23 +55,14 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                 public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint {
                     return new class implements RouteEndPoint {
                         public function respond(ResponseFactory $psrResponseFactory) : ResponseInterface {
-                            return new class extends Response {};
+                            return $psrResponseFactory->make('');
                         }
                     };
                 }
             }
         ]);
 
-        $response = $router->route($request)->respond(new class implements ResponseFactory {
-            public function make(string $statusCode,string $body): ResponseInterface
-            {
-                return new Response($statusCode, [], $body);
-            }
-
-            public function makeWithHeaders(string $statusCode,array $headers, string $body): ResponseInterface
-            {
-            }
-        });
+        $response = $router->route($request)->respond(new ResponseFactory('200'));
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());
@@ -92,16 +75,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $router = new Router([]);
 
-        $response = $router->route($request)->respond(new class implements ResponseFactory {
-            public function make(string $statusCode,string $body): ResponseInterface
-            {
-                return new Response($statusCode, [], $body);
-            }
-
-            public function makeWithHeaders(string $statusCode,array $headers, string $body): ResponseInterface
-            {
-            }
-        });
+        $response = $router->route($request)->respond(new ResponseFactory('200'));
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());

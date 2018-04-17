@@ -1,14 +1,37 @@
 <?php
 namespace pulledbits\Router;
 
-use Psr\Http\Message\ResponseInterface;
-use pulledbits\View\TemplateInstance;
-
-interface ResponseFactory
+class ResponseFactory
 {
-    public function make(string $statusCode, string $body) : ResponseInterface;
+    private $code;
 
-    public function makeWithHeaders(string $statusCode, array $headers, string $body) : ResponseInterface;
+    public function __construct(string $code)
+    {
+        $this->code = $code;
+    }
 
-    public function makeWithTemplate(string $statusCode, TemplateInstance $templateInstance) : ResponseInterface;
+    public function changeStatusCode(string $code) : ResponseFactory {
+        return new static($code);
+    }
+
+    public function make(string $body): \Psr\Http\Message\ResponseInterface
+    {
+        $response = (new \GuzzleHttp\Psr7\Response($this->code))->withBody(\GuzzleHttp\Psr7\stream_for($body));
+        $finfo = new \finfo(FILEINFO_MIME);
+        return $response->withHeader('Content-Type', $finfo->buffer($body));
+    }
+
+    public function makeWithHeaders(array $headers, string $body): \Psr\Http\Message\ResponseInterface
+    {
+        $response = $this->make($this->code, $body);
+        foreach ($headers as $headerIdentifier => $headerValue) {
+            $response = $response->withHeader($headerIdentifier, $headerValue);
+        }
+        return $response;
+    }
+
+    public function makeWithTemplate(\pulledbits\View\TemplateInstance $templateInstance): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->make($this->code, $templateInstance->capture());
+    }
 }

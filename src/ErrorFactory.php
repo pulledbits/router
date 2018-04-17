@@ -12,7 +12,6 @@ class ErrorFactory implements RouteEndPoint
         $this->code = $code;
     }
 
-
     static function makeInstance(string $code)
     {
         return new ErrorFactory($code);
@@ -21,6 +20,6 @@ class ErrorFactory implements RouteEndPoint
 
     public function respond(ResponseFactory $psrResponseFactory): ResponseInterface
     {
-        return $psrResponseFactory->make($this->code, '');
+        return $psrResponseFactory->changeStatusCode($this->code)->make('');
     }
 }
