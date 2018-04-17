@@ -1,23 +1,22 @@
 {
-	"name" : "pulledbits/router",
-	"description" : "Simple router",
-	"license" : "MIT",
-	"type" : "library",
-	"require" : {
-		"php" : ">=7.1",
-		"guzzlehttp/psr7": "^1.3",
-		"pulledbits/view": "^0.4"
-
-	},
-	"require-dev" : {
-		"phpunit/phpunit" : "~6"
-	},
-	"autoload" : {
-		"psr-4" : {
-			"pulledbits\\Router\\" : "src"
-		}
-	},
-	"config" : {
-		"discard-changes" : true
-	}
+  "name": "pulledbits/router",
+  "description": "Simple router",
+  "license": "MIT",
+  "type": "library",
+  "require": {
+    "php": ">=7.1",
+    "guzzlehttp/psr7": "^1.3",
+    "pulledbits/view": "^0.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~6"
+  },
+  "autoload": {
+    "psr-4": {
+      "pulledbits\\Router\\": "src"
+    }
+  },
+  "config": {
+    "discard-changes": true
+  }
 }

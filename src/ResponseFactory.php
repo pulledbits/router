@@ -25,15 +25,15 @@ class ResponseFactory
         return $response;
     }
 
-    public function makeWithTemplate(\pulledbits\View\Renderable $templateInstance): \Psr\Http\Message\ResponseInterface
-    {
-        return $this->make($templateInstance->capture());
-    }
-
     public function make(string $body): \Psr\Http\Message\ResponseInterface
     {
         $response = (new \GuzzleHttp\Psr7\Response($this->code))->withBody(\GuzzleHttp\Psr7\stream_for($body));
         $finfo = new \finfo(FILEINFO_MIME);
         return $response->withHeader('Content-Type', $finfo->buffer($body));
+    }
+
+    public function makeWithTemplate(\pulledbits\View\Renderable $templateInstance): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->make($templateInstance->capture());
     }
 }

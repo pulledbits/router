@@ -25,7 +25,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
     public function testMakeWithHeaders()
     {
         $object = new ResponseFactory('200');
-        $response = $object->makeWithHeaders(['Content-Type' => 'text/plain'],'Hello');
+        $response = $object->makeWithHeaders(['Content-Type' => 'text/plain'], 'Hello');
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals('text/plain', $response->getHeader('Content-Type')[0]);
     }
@@ -33,7 +33,8 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
     public function testMakeWithTemplate()
     {
         $object = new ResponseFactory('200');
-        $response = $object->makeWithTemplate(new class implements Renderable {
+        $response = $object->makeWithTemplate(new class implements Renderable
+        {
             public function capture(): string
             {
                 return 'Hello';
