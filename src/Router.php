@@ -2,8 +2,6 @@
 
 namespace pulledbits\Router;
 
-use GuzzleHttp\Psr7\Response;
-
 class Router
 {
     /**
@@ -16,7 +14,7 @@ class Router
         $this->routes = $routes;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : RouteEndPoint
+    public function route(\Psr\Http\Message\ServerRequestInterface $request): RouteEndPoint
     {
         /**
          * @var $responseFactoryFactory RouteEndPointFactory

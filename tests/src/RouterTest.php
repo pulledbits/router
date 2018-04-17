@@ -7,13 +7,11 @@
 
 namespace pulledbits\Router;
 
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use pulledbits\View\TemplateInstance;
 
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,20 +20,24 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-        $router = new Router([
-            new class implements RouteEndPointFactory {
-                public function matchURI(UriInterface $uri) : bool {
-                    return true;
-                }
-                public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint {
-                    return new class implements RouteEndPoint {
-                        public function respond(ResponseFactory $psrResponseFactory) : ResponseInterface {
-                            return $psrResponseFactory->make('Hello World!');
-                        }
-                    };
-                }
+        $router = new Router([new class implements RouteEndPointFactory
+        {
+            public function matchURI(UriInterface $uri): bool
+            {
+                return true;
             }
-        ]);
+
+            public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint
+            {
+                return new class implements RouteEndPoint
+                {
+                    public function respond(ResponseFactory $psrResponseFactory): ResponseInterface
+                    {
+                        return $psrResponseFactory->make('Hello World!');
+                    }
+                };
+            }
+        }]);
 
         $response = $router->route($request);
 
@@ -47,20 +49,24 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-        $router = new Router([
-            new class implements RouteEndPointFactory {
-                public function matchURI(UriInterface $uri) : bool {
-                    return false;
-                }
-                public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint {
-                    return new class implements RouteEndPoint {
-                        public function respond(ResponseFactory $psrResponseFactory) : ResponseInterface {
-                            return $psrResponseFactory->make('');
-                        }
-                    };
-                }
+        $router = new Router([new class implements RouteEndPointFactory
+        {
+            public function matchURI(UriInterface $uri): bool
+            {
+                return false;
             }
-        ]);
+
+            public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint
+            {
+                return new class implements RouteEndPoint
+                {
+                    public function respond(ResponseFactory $psrResponseFactory): ResponseInterface
+                    {
+                        return $psrResponseFactory->make('');
+                    }
+                };
+            }
+        }]);
 
         $response = $router->route($request)->respond(new ResponseFactory('200'));
 

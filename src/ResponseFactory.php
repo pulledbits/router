@@ -1,4 +1,5 @@
 <?php
+
 namespace pulledbits\Router;
 
 class ResponseFactory
@@ -10,20 +11,14 @@ class ResponseFactory
         $this->code = $code;
     }
 
-    public function changeStatusCode(string $code) : ResponseFactory {
-        return new static($code);
-    }
-
-    public function make(string $body): \Psr\Http\Message\ResponseInterface
+    public function changeStatusCode(string $code): ResponseFactory
     {
-        $response = (new \GuzzleHttp\Psr7\Response($this->code))->withBody(\GuzzleHttp\Psr7\stream_for($body));
-        $finfo = new \finfo(FILEINFO_MIME);
-        return $response->withHeader('Content-Type', $finfo->buffer($body));
+        return new static($code);
     }
 
     public function makeWithHeaders(array $headers, string $body): \Psr\Http\Message\ResponseInterface
     {
-        $response = $this->make($this->code, $body);
+        $response = $this->make($body);
         foreach ($headers as $headerIdentifier => $headerValue) {
             $response = $response->withHeader($headerIdentifier, $headerValue);
         }
@@ -32,6 +27,13 @@ class ResponseFactory
 
     public function makeWithTemplate(\pulledbits\View\TemplateInstance $templateInstance): \Psr\Http\Message\ResponseInterface
     {
-        return $this->make($this->code, $templateInstance->capture());
+        return $this->make($templateInstance->capture());
+    }
+
+    public function make(string $body): \Psr\Http\Message\ResponseInterface
+    {
+        $response = (new \GuzzleHttp\Psr7\Response($this->code))->withBody(\GuzzleHttp\Psr7\stream_for($body));
+        $finfo = new \finfo(FILEINFO_MIME);
+        return $response->withHeader('Content-Type', $finfo->buffer($body));
     }
 }

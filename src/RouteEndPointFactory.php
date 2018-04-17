@@ -7,6 +7,7 @@ use Psr\Http\Message\UriInterface;
 
 interface RouteEndPointFactory
 {
-    public function matchURI(UriInterface $uri) : bool;
-    public function makeRouteEndPointForRequest(ServerRequestInterface $request) : RouteEndPoint;
+    public function matchURI(UriInterface $uri): bool;
+
+    public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint;
 }
