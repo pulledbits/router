@@ -25,7 +25,7 @@ class ResponseFactory
         return $response;
     }
 
-    public function makeWithTemplate(\pulledbits\View\TemplateInstance $templateInstance): \Psr\Http\Message\ResponseInterface
+    public function makeWithTemplate(\pulledbits\View\Renderable $templateInstance): \Psr\Http\Message\ResponseInterface
     {
         return $this->make($templateInstance->capture());
     }
