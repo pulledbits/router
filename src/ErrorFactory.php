@@ -19,8 +19,8 @@ class ErrorFactory implements RouteEndPoint
     }
 
 
-    public function respond(ResponseFactory $psrResponseFactory): ResponseInterface
+    public function respond(ResponseInterface $psrResponse): ResponseInterface
     {
-        return $psrResponseFactory->changeStatusCode($this->code)->make('');
+        return $psrResponse->withStatus($this->code);
     }
 }

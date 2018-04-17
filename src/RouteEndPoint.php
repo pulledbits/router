@@ -6,5 +6,5 @@ use Psr\Http\Message\ResponseInterface;
 
 interface RouteEndPoint
 {
-    public function respond(ResponseFactory $psrResponseFactory): ResponseInterface;
+    public function respond(ResponseInterface $psrResponse): ResponseInterface;
 }
