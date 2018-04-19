@@ -7,11 +7,16 @@ class Router
     /**
      * @var RouteEndPoint[]
      */
-    private $routes;
+    private $routes = [];
 
     public function __construct(array $routes)
     {
-        $this->routes = $routes;
+        array_walk($routes, [$this, 'addRoute']);
+    }
+
+    public function addRoute(RouteEndPointFactory $route)
+    {
+        $this->routes[] = $route;
     }
 
     public function route(\Psr\Http\Message\ServerRequestInterface $request): RouteEndPoint

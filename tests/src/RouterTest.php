@@ -10,6 +10,7 @@ namespace pulledbits\Router;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Stream;
+use function GuzzleHttp\Psr7\stream_for;
 use GuzzleHttp\Psr7\Uri;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\ResponseInterface;
@@ -268,6 +269,37 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals("Not Found", $response->getReasonPhrase());
+
+    }
+
+    public function testAddRoute_When_MatchingRouteExists_Expect_ResponseReturned()
+    {
+        $request = new ServerRequest('GET', new Uri("/hello/world"));
+
+        $router = new Router([]);
+        $router->addRoute(new class implements RouteEndPointFactory
+        {
+            public function matchURI(UriInterface $uri): bool
+            {
+                return true;
+            }
+
+            public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint
+            {
+                return new class implements RouteEndPoint
+                {
+                    public function respond(ResponseInterface $psrResponseFactory): ResponseInterface
+                    {
+                        return $psrResponseFactory->withBody(stream_for('Hello'));
+                    }
+                };
+            }
+        });
+
+        $response = $router->route($request)->respond(new Response('200'));
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals("Hello", $response->getBody()->getContents());
 
     }
 }
