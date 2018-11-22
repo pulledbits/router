@@ -1,13 +1,19 @@
 <?php
 namespace pulledbits\Router;
 
-abstract class RouteEndPointDecorator implements RouteEndPoint
-{
+use Psr\Http\Message\ResponseInterface;
 
-    protected $wrappedEndPoint;
+class RouteEndPointDecorator implements RouteEndPoint
+{
+    private $wrappedEndPoint;
 
     public function __construct(RouteEndPoint $wrappedEndPoint)
     {
         $this->wrappedEndPoint = $wrappedEndPoint;
+    }
+
+    public function respond(ResponseInterface $psrResponse): ResponseInterface
+    {
+        return $this->wrappedEndPoint->respond($psrResponse);
     }
 }
