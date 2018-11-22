@@ -1,10 +1,7 @@
 <?php
-
-
 namespace pulledbits\Router;
 
-
-abstract class RouteEndPointDecorator
+abstract class RouteEndPointDecorator implements RouteEndPoint
 {
 
     protected $wrappedEndPoint;
@@ -13,5 +10,4 @@ abstract class RouteEndPointDecorator
     {
         $this->wrappedEndPoint = $wrappedEndPoint;
     }
-
 }
