@@ -25,14 +25,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-        $router = new Router([new class implements RouteEndPointFactory
-        {
-            public function matchURI(UriInterface $uri): bool
-            {
-                return true;
-            }
-
-            public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint
+        $router = new Router(["/hello/world" => function(ServerRequestInterface $request) : RouteEndPoint
             {
                 return new class implements RouteEndPoint
                 {
@@ -221,7 +214,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                     }
                 };
             }
-        }]);
+        ]);
 
         $response = $router->route($request);
 
@@ -233,14 +226,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-        $router = new Router([new class implements RouteEndPointFactory
-        {
-            public function matchURI(UriInterface $uri): bool
-            {
-                return false;
-            }
-
-            public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint
+        $router = new Router(["/hello/worl$" => function(ServerRequestInterface $request): RouteEndPoint
             {
                 return new class implements RouteEndPoint
                 {
@@ -250,7 +236,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
                     }
                 };
             }
-        }]);
+        ]);
 
         $response = $router->route($request)->respond(new Response('200'));
 
@@ -277,23 +263,14 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
         $router = new Router([]);
-        $router->addRoute(new class implements RouteEndPointFactory
-        {
-            public function matchURI(UriInterface $uri): bool
+        $router->addRoute("/hello/world", function(ServerRequestInterface $request): RouteEndPoint  {
+            return new class implements RouteEndPoint
             {
-                return true;
-            }
-
-            public function makeRouteEndPointForRequest(ServerRequestInterface $request): RouteEndPoint
-            {
-                return new class implements RouteEndPoint
+                public function respond(ResponseInterface $psrResponseFactory): ResponseInterface
                 {
-                    public function respond(ResponseInterface $psrResponseFactory): ResponseInterface
-                    {
-                        return $psrResponseFactory->withBody(stream_for('Hello'));
-                    }
-                };
-            }
+                    return $psrResponseFactory->withBody(stream_for('Hello'));
+                }
+            };
         });
 
         $response = $router->route($request)->respond(new Response('200'));

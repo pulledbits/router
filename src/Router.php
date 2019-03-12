@@ -11,22 +11,21 @@ class Router
 
     public function __construct(array $routes)
     {
-        array_walk($routes, [$this, 'addRoute']);
+        $this->routes = $routes;
     }
 
-    public function addRoute(RouteEndPointFactory $route)
+    public function addRoute(string $regexp, callable $route)
     {
-        $this->routes[] = $route;
+        $this->routes[$regexp] = $route;
     }
 
     public function route(\Psr\Http\Message\ServerRequestInterface $request): RouteEndPoint
     {
-        /**
-         * @var $responseFactoryFactory RouteEndPointFactory
-         */
-        foreach ($this->routes as $responseFactoryFactory) {
-            if ($responseFactoryFactory->matchURI($request->getUri())) {
-                return $responseFactoryFactory->makeRouteEndPointForRequest($request);
+        $uri = $request->getUri();
+        foreach ($this->routes as $regexp => $responseFactory) {
+            $matches = [];
+            if (preg_match("#" . $regexp . "#", $uri->getPath(), $matches) === 1) {
+                return $responseFactory($request);
             }
         }
         return ErrorFactory::makeInstance(404);
