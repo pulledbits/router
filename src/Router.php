@@ -5,13 +5,17 @@ namespace pulledbits\Router;
 class Router
 {
     /**
-     * @var RouteEndPoint[]
+     * @var callable[]
      */
     private $routes = [];
 
     public function __construct(array $routes)
     {
         $this->routes = $routes;
+    }
+
+    public function addPath(string $regexp, string $responseFactory) {
+        $this->addRoute($regexp, require $responseFactory);
     }
 
     public function addRoute(string $regexp, callable $route)
