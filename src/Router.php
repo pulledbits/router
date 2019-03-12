@@ -25,6 +25,9 @@ class Router
         foreach ($this->routes as $regexp => $responseFactory) {
             $matches = [];
             if (preg_match("#" . $regexp . "#", $uri->getPath(), $matches) === 1) {
+                foreach ($matches as $matchIdentifier => $match) {
+                    $request = $request->withAttribute($matchIdentifier, $match);
+                }
                 return $responseFactory($request);
             }
         }
