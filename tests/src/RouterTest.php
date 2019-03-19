@@ -181,4 +181,32 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals("Hello", $response->getBody()->getContents());
     }
+
+
+    public function testAddRoute_When_ImproperReturnType_Expect_RouteNotAdded()
+    {
+        $request = new ServerRequest('GET', new Uri("/hello/world"));
+
+        $router = new Router([]);
+        $router->addRoute("/hello/world", function()  {
+            return new class implements Route
+            {
+                public function handleRequest(ServerRequestInterface $request): RouteEndPoint
+                {
+                    return new class implements RouteEndPoint
+                    {
+                        public function respond(ResponseInterface $psrResponseFactory): ResponseInterface
+                        {
+                            return $psrResponseFactory->withBody(stream_for('Hello'));
+                        }
+                    };
+                }
+            };
+        });
+
+        $response = $router->route($request)->respond(new Response('200'));
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals("Not Found", $response->getReasonPhrase());
+    }
 }

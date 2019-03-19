@@ -18,8 +18,14 @@ class Router
         $this->addRoute($regexp, require $responseFactory);
     }
 
-    public function addRoute(string $regexp, callable $route)
+    public function addRoute(string $regexp, callable $route) : void
     {
+        $reflection = new \ReflectionFunction($route);
+        if ($reflection->hasReturnType() === false) {
+            return;
+        } elseif ($reflection->getReturnType()->getName() !== Route::class) {
+            return;
+        }
         $this->routes[$regexp] = $route;
     }
 
