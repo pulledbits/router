@@ -32,7 +32,7 @@ class Router
                 foreach ($matches as $matchIdentifier => $match) {
                     $request = $request->withAttribute($matchIdentifier, $match);
                 }
-                return $responseFactory($request);
+                return $responseFactory()->handleRequest($request);
             }
         }
         return ErrorFactory::makeInstance(404);
