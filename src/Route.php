@@ -8,5 +8,5 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface Route
 {
-    public function handleRequest(ServerRequestInterface $request) : RouteEndPoint;
+    public function handleRequest(ServerRequestInterface $request, RouteEndPoint $currentEndPoint) : RouteEndPoint;
 }
