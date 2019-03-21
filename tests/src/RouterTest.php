@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testRoute_When_ExistingRoute_Expect_ResponseReturned()
+    public function testRoute_When_ExistingRouteEndPoint_Expect_ResponseReturned()
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
@@ -36,8 +36,30 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("Hello World!", $route->respond(new Response('202'))->getBody());
 
     }
+    public function testRoute_When_ExistingRoute_Expect_ResponseReturned()
+    {
+        $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-    public function testRoute_When_ExistingRouteMatchesMethod_Expect_ResponseReturned()
+        $router = new Router(["/hello/world" => new class implements Route
+        {
+            public function handleRequest(ServerRequestInterface $request): RouteEndPoint
+            {
+                return new class implements RouteEndPoint
+                {
+                    public function respond(ResponseInterface $psrResponse): ResponseInterface
+                    {
+                        return $psrResponse->withBody(stream_for("Hello World!"));
+                    }
+                };
+            }
+        }]);
+
+        $route = $router->route($request);
+
+        $this->assertEquals("Hello World!", $route->respond(new Response('202'))->getBody());
+    }
+
+        public function testRoute_When_ExistingRouteMatchesMethod_Expect_ResponseReturned()
     {
         $request = new ServerRequest('POST', new Uri("/post/hello/world"));
 

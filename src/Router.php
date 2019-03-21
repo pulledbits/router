@@ -25,7 +25,7 @@ class Router
         $this->routes[$regexp] = $routeFactory;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : Route
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : RouteEndPoint
     {
         $uri = $request->getUri();
         foreach ($this->routes as $regexp => $routeFactory) {
@@ -39,15 +39,18 @@ class Router
                     $request = $request->withAttribute($matchIdentifier, $match);
                 }
 
-                if (($routeFactory instanceof \Closure) === false) {
-                    return new Route($routeFactory);
+                if ($routeFactory instanceof \Closure) {
+                    $chain = new Chain($request);
+                    $routeFactory($chain);
+                    return new ChainedEndPoint($chain);
+                } elseif ($routeFactory instanceof RouteEndPoint) {
+                    return $routeFactory;
+                } elseif ($routeFactory instanceof Route) {
+                    return $routeFactory->handleRequest($request);
                 }
-                $chain = new Chain($request);
-                $routeFactory($chain);
-                return new Route($chain);
             }
         }
-        return new Route(ErrorFactory::makeInstance(404));
+        return ErrorFactory::makeInstance(404);
     }
 
 }
