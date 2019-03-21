@@ -2,6 +2,8 @@
 
 namespace pulledbits\Router;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class Router
 {
     /**
@@ -23,23 +25,22 @@ class Router
         $this->routes[$regexp] = $routeFactory;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request): RouteEndPoint
+    public function route(\Psr\Http\Message\ServerRequestInterface $request) : Route
     {
         $uri = $request->getUri();
-        $endPoint = ErrorFactory::makeInstance(404);
         foreach ($this->routes as $regexp => $routeFactory) {
             $matches = [];
             if (preg_match("#" . $regexp . "#", $uri->getPath(), $matches) === 1) {
-                $chain = new Chain($endPoint);
-                ($this->routes[$regexp])($chain);
-
                 foreach ($matches as $matchIdentifier => $match) {
                     $request = $request->withAttribute($matchIdentifier, $match);
                 }
-                return $chain->handleRequest($request);
+
+                $chain = new Chain($request);
+                ($this->routes[$regexp])($chain);
+                return new Route($chain);
             }
         }
-        return $endPoint;
+        return new Route(ErrorFactory::makeInstance(404));
     }
 
 }

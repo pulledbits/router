@@ -4,31 +4,37 @@
 namespace pulledbits\Router;
 
 
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Chain
+class Chain implements RouteEndPoint
 {
-    private $endPoint;
     private $links = [];
+    private $request;
 
     /**
      * Chain constructor.
      */
-    public function __construct(RouteEndPoint $endPoint)
+    public function __construct(ServerRequestInterface $request)
     {
-        $this->endPoint = $endPoint;
+        $this->request = $request;
     }
 
-    public function link(Route $route)
+    public function link(\Closure $link)
     {
-        $this->links[] = $route;
+        $this->links[] = $link;
     }
 
-    public function handleRequest(ServerRequestInterface $request) : RouteEndPoint
+    public function respond(ResponseInterface $response) : ResponseInterface
     {
+        $last = function(ServerRequestInterface $request) use ($response) {
+            return $response;
+        };
         foreach ($this->links as $link) {
-            $this->endPoint = $link->handleRequest($request, $this->endPoint);
+            $last = function(ServerRequestInterface $request) use ($link, $last) {
+                return $link($request, $last);
+            };
         }
-        return $this->endPoint;
+        return $last($this->request);
     }
 }

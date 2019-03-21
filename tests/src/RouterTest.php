@@ -24,24 +24,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $router = new Router(["/hello/world" => function(Chain $chain) : void
             {
-                $chain->link(new class implements Route {
-                    public function handleRequest(ServerRequestInterface $request, RouteEndPoint $currentEndPoint): RouteEndPoint
+                $chain->link(function(ServerRequestInterface $request, \Closure $next) : ResponseInterface
                     {
-                        return new class implements RouteEndPoint
-                        {
-                            public function respond(ResponseInterface $psrResponse): ResponseInterface
-                            {
-                                return $psrResponse->withBody(stream_for("Hello World!"));
-                            }
-                        };
-                    }
+                        $response = $next($request);
+                        return $response->withBody(stream_for("Hello World!"));
+
                 });
             }
         ]);
 
-        $response = $router->route($request);
+        $route = $router->route($request);
 
-        $this->assertEquals("Hello World!", $response->respond(new Response('202'))->getBody());
+        $this->assertEquals("Hello World!", $route->respond(new Response('202'))->getBody());
 
     }
 
@@ -52,18 +46,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $file = tempnam(sys_get_temp_dir(), 'route_');
         file_put_contents($file, '<?php return function(pulledbits\Router\Chain $chain) : void
         {
-            $chain->link(new class implements pulledbits\Router\Route {
-                public function handleRequest(Psr\Http\Message\ServerRequestInterface $request, pulledbits\Router\RouteEndPoint $currentEndPoint): pulledbits\Router\RouteEndPoint
+            $chain->link(function(Psr\Http\Message\ServerRequestInterface $request, \Closure $next) : Psr\Http\Message\ResponseInterface
                 {
-                    return new class implements pulledbits\Router\RouteEndPoint
-                    {
-                        public function respond(Psr\Http\Message\ResponseInterface $psrResponse): Psr\Http\Message\ResponseInterface
-                        {
-                            return $psrResponse->withBody(GuzzleHttp\Psr7\stream_for("Hello World!"));
-                        }
-                    };
-                }
-            });
+                    $response = $next($request);
+                    return $response->withBody(GuzzleHttp\Psr7\stream_for("Hello World!"));
+                });
         };');
 
         $router = new Router([]);
@@ -84,30 +71,18 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $router = new Router(["/hello/(?<where>\w+)" => function(Chain $chain) : void
         {
-            $chain->link(new class implements Route {
-                public function handleRequest(ServerRequestInterface $request, RouteEndPoint $currentEndPoint): RouteEndPoint
+            $chain->link(function(ServerRequestInterface $request, \Closure $next) : ResponseInterface
                 {
-                    return new class($request->getAttribute('where')) implements RouteEndPoint
-                    {
-                        private $where;
-                        public function __construct(string $where)
-                        {
-                            $this->where = $where;
-                        }
+                    $response = $next($request);
+                    return $response->withBody(stream_for('Hello ' . $request->getAttribute('where') . '!'));
 
-                        public function respond(ResponseInterface $psrResponse): ResponseInterface
-                        {
-                            return $psrResponse->withBody(stream_for('Hello ' . $this->where . '!'));
-                        }
-                    };
-                }
             });
         }
         ]);
 
         $response = $router->route($request);
 
-        $this->assertEquals("Hello wooorld!", $response->respond(new Response('202'))->getBody());
+        $this->assertEquals("Hello wooorld!", $response->respond(new Response('202'))->getBody()->getContents());
 
     }
 
@@ -118,19 +93,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $router = new Router(["/hello/worl$" => function(Chain $chain): void
             {
-                $chain->link(new class implements Route
-                {
-                    public function handleRequest(ServerRequestInterface $request, RouteEndPoint $currentEndPoint): RouteEndPoint
+                $chain->link(function(ServerRequestInterface $request, \Closure $next) : ResponseInterface
                     {
-                        return new class implements RouteEndPoint
-                        {
-                            public function respond(ResponseInterface $psrResponseFactory): ResponseInterface
-                            {
-                                return $psrResponseFactory->make('');
-                            }
-                        };
+                        return $next($request);
                     }
-                });
+                );
             }
         ]);
 
@@ -160,18 +127,8 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $router = new Router([]);
         $router->addRoute("/hello/world", function(Chain $chain): void {
-            $chain->link(new class implements Route
-            {
-                public function handleRequest(ServerRequestInterface $request, RouteEndPoint $currentEndPoint): RouteEndPoint
-                {
-                    return new class implements RouteEndPoint
-                    {
-                        public function respond(ResponseInterface $psrResponse): ResponseInterface
-                        {
-                            return $psrResponse->withBody(stream_for('Hello'));
-                        }
-                    };
-                }
+            $chain->link(function(ServerRequestInterface $request, \Closure $next) : ResponseInterface {
+                return $next($request)->withBody(stream_for('Hello'));
             });
         });
 
