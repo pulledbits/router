@@ -20,7 +20,7 @@ class Router
         $this->addRoute($regexp, require $routeFactoryPath);
     }
 
-    public function addRoute(string $regexp, callable $routeFactory) : void
+    public function addRoute(string $regexp, $routeFactory) : void
     {
         $this->routes[$regexp] = $routeFactory;
     }
