@@ -56,6 +56,28 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     }
 
+    public function testRoute_When_ExistingRouteMatchesMethods_Expect_ResponseReturned()
+    {
+        $router = new Router(["(GET|POST):/hello/world" => new class implements RouteEndPoint
+        {
+            public function respond(ResponseInterface $psrResponse): ResponseInterface
+            {
+                return $psrResponse->withBody(stream_for("Hello World!"));
+            }
+        }
+        ]);
+
+        $route = $router->route(new ServerRequest('POST', new Uri("/hello/world")));
+        $this->assertEquals("Hello World!", $route->respond(new Response('201'))->getBody()->getContents());
+
+
+        $route = $router->route(new ServerRequest('GET', new Uri("/hello/world")));
+        $this->assertEquals("Hello World!", $route->respond(new Response('201'))->getBody()->getContents());
+
+    }
+
+
+
     public function testAddPath_When_ExistingRoute_Expect_ResponseReturned()
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
