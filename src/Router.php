@@ -29,17 +29,22 @@ class Router
     {
         $uri = $request->getUri();
         foreach ($this->routes as $regexp => $routeFactory) {
+            if (preg_match("/^[\w\|]+\:/", $regexp, $matches) === 0) {
+                $regexp = 'GET:' . $regexp;
+            }
+
+
             $matches = [];
-            if (preg_match("#" . $regexp . "#", $uri->getPath(), $matches) === 1) {
+            if (preg_match("#" . $regexp . "#", $request->getMethod() . ':' . $uri->getPath(), $matches) === 1) {
                 foreach ($matches as $matchIdentifier => $match) {
                     $request = $request->withAttribute($matchIdentifier, $match);
                 }
 
-                if (($this->routes[$regexp] instanceof \Closure) === false) {
-                    return new Route($this->routes[$regexp]);
+                if (($routeFactory instanceof \Closure) === false) {
+                    return new Route($routeFactory);
                 }
                 $chain = new Chain($request);
-                ($this->routes[$regexp])($chain);
+                $routeFactory($chain);
                 return new Route($chain);
             }
         }
