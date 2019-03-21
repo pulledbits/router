@@ -30,9 +30,8 @@ class Router
         $uri = $request->getUri();
         foreach ($this->routes as $regexp => $routeFactory) {
             if (preg_match("/^(\w+|\([\w\|]+\))\:/", $regexp, $matches) === 0) {
-                $regexp = 'GET:' . $regexp;
+                $regexp = '\w+:' . $regexp;
             }
-
 
             $matches = [];
             if (preg_match("#" . $regexp . "#", $request->getMethod() . ':' . $uri->getPath(), $matches) === 1) {
