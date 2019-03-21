@@ -35,6 +35,9 @@ class Router
                     $request = $request->withAttribute($matchIdentifier, $match);
                 }
 
+                if (($this->routes[$regexp] instanceof \Closure) === false) {
+                    return new Route($this->routes[$regexp]);
+                }
                 $chain = new Chain($request);
                 ($this->routes[$regexp])($chain);
                 return new Route($chain);

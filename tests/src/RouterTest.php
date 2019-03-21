@@ -22,15 +22,13 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
 
-        $router = new Router(["/hello/world" => function(Chain $chain) : void
+        $router = new Router(["/hello/world" => new class implements RouteEndPoint
+        {
+            public function respond(ResponseInterface $psrResponse): ResponseInterface
             {
-                $chain->link(function(ServerRequestInterface $request, \Closure $next) : ResponseInterface
-                    {
-                        $response = $next($request);
-                        return $response->withBody(stream_for("Hello World!"));
-
-                });
+                return $psrResponse->withBody(stream_for("Hello World!"));
             }
+        }
         ]);
 
         $route = $router->route($request);
