@@ -36,6 +36,21 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("Hello World!", $route->respond(new Response('202'))->getBody());
 
     }
+    public function testRoute_When_ExistingRouteEndPointClosure_Expect_ResponseReturned()
+    {
+        $request = new ServerRequest('GET', new Uri("/hello/world"));
+
+        $router = new Router(["/hello/world" => function(ServerRequestInterface $request, callable $next): ResponseInterface
+        {
+            return $next($request)->withBody(stream_for("Hello World!"));
+        }
+        ]);
+
+        $route = $router->route($request);
+
+        $this->assertEquals("Hello World!", $route->respond(new Response('202'))->getBody());
+
+    }
     public function testRoute_When_ExistingRoute_Expect_ResponseReturned()
     {
         $request = new ServerRequest('GET', new Uri("/hello/world"));
@@ -119,7 +134,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
         $response = $router->route($request);
 
-        $this->assertEquals("Hello World!", $response->respond(new Response('202'))->getBody());
+        $this->assertEquals("Hello World!", $response->respond(new Response('202'))->getBody()->getContents());
 
         unlink($file);
     }

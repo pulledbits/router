@@ -2,7 +2,7 @@
 
 namespace pulledbits\Router;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Router
 {
@@ -16,16 +16,17 @@ class Router
         $this->routes = $routeFactories;
     }
 
-    public function addPath(string $regexp, string $routeFactoryPath) {
+    public function addPath(string $regexp, string $routeFactoryPath)
+    {
         $this->addRoute($regexp, require $routeFactoryPath);
     }
 
-    public function addRoute(string $regexp, $routeFactory) : void
+    public function addRoute(string $regexp, $routeFactory): void
     {
         $this->routes[$regexp] = $routeFactory;
     }
 
-    public function route(\Psr\Http\Message\ServerRequestInterface $request) : RouteEndPoint
+    public function route(\Psr\Http\Message\ServerRequestInterface $request): RouteEndPoint
     {
         $uri = $request->getUri();
         foreach ($this->routes as $regexp => $routeFactory) {
@@ -41,7 +42,12 @@ class Router
 
                 if ($routeFactory instanceof \Closure) {
                     $chain = new Chain($request);
-                    $routeFactory($chain);
+                    $reflection = new \ReflectionFunction($routeFactory);
+                    if ($reflection->hasReturnType() === false || $reflection->getReturnType()->getName() === 'void') {
+                        $routeFactory($chain);
+                    } elseif ($reflection->getReturnType()->getName() === ResponseInterface::class) {
+                        $chain->link($routeFactory);
+                    }
                     return new ChainedEndPoint($chain);
                 } elseif ($routeFactory instanceof RouteEndPoint) {
                     return $routeFactory;
